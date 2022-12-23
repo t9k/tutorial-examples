@@ -24,7 +24,6 @@ spec:
                 - "job/tensorflowtrainingjob/multiworker/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              imagePullPolicy: IfNotPresent
               image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
               resources:
                 requests:

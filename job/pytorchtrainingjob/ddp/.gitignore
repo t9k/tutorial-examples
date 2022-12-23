@@ -1,0 +1,5 @@
+# log files
+log/
+
+# dataset files
+data/

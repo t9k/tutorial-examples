@@ -2,17 +2,11 @@
 
 本示例使用 TensorFlowTrainingJob 对 Keras 模型进行多工作器同步训练（采用 [`tf.distribute.MultiWorkerMirroredStrategy`](https://www.tensorflow.org/api_docs/python/tf/distribute/MultiWorkerMirroredStrategy) 分布式策略）。
 
-切换到当前目录下，执行 `download_dataset.py` 脚本以下载数据集：
+切换到当前目录下，使用 `job.yaml` 创建 TensorFlowTrainingJob：
 
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/job/tensorflowtrainingjob/multiworker
-python download_dataset.py
-```
-
-使用 `job.yaml` 创建 TensorFlowTrainingJob：
-
-```shell
 kubectl create -f job.yaml
 ```
 
