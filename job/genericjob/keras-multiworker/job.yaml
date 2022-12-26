@@ -1,0 +1,52 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: GenericJob
+metadata:
+  name: keras-mnist-genericjob
+spec:
+  successRules:
+    - { "worker": [0] }
+  failureRules:
+    - { "worker": [0] }
+    - { "worker": [1] }
+    - { "worker": [2] }
+    - { "worker": [3] }
+  service:
+    ports:
+      - name: http
+        port: 2222
+  cleanUpPolicy: Unfinished
+  replicaSpecs:
+    - type: worker
+      replicas: 4
+      restartPolicy:
+        policy: OnFailure
+        limit: 100
+      template:
+        spec:
+          containers:
+            - name: tensorflow
+              command:
+                - python3
+                - job/genericjob/multiworker/keras_mnist_genericjob.py
+                - "--log_dir"
+                - "job/genericjob/multiworker/log"
+              workingDir: /t9k/mnt/tutorial-examples
+              env:
+                - name: TF_CONFIG
+                  value: '{"cluster":{"worker":["$(service.worker[0].host):$(service.port[http])","$(service.worker[1].host):$(service.port[http])","$(service.worker[2].host):$(service.port[http])","$(service.worker[3].host):$(service.port[http])"]},"task":{"type":"$(type)","index":$(rank)}}'
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
+              imagePullPolicy: Always
+              resources:
+                requests:
+                  cpu: 2000m
+                  memory: 2Gi
+                limits:
+                  cpu: 4000m
+                  memory: 4Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
