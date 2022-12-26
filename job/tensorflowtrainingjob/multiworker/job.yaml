@@ -6,7 +6,7 @@ spec:
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/job/tensorflowtrainingjob/multiworker/log
-    image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
   replicaSpecs:
     - type: worker
       replicas: 4
@@ -24,7 +24,7 @@ spec:
                 - "job/tensorflowtrainingjob/multiworker/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
               resources:
                 requests:
                   cpu: 2000m

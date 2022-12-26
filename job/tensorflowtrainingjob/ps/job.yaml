@@ -6,7 +6,7 @@ spec:
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/job/tensorflowtrainingjob/ps/log
-    image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
   replicaSpecs:
     - type: chief
       replicas: 1
@@ -23,15 +23,15 @@ spec:
                 - "job/tensorflowtrainingjob/ps/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
               name: tensorflow
               resources:
                 requests:
                   cpu: 2000m
-                  memory: 2Gi
+                  memory: 4Gi
                 limits:
                   cpu: 4000m
-                  memory: 4Gi
+                  memory: 8Gi
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
@@ -54,7 +54,7 @@ spec:
                 - "job/tensorflowtrainingjob/ps/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples  
-              image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
               name: tensorflow
               resources:
                 requests:
@@ -85,15 +85,15 @@ spec:
                 - "job/tensorflowtrainingjob/ps/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples  
-              image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
               name: tensorflow
               resources:
                 requests:
                   cpu: 2000m
-                  memory: 2Gi
+                  memory: 4Gi
                 limits:
                   cpu: 4000m
-                  memory: 4Gi
+                  memory: 8Gi
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data

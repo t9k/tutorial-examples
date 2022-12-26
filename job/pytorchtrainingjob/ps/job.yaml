@@ -3,17 +3,13 @@ kind: PyTorchTrainingJob
 metadata:
   name: torch-mnist-trainingjob-ps
 spec:
-  scheduler:
-    t9kScheduler:
-      queue: default
-      priority: 50
   runPolicy:
     cleanUpPolicy: Unfinished
     backoffLimit: 20
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ps/log
-    image: registry.tensorstack.cn/t9k/tensorflow-2.5.0:cpu
+    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.1
   replicaSpecs:
     - type: master
       replicas: 1
@@ -28,7 +24,7 @@ spec:
                 - job/pytorchtrainingjob/ps/torch_mnist_trainingjob_ps.py
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/pytorch-1.9.0:tensorboard
+              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.1
               name: pytorch
               resources:
                 requests:
@@ -61,7 +57,7 @@ spec:
                 - "job/pytorchtrainingjob/ps/model_state_dict.pt"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/pytorch-1.9.0:tensorboard
+              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.1
               name: pytorch
               resources:
                 requests:

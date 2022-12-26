@@ -27,14 +27,9 @@ spec:
       spec:
         containers:
           - name: mpi-worker
-            image: registry.tensorstack.cn/t9k/horovod:20211201
+            image: registry.tensorstack.cn/t9k/horovod:sdk-0.5.1
             imagePullPolicy: IfNotPresent
             workingDir: /t9k/mnt/tutorial-examples
-            env:
-              - name: LD_LIBRARY_PATH
-                value: "/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/lib"
-              - name: NCCL_DEBUG
-                value: INFO
             resources:
               requests:
                 cpu: 4000m
