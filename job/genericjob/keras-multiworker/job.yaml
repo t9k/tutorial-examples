@@ -27,9 +27,9 @@ spec:
             - name: tensorflow
               command:
                 - python3
-                - job/genericjob/multiworker/keras_mnist_genericjob.py
+                - job/genericjob/keras-multiworker/keras_mnist_genericjob.py
                 - "--log_dir"
-                - "job/genericjob/multiworker/log"
+                - "job/genericjob/keras-multiworker/log"
               workingDir: /t9k/mnt/tutorial-examples
               env:
                 - name: TF_CONFIG
