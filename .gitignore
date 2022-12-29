@@ -1,1 +1,5 @@
+# Jupyter notebook tmp directory
 **/.ipynb_checkpoints/*
+
+# For local test
+local-test

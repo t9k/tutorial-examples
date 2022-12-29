@@ -1,0 +1,2 @@
+tensorflow==2.1.0
+tfx==0.21.4
