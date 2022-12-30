@@ -2,10 +2,6 @@ apiVersion: batch.tensorstack.dev/v1beta1
 kind: WorkflowTemplate
 metadata:
   name: taxi-tips-prediction
-  labels:
-    tensorstack.dev/component: taskman
-    tensorstack.dev/component-type: user
-    tensorstack.dev/context-type: DAG
 spec:
   workspaces:
     - name: shared-workspace
