@@ -1,0 +1,113 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowTemplate
+metadata:
+  name: taxi-tips-prediction
+spec:
+  workspaces:
+    - name: shared-workspace
+  params:
+    - name: srcPath
+      description: the path to the src directory, relative to the user workspace.
+      default: src
+    - name: outputPath
+      description: the path to the output directory, relative to the user workspace.
+      default: output
+    - name: dataPath
+      description: the path to the data directory, relative to the user workspace.
+      default: data
+    - name: RUNTIME_IMAGE
+      description: The docker image for runnning this task.
+      default: "registry.tensorstack.cn/t9k/tfx:prod-2.1.1"
+  type: DAG
+  dag:
+    templates:
+      - name: data-validation
+        workflowTemplateRef: data-validation
+        workspaces:
+          - name: user
+            workspace: shared-workspace
+        params:
+          - name: srcPath
+            value: "$(params.srcPath)"
+          - name: outputPath
+            value: "$(params.outputPath)"
+          - name: dataPath
+            value: "$(params.dataPath)"
+          - name: RUNTIME_IMAGE
+            value: "$(params.RUNTIME_IMAGE)"
+      - name: data-transform
+        workflowTemplateRef: data-transform
+        dependencies:
+          - data-validation
+        workspaces:
+          - name: user
+            workspace: shared-workspace
+        params:
+          - name: srcPath
+            value: "$(params.srcPath)"
+          - name: outputPath
+            value: "$(params.outputPath)"
+          - name: dataPath
+            value: "$(params.dataPath)"
+          - name: RUNTIME_IMAGE
+            value: "$(params.RUNTIME_IMAGE)"
+      - name: model-training
+        workflowTemplateRef: model-training
+        dependencies:
+          - data-transform
+        workspaces:
+          - name: user
+            workspace: shared-workspace
+        params:
+          - name: srcPath
+            value: "$(params.srcPath)"
+          - name: outputPath
+            value: "$(params.outputPath)"
+          - name: dataPath
+            value: "$(params.dataPath)"
+          - name: RUNTIME_IMAGE
+            value: "$(params.RUNTIME_IMAGE)"
+      - name: model-analysis
+        workflowTemplateRef: model-analysis
+        dependencies:
+          - model-training
+        workspaces:
+          - name: user
+            workspace: shared-workspace
+        params:
+          - name: srcPath
+            value: "$(params.srcPath)"
+          - name: outputPath
+            value: "$(params.outputPath)"
+          - name: dataPath
+            value: "$(params.dataPath)"
+          - name: RUNTIME_IMAGE
+            value: "$(params.RUNTIME_IMAGE)"
+      - name: roc
+        workflowTemplateRef: roc
+        dependencies:
+          - model-training
+        workspaces:
+          - name: user
+            workspace: shared-workspace
+        params:
+          - name: srcPath
+            value: "$(params.srcPath)"
+          - name: outputPath
+            value: "$(params.outputPath)"
+          - name: RUNTIME_IMAGE
+            value: "$(params.RUNTIME_IMAGE)"
+      - name: confusion-matrix
+        workflowTemplateRef: confusion-matrix
+        dependencies:
+          - model-training
+        workspaces:
+          - name: user
+            workspace: shared-workspace
+        params:
+          - name: srcPath
+            value: "$(params.srcPath)"
+          - name: outputPath
+            value: "$(params.outputPath)"
+          - name: RUNTIME_IMAGE
+            value: "$(params.RUNTIME_IMAGE)"

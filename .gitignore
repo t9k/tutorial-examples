@@ -1,1 +1,17 @@
+# Jupyter notebook tmp directory
 **/.ipynb_checkpoints/*
+
+# Mac generated files
+*.DS_Store
+
+# For local test
+local-test
+
+# Visual Studio Code configuration file
+/.vscode/
+
+# Python generated files
+*.egg-info/
+
+# For local test
+local-test

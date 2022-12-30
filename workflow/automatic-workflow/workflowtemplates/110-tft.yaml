@@ -1,0 +1,41 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowTemplate
+metadata:
+  name: data-transform
+spec:
+  workspaces:
+    - name: user
+      description: A workspace where user program and data files will be uploaded from.
+  params:
+    - name: srcPath
+      description: the path to the src directory, relative to the user workspace.
+      default: src
+    - name: outputPath
+      description: the path to the output directory, relative to the user workspace.
+      default: output
+    - name: trainDataPath
+      description: the path to the data directory, relative to the user workspace.
+      default: data
+    - name: evalDataPath
+      description: the path to the data directory, relative to the user workspace.
+      default: data
+    - name: RUNTIME_IMAGE
+      description: The docker image for runnning this task.
+      default: "registry.tensorstack.cn/t9k/tfx:prod-2.1.1"
+  type: SeqPod
+  seqPod:
+    steps:
+      - name: tf-transform
+        image: $(params.RUNTIME_IMAGE)
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        workingDir: $(workspaces.user.path)
+        command:
+          - python3
+          - $(params.srcPath)/tft/transform.py
+          - --output=$(params.outputPath)/tft
+          - --train=$(params.trainDataPath)/train.csv
+          - --eval=$(params.dataPath)/eval.csv
+          - --schema=$(params.outputPath)/tfdv/schema.json

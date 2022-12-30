@@ -1,0 +1,39 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowTemplate
+metadata:
+  name: model-analysis
+spec:
+  workspaces:
+    - name: user
+      description: A workspace where user program and data files will be uploaded from.
+  params:
+    - name: srcPath
+      description: the path to the src directory, relative to the user workspace.
+      default: src
+    - name: outputPath
+      description: the path to the output directory, relative to the user workspace.
+      default: output
+    - name: dataPath
+      description: the path to the data directory, relative to the user workspace.
+      default: data
+    - name: RUNTIME_IMAGE
+      description: The docker image for runnning this task.
+      default: "registry.tensorstack.cn/t9k/tfx:prod-2.1.1"
+  type: SeqPod
+  seqPod:
+    steps:
+      - name: analyze-model
+        image: $(params.RUNTIME_IMAGE)
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        workingDir: $(workspaces.user.path)
+        command:
+          - python3
+          - $(params.srcPath)/tfma/model_analysis.py
+          - --output=$(params.outputPath)/tfma
+          - --model=$(params.outputPath)/trainer/model/tfma_eval_model_dir
+          - --eval=$(params.dataPath)/eval.csv
+          - --schema=$(params.outputPath)/tfdv/schema.json
+          - --slice-columns=trip_start_hour

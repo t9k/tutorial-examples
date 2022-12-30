@@ -1,0 +1,14 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowRun
+metadata:
+  generateName: taxi-tips-prediction-
+spec:
+  workflowTemplateRef: taxi-tips-prediction
+  params:
+    - name: outputPath
+      value: output
+  workspaces:
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: tutorial
+      subPath: tutorial-examples/workflow/automatic-workflow

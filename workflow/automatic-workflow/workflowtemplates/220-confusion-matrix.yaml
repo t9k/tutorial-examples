@@ -1,0 +1,34 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowTemplate
+metadata:
+  name: confusion-matrix
+spec:
+  workspaces:
+    - name: user
+      description: A workspace where user program and data files will be uploaded from.
+  params:
+    - name: srcPath
+      description: the path to the src directory, relative to the user workspace.
+      default: src
+    - name: outputPath
+      description: the path to the output directory, relative to the user workspace.
+      default: output
+    - name: RUNTIME_IMAGE
+      description: The docker image for runnning this task.
+      default: "registry.tensorstack.cn/t9k/tfx:prod-2.1.1"
+  type: SeqPod
+  seqPod:
+    steps:
+      - name: compute-confusion-matrix
+        image: $(params.RUNTIME_IMAGE)
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        workingDir: $(workspaces.user.path)
+        command:
+          - python3
+          - $(params.srcPath)/confusion_matrix/confusion_matrix.py
+          - --output=$(params.outputPath)/confusion_matrix
+          - --predictions=$(params.outputPath)/trainer/prediction_results-*
+          - --output-schema=$(params.outputPath)/trainer/output_schema.json
