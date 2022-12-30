@@ -2,10 +2,6 @@ apiVersion: batch.tensorstack.dev/v1beta1
 kind: WorkflowTemplate
 metadata:
   name: model-analysis
-  labels:
-    tensorstack.dev/component: taskman
-    tensorstack.dev/component-type: user
-    tensorstack.dev/execution-type: ModelAnalysis
 spec:
   workspaces:
     - name: user
@@ -28,10 +24,6 @@ spec:
     steps:
       - name: analyze-model
         image: $(params.RUNTIME_IMAGE)
-        resources:
-          limits:
-            cpu: 500m
-            memory: 500Mi
         workingDir: $(workspaces.user.path)
         command:
           - python3
