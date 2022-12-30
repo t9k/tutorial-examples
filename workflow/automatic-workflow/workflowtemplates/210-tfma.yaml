@@ -24,6 +24,10 @@ spec:
     steps:
       - name: analyze-model
         image: $(params.RUNTIME_IMAGE)
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
         workingDir: $(workspaces.user.path)
         command:
           - python3
