@@ -1,0 +1,58 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: AutoTuneExperiment
+metadata:
+  name: keras-mnist-autotune
+spec:
+  maxExecSeconds: 3600
+  maxTrialNum: 20
+  trialConcurrency: 3
+  aimd:
+    secret: api-key-aimd
+    folder: 
+  storage: 100Mi
+  searchSpace: |-
+    {
+      "batch_size": {"_type": "choice", "_value": [16, 32, 64, 128]},
+      "learning_rate": {"_type": "choice", "_value": [0.0001, 0.001, 0.01, 0.1]},
+      "conv_channels1": {"_type": "choice", "_value": [16, 32, 64, 128]}
+    }
+  trainingConfig:
+    type: tensorflow
+    tasks:
+      - type: worker
+        replicas: 4
+        template:
+          spec:
+            securityContext:
+              runAsUser: 1000
+            containers:
+              - name: tensorflow
+                command:
+                  - python3
+                  - autotune/hpo/keras_mnist_autotune.py
+                  - "--log_dir"
+                  - "autotune/hpo/log"
+                  - "--no_cuda"
+                workingDir: /t9k/mnt/tutorial-examples
+                image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+                resources:
+                  requests:
+                    cpu: 2000m
+                    memory: 2Gi
+                  limits:
+                    cpu: 4000m
+                    memory: 4Gi
+                volumeMounts:
+                  - mountPath: /t9k/mnt
+                    name: data
+            volumes:
+              - name: data
+                persistentVolumeClaim:
+                  claimName: tutorial
+  tuner:
+    builtinTunerName: TPE
+    classArgs: |-
+      {
+        "optimize_mode": "maximize", 
+        "constant_liar_type": "min"
+      }
