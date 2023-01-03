@@ -9,18 +9,21 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.parallel import DistributedDataParallel as DDP
 import torch.optim as optim
-from torch.optim.lr_scheduler import StepLR
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
 
 parser = argparse.ArgumentParser(
     description='Distributed training of Keras model for MNIST with DDP.')
+parser.add_argument('--api_key',
+                    type=str,
+                    help='API Key for requesting AIMD server.')
 parser.add_argument(
     '--backend',
     type=str,
     help='Distributed backend',
     choices=[dist.Backend.GLOO, dist.Backend.NCCL, dist.Backend.MPI],
     default=dist.Backend.GLOO)
+parser.add_argument('--host', type=str, help='URL of AIMD server.')
 parser.add_argument('--log_dir',
                     type=str,
                     help='Path of the TensorBoard log directory.')
@@ -35,12 +38,18 @@ class Net(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.conv3 = nn.Conv2d(64, 64, 3, 1)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.dense1 = nn.Linear(576, 64)
-        self.dense2 = nn.Linear(64, 10)
+        self.conv1 = nn.Conv2d(1, params['conv_channels1'],
+                               params['conv_kernel_size'], 1)
+        self.conv2 = nn.Conv2d(params['conv_channels1'],
+                               params['conv_channels2'],
+                               params['conv_kernel_size'], 1)
+        self.conv3 = nn.Conv2d(params['conv_channels2'],
+                               params['conv_channels3'],
+                               params['conv_kernel_size'], 1)
+        self.pool = nn.MaxPool2d(params['maxpool_size'],
+                                 params['maxpool_size'])
+        self.dense1 = nn.Linear(576, params['linear_features1'])
+        self.dense2 = nn.Linear(params['linear_features1'], 10)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -73,6 +82,12 @@ def train(scheduler):
 
                 if args.log_dir and rank == 0:
                     writer.add_scalar('train/loss', train_loss, global_step)
+
+                if rank == 0:
+                    trial.log(metrics_type='train',
+                              metrics={'loss': train_loss},
+                              step=global_step,
+                              epoch=epoch)
 
         scheduler.step()
         global_step = epoch * steps_per_epoch
@@ -108,6 +123,15 @@ def test(val=False, epoch=None):
         writer.add_scalar('{:s}/accuracy'.format(label), test_accuracy,
                           global_step)
 
+    if rank == 0:
+        trial.log(metrics_type=label,
+                  metrics={
+                      'loss': test_loss,
+                      'accuracy': test_accuracy,
+                  },
+                  step=global_step,
+                  epoch=epoch)
+
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -124,6 +148,27 @@ if __name__ == '__main__':
     rank = dist.get_rank()
     world_size = dist.get_world_size()
 
+    params = {
+        'batch_size': 32 * world_size,
+        'epochs': 10,
+        'learning_rate': 0.001 * world_size,
+        'learning_rate_decay_period': 1,
+        'learning_rate_decay_factor': 0.7,
+        'conv_channels1': 32,
+        'conv_channels2': 64,
+        'conv_channels3': 64,
+        'conv_kernel_size': 3,
+        'maxpool_size': 2,
+        'linear_features1': 64,
+        'seed': 1,
+    }
+
+    if rank == 0:
+        from t9k import aimd
+        trial = aimd.create_trial(trial_name='mnist_torch_distributed',
+                                  folder_path='aimd-example')
+        trial.params.update(params)
+
     # rank 0 download datasets in advance
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'data')
@@ -131,11 +176,16 @@ if __name__ == '__main__':
         datasets.MNIST(root=dataset_path, train=True, download=True)
         datasets.MNIST(root=dataset_path, train=False, download=True)
 
+    torch.manual_seed(params['seed'])
+
     model = Net().to(device)
     model = DDP(model)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001 * world_size)
-    scheduler = StepLR(optimizer, step_size=1, gamma=0.7)
+    optimizer = optim.Adam(model.parameters(), lr=params['learning_rate'])
+    scheduler = optim.lr_scheduler.StepLR(
+        optimizer,
+        step_size=params['learning_rate_decay_period'],
+        gamma=params['learning_rate_decay_factor'])
 
     transform = transforms.Compose(
         [transforms.ToTensor(),
@@ -151,7 +201,7 @@ if __name__ == '__main__':
                                   download=False,
                                   transform=transform)
     train_loader = torch.utils.data.DataLoader(train_dataset,
-                                               batch_size=32 * world_size,
+                                               batch_size=params['batch_size'],
                                                shuffle=True,
                                                **kwargs)
     val_loader = torch.utils.data.DataLoader(val_dataset,
@@ -170,7 +220,12 @@ if __name__ == '__main__':
         writer = SummaryWriter(log_dir)
 
     global_step = 0
-    epochs = 10
+    epochs = params['epochs']
     steps_per_epoch = len(train_loader)
     train(scheduler)
     test()
+
+    if rank == 0:
+        trial.finish()
+        aimd.login(host=args.host, api_key=args.api_key)
+        trial.upload(make_folder=True)

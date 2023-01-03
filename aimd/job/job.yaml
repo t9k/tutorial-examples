@@ -1,0 +1,74 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: PyTorchTrainingJob
+metadata:
+  name: torch-mnist-trainingjob-aimd
+spec:
+  tensorboardSpec:
+    trainingLogFilesets:
+      - t9k://pvc/tutorial/tutorial-examples/aimd/job/log
+    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+  replicaSpecs:
+    - type: master
+      replicas: 1
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - name: pytorch
+              command:
+                - python
+                - aimd/job/torch_mnist_trainingjob_aimd.py
+                - "--host"
+                - ""
+                - "--api_key"
+                - ""
+                - "--log_dir"
+                - "aimd/job/log"
+                - "--no_cuda"
+              workingDir: /t9k/mnt/tutorial-examples
+              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              resources:
+                requests:
+                  cpu: 8000m
+                  memory: 2Gi
+                limits:
+                  cpu: 12000m
+                  memory: 4Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
+    - type: worker
+      replicas: 3
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - name: pytorch
+              command:
+                - python
+                - aimd/job/torch_mnist_trainingjob_aimd.py
+                - "--no_cuda"
+              workingDir: /t9k/mnt/tutorial-examples
+              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              resources:
+                requests:
+                  cpu: 8000m
+                  memory: 2Gi
+                limits:
+                  cpu: 12000m
+                  memory: 4Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
