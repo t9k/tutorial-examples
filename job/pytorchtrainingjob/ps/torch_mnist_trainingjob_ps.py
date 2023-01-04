@@ -21,19 +21,6 @@ global_lock = Lock()
 parser = argparse.ArgumentParser(
     description='Distributed training of PyTorch model for MNIST '
     'with RPC-based parameter server.')
-parser.add_argument('--aimd',
-                    action='store_true',
-                    default=False,
-                    help='Use AIMD to record training data.')
-parser.add_argument('--api_key',
-                    type=str,
-                    help='API Key for requesting AIMD server. '
-                    'Required if --aimd is set.')
-parser.add_argument(
-    '--folder_path',
-    type=str,
-    default='aimd-example',
-    help='Path of AIMD folder in which trial is to be created.')
 parser.add_argument('--log_dir',
                     type=str,
                     help='Path of the TensorBoard log directory.')
@@ -41,19 +28,10 @@ parser.add_argument('--no_cuda',
                     action='store_true',
                     default=False,
                     help='Disable CUDA training.')
-parser.add_argument(
-    '--server_url',
-    type=str,
-    default='https://proxy.nc201.kube.tensorstack.net/t9k/aimd/server',
-    help='URL of AIMD server. Required if --aimd is set.')
 parser.add_argument('--save_path',
                     type=str,
                     default=None,
                     help='Save path of the trained model.')
-parser.add_argument('--trial_name',
-                    type=str,
-                    default='mnist_torch_distributed_ps',
-                    help='Name of AIMD trial to create.')
 logger = logging.getLogger('print')
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
@@ -283,13 +261,6 @@ def train(net):
                 if args.log_dir:
                     writer.add_scalar('train/loss', train_loss, global_step)
 
-                if args.aimd:
-                    trial.log(
-                        metrics_type='train',  # 记录训练指标
-                        metrics={'loss': train_loss},  # 指标名称及相应值
-                        step=global_step,  # 当前全局步数
-                        epoch=epoch)  # 当前回合数
-
         global_step = epoch * steps_per_epoch
         test(net, val=True, epoch=epoch)
 
@@ -322,16 +293,6 @@ def test(net, val=False, epoch=None):
         writer.add_scalar('{:s}/accuracy'.format(label), test_accuracy,
                           global_step)
 
-    if args.aimd:
-        trial.log(
-            metrics_type=label,  # 记录验证/测试指标
-            metrics={
-                'loss': test_loss,
-                'accuracy': test_accuracy,
-            },
-            step=global_step,
-            epoch=epoch)
-
 
 # Main loop for workers.
 def run_worker():
@@ -343,26 +304,27 @@ def run_worker():
 
     global train_loader, val_loader, test_loader, steps_per_epoch
     transform = transforms.Compose(
-            [transforms.ToTensor(),
-             transforms.Normalize((0.5), (0.5))])
+        [transforms.ToTensor(),
+         transforms.Normalize((0.5), (0.5))])
     train_set = datasets.MNIST(root=dataset_path,
-                                train=True,
-                                download=True,
-                                transform=transform)
-    train_set, val_set = torch.utils.data.random_split(
-        train_set, [48000, 12000])
-    train_loader = torch.utils.data.DataLoader(
-        train_set, batch_size=params['batch_size'], shuffle=True)
+                               train=True,
+                               download=True,
+                               transform=transform)
+    train_set, val_set = torch.utils.data.random_split(train_set,
+                                                       [48000, 12000])
+    train_loader = torch.utils.data.DataLoader(train_set,
+                                               batch_size=params['batch_size'],
+                                               shuffle=True)
     val_loader = torch.utils.data.DataLoader(val_set,
-                                                batch_size=500,
-                                                shuffle=False)
+                                             batch_size=500,
+                                             shuffle=False)
     test_set = datasets.MNIST(root=dataset_path,
-                                train=False,
-                                download=True,
-                                transform=transform)
+                              train=False,
+                              download=True,
+                              transform=transform)
     test_loader = torch.utils.data.DataLoader(test_set,
-                                                batch_size=500,
-                                                shuffle=False)
+                                              batch_size=500,
+                                              shuffle=False)
     steps_per_epoch = len(train_loader)
 
     net = TrainerNet(rank=rank)
@@ -401,15 +363,6 @@ if __name__ == '__main__':
     if rank == 0:
         run_parameter_server()
     else:
-        if args.aimd:
-            from t9k import aimd
-            trial = aimd.init(trial_name=args.trial_name +
-                              '_worker_{}'.format(rank),
-                              server_url=args.server_url,
-                              folder_path=args.folder_path,
-                              api_key=args.api_key)
-            trial.params.update(params)
-
         dataset_path = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), 'data')
         if rank == 1:
@@ -425,11 +378,7 @@ if __name__ == '__main__':
                 shutil.rmtree(log_dir, ignore_errors=True)
             writer = SummaryWriter(log_dir)
 
-
         global_step = 0
         epochs = params['epochs']
         steps_per_epoch = None
         run_worker()
-
-        if args.aimd:
-            trial.finish()

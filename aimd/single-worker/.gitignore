@@ -1,0 +1,5 @@
+# dataset files
+data/
+
+# AIMD logs
+.aimd/
