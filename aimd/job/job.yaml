@@ -60,10 +60,10 @@ spec:
               image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 8000m
+                  cpu: 8.0
                   memory: 2Gi
                 limits:
-                  cpu: 12000m
+                  cpu: 12.0
                   memory: 4Gi
               volumeMounts:
                 - mountPath: /t9k/mnt

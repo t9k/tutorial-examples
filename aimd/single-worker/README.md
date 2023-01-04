@@ -6,7 +6,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/aimd/single-device
+cd ~/tutorial-examples/aimd/single-worker
 vim job.yaml
 # fill in host of AIMD server (line 20) and your API Key (line 22)
 # host of AIMD server is like "https://.../t9k/aimd/server"
