@@ -14,7 +14,7 @@ vim job.yaml
 
 使用 `job.yaml` 创建 PyTorchTrainingJob：
 
-> PyTorchTrainingJob 本身被设计用于运行 PyTorch 的分布式训练，这里为便于演示，将使用只有一个工作器的 PyTorchTrainingJob 来运行这一训练。您也可以在安装了 PyTorch 的本地环境或 Notebook 中直接运行脚本 `torch_mnist_aimd.py`。
+> PyTorchTrainingJob 本身被设计用于运行 PyTorch 的分布式训练，这里为便于演示，将使用只有一个工作器的 PyTorchTrainingJob 来运行这一训练。您也可以在安装了 PyTorch 的本地环境或 Notebook 中直接运行脚本 `torch_mnist_single_aimd.py`。
 
 ```shell
 kubectl create -f job.yaml
@@ -26,4 +26,4 @@ kubectl create -f job.yaml
 kubectl get -f job.yaml -o wide -w
 ```
 
-或者前往模型构建控制台查看训练状态和日志等。训练完成后，其数据将被上传到 AIMD 服务器，此时前往实验管理控制台，找到文件夹 aimd-example 下的试验 mnist_torch，进入以查看试验的元数据、运行环境、指标以及超参数。
+或者前往模型构建控制台查看训练状态和日志等。训练完成后，其数据将被上传到 AIMD 服务器，此时前往实验管理控制台，找到文件夹 aimd-example 下的试验 mnist_torch（文件夹路径和试验名称被硬编码在 `torch_mnist_single_aimd.py` 的第 132-133 行），进入以查看试验的元数据、运行环境、指标以及超参数。

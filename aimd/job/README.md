@@ -6,7 +6,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/aimd/single-device
+cd ~/tutorial-examples/aimd/distributed
 vim job.yaml
 # fill in host of AIMD server (line 24) and your API Key (line 26)
 # host of AIMD server is like "https://.../t9k/aimd/server"
@@ -24,4 +24,4 @@ kubectl create -f job.yaml
 kubectl get -f job.yaml -o wide -w
 ```
 
-或者前往模型构建控制台查看训练状态、日志和 TensorBoard 等。训练完成后，其数据将被上传到 AIMD 服务器，此时前往实验管理控制台，找到文件夹 aimd-example 下的试验 mnist_torch_distributed，进入以查看试验的元数据、运行环境、指标以及超参数。
+或者前往模型构建控制台查看训练状态、日志和 TensorBoard 等。训练完成后，其数据将被上传到 AIMD 服务器，此时前往实验管理控制台，找到文件夹 aimd-example 下的试验 mnist_torch_distributed（文件夹路径和试验名称被硬编码在 `torch_mnist_trainingjob_aimd.py` 的第 169-170 行），进入以查看试验的元数据、运行环境、指标以及超参数。

@@ -124,9 +124,9 @@ if __name__ == '__main__':
     rank = dist.get_rank()
     world_size = dist.get_world_size()
 
-    # rank 0 download datasets in advance
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'data')
+    # rank 0 downloads datasets in advance
     if rank == 0:
         datasets.MNIST(root=dataset_path, train=True, download=True)
         datasets.MNIST(root=dataset_path, train=False, download=True)

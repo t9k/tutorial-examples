@@ -13,14 +13,14 @@ from t9k import aimd
 parser = argparse.ArgumentParser(
     description=
     'Recording of training data of PyTorch model for MNIST with AIMD.')
-parser.add_argument('--api_key',
-                    type=str,
-                    required=True,
-                    help='API Key for requesting AIMD server.')
-parser.add_argument('--host',
+parser.add_argument('--aimd_host',
                     type=str,
                     required=True,
                     help='URL of AIMD server.')
+parser.add_argument('--api_key',
+                    type=str,
+                    required=True,
+                    help='API Key for communicating with AIMD server.')
 parser.add_argument('--no_cuda',
                     action='store_true',
                     default=False,
@@ -75,10 +75,10 @@ def train(scheduler):
                 global_step = (epoch - 1) * steps_per_epoch + step
 
                 trial.log(
-                    metrics_type='train',  # 记录训练指标
-                    metrics={'loss': train_loss},  # 指标名称及相应值
-                    step=global_step,  # 当前全局步数
-                    epoch=epoch)  # 当前回合数
+                    metrics_type='train',
+                    metrics={'loss': train_loss},
+                    step=global_step,
+                    epoch=epoch)
 
         scheduler.step()
         global_step = epoch * steps_per_epoch
@@ -110,7 +110,7 @@ def test(val=False, epoch=None):
     logging.info(msg)
 
     trial.log(
-        metrics_type=label,  # 记录验证/测试指标
+        metrics_type=label,
         metrics={
             'loss': test_loss,
             'accuracy': test_accuracy,
@@ -194,5 +194,5 @@ if __name__ == '__main__':
     test()
 
     trial.finish()
-    aimd.login(host=args.host, api_key=args.api_key)
+    aimd.login(host=args.aimd_host, api_key=args.api_key)
     trial.upload(make_folder=True)

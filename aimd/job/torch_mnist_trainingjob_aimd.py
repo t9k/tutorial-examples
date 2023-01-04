@@ -12,18 +12,20 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
 
+from t9k import aimd
+
 parser = argparse.ArgumentParser(
     description='Distributed training of Keras model for MNIST with DDP.')
+parser.add_argument('--aimd_host', type=str, help='URL of AIMD server.')
 parser.add_argument('--api_key',
                     type=str,
-                    help='API Key for requesting AIMD server.')
+                    help='API Key for communicating with AIMD server.')
 parser.add_argument(
     '--backend',
     type=str,
     help='Distributed backend',
     choices=[dist.Backend.GLOO, dist.Backend.NCCL, dist.Backend.MPI],
     default=dist.Backend.GLOO)
-parser.add_argument('--host', type=str, help='URL of AIMD server.')
 parser.add_argument('--log_dir',
                     type=str,
                     help='Path of the TensorBoard log directory.')
@@ -164,14 +166,13 @@ if __name__ == '__main__':
     }
 
     if rank == 0:
-        from t9k import aimd
         trial = aimd.create_trial(trial_name='mnist_torch_distributed',
                                   folder_path='aimd-example')
         trial.params.update(params)
 
-    # rank 0 download datasets in advance
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'data')
+    # rank 0 downloads datasets in advance
     if rank == 0:
         datasets.MNIST(root=dataset_path, train=True, download=True)
         datasets.MNIST(root=dataset_path, train=False, download=True)
@@ -227,5 +228,5 @@ if __name__ == '__main__':
 
     if rank == 0:
         trial.finish()
-        aimd.login(host=args.host, api_key=args.api_key)
+        aimd.login(host=args.aimd_host, api_key=args.api_key)
         trial.upload(make_folder=True)

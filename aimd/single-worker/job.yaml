@@ -1,7 +1,7 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: PyTorchTrainingJob
 metadata:
-  name: torch-mnist-aimd
+  name: torch-mnist-single-aimd
 spec:
   replicaSpecs:
     - type: master
@@ -15,8 +15,8 @@ spec:
             - name: pytorch
               command:
                 - python
-                - aimd/single-device/torch_mnist_aimd.py
-                - "--host"
+                - aimd/single-worker/torch_mnist_single_aimd.py
+                - "--aimd_host"
                 - ""
                 - "--api_key"
                 - ""
@@ -25,10 +25,10 @@ spec:
               image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 8000m
+                  cpu: 8.0
                   memory: 2Gi
                 limits:
-                  cpu: 12000m
+                  cpu: 12.0
                   memory: 4Gi
               volumeMounts:
                 - mountPath: /t9k/mnt
