@@ -1,12 +1,12 @@
 # Job 使用 AIMD
 
-本示例使用 AIMD 在 Job 分布式训练中记录并展示模型的训练数据（以 PyTorch 模型的多工作器同步训练为例）。
+本示例使用 AIMD 在 Job 分布式训练中记录并展示模型的训练数据（以 PyTorch 模型的多工作器同步训练为例）。本示例的训练脚本修改自示例[使用 PyTorchTrainingJob 进行多工作器同步训练](../../job/pytorchtrainingjob/ddp)的训练脚本，在其基础上增加了创建试验、使用超参数配置模型、记录指标、结束和上传试验等步骤。
 
 切换到当前目录下，编辑文件 `job.yaml`，在命令中补全 AIMD 服务器的地址（第 24 行）以及您的 API Key（第 26 行）。
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/aimd/distributed
+cd ~/tutorial-examples/aimd/job
 vim job.yaml
 # fill in host of AIMD server (line 24) and your API Key (line 26)
 # host of AIMD server is like "https://.../t9k/aimd/server"
