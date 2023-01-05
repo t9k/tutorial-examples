@@ -1,6 +1,6 @@
 # 部署用于生产环境的模型推理服务
 
-本示例使用 MLService 部署用于生产环境的模型推理服务。
+本示例使用 MLService 部署用于生产环境的模型推理服务（以 Keras 模型为例）。
 
 ## 准备工作
 
@@ -22,6 +22,7 @@ tar zxvf saved_model.tar.gz
 将这些文件放置到 s3 存储的 `s3://tutorial/keras-mnist/` 路径下：
 
 ```shell
+s3cmd mb s3://tutorial
 s3cmd put -r saved_model/* s3://tutorial/keras-mnist/
 ```
 
@@ -56,14 +57,14 @@ curl -H 'content-type:application/json' -d '@data.json' <URL>
       3.80764725e-11,
       2.20902262e-13,
       4.51935573e-15,
-      1,
+      1.0,
       5.78038117e-10,
       6.0478933e-10
     ],
     [
       4.08048491e-11,
       7.25147e-9,
-      1,
+      1.0,
       6.50814165e-16,
       4.15474912e-14,
       1.13560955e-17,

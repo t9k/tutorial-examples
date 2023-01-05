@@ -4,7 +4,6 @@ metadata:
   name: keras-mnist-mlservice
 spec:
   default: test
-  canary: ''
   canaryTrafficPercent: 0
   releases:
     - name: test
@@ -18,3 +17,6 @@ spec:
             limits:
               cpu: 200m
               memory: 500M
+        storage:
+          s3Storage:
+            secretName: s3cfg
