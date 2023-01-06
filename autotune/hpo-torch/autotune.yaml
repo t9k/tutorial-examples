@@ -1,0 +1,86 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: AutoTuneExperiment
+metadata:
+  name: torch-mnist-autotune
+spec:
+  maxExecSeconds: 7200
+  maxTrialNum: 20
+  trialConcurrency: 3
+  storage: 100Mi
+  searchSpace: |-
+    {
+      "batch_size": {"_type": "choice", "_value": [16, 32, 64, 128]},
+      "learning_rate": {"_type": "choice", "_value": [0.0001, 0.001, 0.01, 0.1]},
+      "conv_channels1": {"_type": "choice", "_value": [16, 32, 64, 128]}
+    }
+  trainingConfig:
+    type: pytorch
+    tasks:
+      - type: master
+        replicas: 1
+        template:
+          spec:
+            securityContext:
+              runAsUser: 1000
+            containers:
+              - name: pytorch
+                command:
+                  - python3
+                  - autotune/hpo-torch/torch_mnist_autotune.py
+                  - "--backend"
+                  - "gloo"
+                  - "--no_cuda"
+                workingDir: /t9k/mnt/tutorial-examples
+                imagePullPolicy: IfNotPresent
+                image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+                resources:
+                  requests:
+                    cpu: 8.0
+                    memory: 2Gi
+                  limits:
+                    cpu: 12.0
+                    memory: 4Gi
+                volumeMounts:
+                  - mountPath: /t9k/mnt
+                    name: data
+            volumes:
+              - name: data
+                persistentVolumeClaim:
+                  claimName: tutorial
+      - type: worker
+        replicas: 3
+        template:
+          spec:
+            securityContext:
+              runAsUser: 1000
+            containers:
+              - name: pytorch
+                command:
+                  - python3
+                  - autotune/hpo-torch/torch_mnist_autotune.py
+                  - "--backend"
+                  - "gloo"
+                  - "--no_cuda"
+                workingDir: /t9k/mnt/tutorial-examples
+                image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+                resources:
+                  requests:
+                    cpu: 8.0
+                    memory: 2Gi
+                  limits:
+                    cpu: 12.0
+                    memory: 4Gi
+                volumeMounts:
+                  - mountPath: /t9k/mnt
+                    name: data
+            volumes:
+              - name: data
+                persistentVolumeClaim:
+                  claimName: tutorial
+  tuner:
+    builtinTunerName: TPE
+    classArgs: |-
+      {
+        "optimize_mode": "maximize", 
+        "constant_liar_type": "min"
+      }
