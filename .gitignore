@@ -1,5 +1,19 @@
+# dataset files
+data/
+mnist.npz
+
+# model files
+saved_model/
+
+# log files
+log/
+.aimd/
+
+# output files
+output/
+
 # Jupyter notebook tmp directory
-**/.ipynb_checkpoints/*
+.ipynb_checkpoints
 
 # Mac generated files
 *.DS_Store
@@ -12,6 +26,3 @@ local-test
 
 # Python generated files
 *.egg-info/
-
-# For local test
-local-test

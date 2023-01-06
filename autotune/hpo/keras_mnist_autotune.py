@@ -90,9 +90,11 @@ with strategy.scope():
         loss='sparse_categorical_crossentropy',
         metrics=['accuracy'])
 
-(train_images, train_labels), (test_images,
-                               test_labels) = datasets.mnist.load_data(
-                                   path=os.path.join(os.getcwd(), 'mnist.npz'))
+dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                            'mnist.npz')
+(train_images,
+ train_labels), (test_images,
+                 test_labels) = datasets.mnist.load_data(path=dataset_path)
 train_images = train_images.reshape((60000, 28, 28, 1)).astype("float32") / 255
 test_images = test_images.reshape((10000, 28, 28, 1)).astype("float32") / 255
 train_images, val_images = train_images[:48000], train_images[48000:]
