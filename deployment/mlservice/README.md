@@ -1,10 +1,14 @@
 # 部署用于生产环境的模型推理服务
 
-本示例使用 MLService 部署用于生产环境的模型推理服务（以 Keras 模型为例）。
+本示例使用 MLService 部署用于生产环境的模型推理服务（以 Keras 模型为例），主要包含以下操作：
+
+1. 将训练好的模型文件上传到 S3 存储服务
+1. 创建 `MLService` 模型推理服务，其使用 S3 中存储的模型
+1. 使用命令行向 `MLService` 发送推理请求
 
 ## 准备工作
 
-1. 将集群的 s3 服务对应的 s3cmd 配置文件放置于 `/t9k/mnt/.s3cfg` 路径下，执行 `s3cmd ls` 命令以确认可以访问。
+1. 将集群的 S3 服务对应的 s3cmd 配置文件放置于 `/t9k/mnt/.s3cfg` 路径下，执行 `s3cmd ls` 命令以确认可以访问。
 1. 前往模型构建控制台，创建一个 S3-cfg 类型的 Secret，名称填写 s3cfg，服务端点、访问键和密码分别按照上述配置文件中相应的值填写。
 
 ## 操作步骤
@@ -19,11 +23,11 @@ tar zxvf saved_model.tar.gz
 
 得到的 `saved_model` 目录里面是一个在 MNIST 数据集上训练的简易 Keras 模型以 SavedModel 格式保存的文件。
 
-将这些文件放置到 s3 存储的 `s3://tutorial/keras-mnist/` 路径下：
+将这些文件放置到 S3 存储的 `s3://tutorial/keras-mnist/` 路径下：
 
 ```shell
 s3cmd mb s3://tutorial
-s3cmd put -r saved_model/* s3://tutorial/keras-mnist/
+s3cmd sync saved_model/* s3://tutorial/keras-mnist/
 ```
 
 使用 `mlservice.yaml` 创建 MLService：
