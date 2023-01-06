@@ -12,10 +12,6 @@ from t9k import tuner
 parser = argparse.ArgumentParser(
     description='Distributed training of Keras model for MNIST with '
     'MultiWorkerMirroredStrategy.')
-parser.add_argument('--log_dir',
-                    type=str,
-                    default=None,
-                    help='Path of the TensorBoard log directory.')
 parser.add_argument('--no_cuda',
                     action='store_true',
                     default=False,
@@ -114,9 +110,6 @@ if task_index == 0:
     from t9k.tuner.keras import AutoTuneFitCallback, AutoTuneEvalCallback
     train_callbacks.append(AutoTuneFitCallback(metric='accuracy'))
     test_callbacks.append(AutoTuneEvalCallback(metric='accuracy'))
-    if args.log_dir:
-        tensorboard_callback = callbacks.TensorBoard(log_dir=args.log_dir)
-        train_callbacks.append(tensorboard_callback)
 
 model.fit(train_images,
           train_labels,
