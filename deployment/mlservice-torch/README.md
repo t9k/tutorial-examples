@@ -19,7 +19,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/deployment/mlservice
+cd ~/tutorial-examples/deployment/mlservice-torch
 s3cmd mb s3://tutorial  # if necessary
 s3cmd sync mnist.mar s3://tutorial/torch-mnist/
 ```

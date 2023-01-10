@@ -17,7 +17,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/deployment/mlservice
+cd ~/tutorial-examples/deployment/mlservice-keras
 tar zxvf saved_model.tar.gz
 ```
 
