@@ -2,7 +2,7 @@
 
 本示例使用 MLService 部署用于生产环境的模型推理服务（以 Keras 模型为例），主要包含以下操作：
 
-1. 将训练好的模型文件上传到 S3 存储服务
+1. 将训练好保存的模型文件上传到 S3 存储服务
 1. 创建 `MLService` 模型推理服务，其使用 S3 中存储的模型
 1. 使用命令行向 `MLService` 发送推理请求
 
@@ -23,10 +23,10 @@ tar zxvf saved_model.tar.gz
 
 得到的 `saved_model` 目录里面是一个在 MNIST 数据集上训练的简易 Keras 模型以 SavedModel 格式保存的文件。
 
-将这些文件放置到 S3 存储的 `s3://tutorial/keras-mnist/` 路径下：
+将这些文件同步到 S3 存储的 `s3://tutorial/keras-mnist/` 路径下：
 
 ```shell
-s3cmd mb s3://tutorial
+s3cmd mb s3://tutorial  # if necessary
 s3cmd sync saved_model/* s3://tutorial/keras-mnist/
 ```
 

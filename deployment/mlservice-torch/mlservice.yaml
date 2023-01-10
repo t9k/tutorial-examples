@@ -1,0 +1,22 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLService
+metadata:
+  name: torch-mnist-mlservice
+spec:
+  default: test
+  canaryTrafficPercent: 0
+  releases:
+    - name: test
+      predictor:
+        maxReplicas: 1
+        minReplicas: 1
+        pytorch:
+          image: registry.tensorstack.cn/t9kmirror/pytorch-serve:0.4.2-cpu
+          modelUri: s3://tutorial/torch-mnist/
+          resources:
+            limits:
+              cpu: 200m
+              memory: 500M
+        storage:
+          s3Storage:
+            secretName: s3cfg
