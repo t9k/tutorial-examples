@@ -23,17 +23,18 @@ spec:
                 - "--log_dir"
                 - "job/pytorchtrainingjob/ddp/log"
                 - "--backend"
-                - "gloo"
-                - "--no_cuda"
+                - "nccl"
               workingDir: /t9k/mnt/tutorial-examples
               image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 8
+                  cpu: 1
                   memory: 2Gi
+                  nvidia.com/gpu: 1
                 limits:
-                  cpu: 12
+                  cpu: 2
                   memory: 4Gi
+                  nvidia.com/gpu: 1
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
@@ -56,17 +57,18 @@ spec:
                 - "--log_dir"
                 - "job/pytorchtrainingjob/ddp/log"
                 - "--backend"
-                - "gloo"
-                - "--no_cuda"
+                - "nccl"
               workingDir: /t9k/mnt/tutorial-examples
               image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 8
+                  cpu: 1
                   memory: 2Gi
+                  nvidia.com/gpu: 1
                 limits:
-                  cpu: 12
+                  cpu: 2
                   memory: 4Gi
+                  nvidia.com/gpu: 1
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
