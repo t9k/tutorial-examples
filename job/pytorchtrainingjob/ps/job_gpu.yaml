@@ -1,39 +1,39 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: PyTorchTrainingJob
 metadata:
-  name: torch-mnist-trainingjob
+  name: torch-mnist-trainingjob-ps
 spec:
+  runPolicy:
+    cleanUpPolicy: Unfinished
+    backoffLimit: 20
   tensorboardSpec:
     trainingLogFilesets:
-      - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log
+      - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ps/log
     image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
     - type: master
       replicas: 1
-      restartPolicy: ExitCode
+      restartPolicy: OnFailure
       template:
         spec:
           securityContext:
             runAsUser: 1000
           containers:
-            - name: pytorch
-              command:
+            - command:
                 - python
-                - job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py
-                - "--log_dir"
-                - "job/pytorchtrainingjob/ddp/log"
-                - "--backend"
-                - "gloo"
-                - "--no_cuda"
+                - job/pytorchtrainingjob/ps/torch_mnist_trainingjob_ps.py
               workingDir: /t9k/mnt/tutorial-examples
               image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              name: pytorch
               resources:
                 requests:
-                  cpu: 8
-                  memory: 2Gi
-                limits:
-                  cpu: 12
+                  cpu: 2
                   memory: 4Gi
+                  nvidia.com/gpu: 4
+                limits:
+                  cpu: 4
+                  memory: 8Gi
+                  nvidia.com/gpu: 4
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
@@ -42,30 +42,29 @@ spec:
               persistentVolumeClaim:
                 claimName: tutorial
     - type: worker
-      replicas: 3
-      restartPolicy: ExitCode
+      replicas: 4
+      restartPolicy: OnFailure
       template:
         spec:
           securityContext:
             runAsUser: 1000
           containers:
-            - name: pytorch
-              command:
+            - command:
                 - python
-                - job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py
+                - job/pytorchtrainingjob/ps/torch_mnist_trainingjob_ps.py
                 - "--log_dir"
-                - "job/pytorchtrainingjob/ddp/log"
-                - "--backend"
-                - "gloo"
-                - "--no_cuda"
+                - "job/pytorchtrainingjob/ps/log"
+                - "--save_path"
+                - "job/pytorchtrainingjob/ps/model_state_dict.pt"
               workingDir: /t9k/mnt/tutorial-examples
               image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              name: pytorch
               resources:
                 requests:
-                  cpu: 8
+                  cpu: 1
                   memory: 2Gi
                 limits:
-                  cpu: 12
+                  cpu: 2
                   memory: 4Gi
               volumeMounts:
                 - mountPath: /t9k/mnt
