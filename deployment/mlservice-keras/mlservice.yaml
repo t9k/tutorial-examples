@@ -4,7 +4,6 @@ metadata:
   name: keras-mnist-mlservice
 spec:
   default: test
-  canaryTrafficPercent: 0
   releases:
     - name: test
       predictor:
