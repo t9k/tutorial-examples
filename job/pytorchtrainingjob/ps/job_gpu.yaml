@@ -27,11 +27,11 @@ spec:
               name: pytorch
               resources:
                 requests:
-                  cpu: 2
+                  cpu: 4
                   memory: 4Gi
                   nvidia.com/gpu: 4
                 limits:
-                  cpu: 4
+                  cpu: 8
                   memory: 8Gi
                   nvidia.com/gpu: 4
               volumeMounts:
@@ -61,10 +61,10 @@ spec:
               name: pytorch
               resources:
                 requests:
-                  cpu: 1
+                  cpu: 2
                   memory: 2Gi
                 limits:
-                  cpu: 2
+                  cpu: 4
                   memory: 4Gi
               volumeMounts:
                 - mountPath: /t9k/mnt
