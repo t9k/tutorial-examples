@@ -27,15 +27,14 @@ spec:
       spec:
         containers:
           - name: mpi-worker
-            image: registry.tensorstack.cn/t9k/horovod:sdk-0.5.1
-            imagePullPolicy: IfNotPresent
+            image: registry.tensorstack.cn/t9k/horovod:sdk-0.5.2
             workingDir: /t9k/mnt/tutorial-examples
             resources:
               requests:
-                cpu: 4000m
+                cpu: 4
                 memory: 2Gi
               limits:
-                cpu: 8000m
+                cpu: 8
                 memory: 4Gi
             volumeMounts:
               - mountPath: /t9k/mnt

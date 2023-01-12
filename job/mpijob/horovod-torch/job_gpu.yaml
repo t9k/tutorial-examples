@@ -1,7 +1,7 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: MPIJob
 metadata:
-  name: keras-mnist-mpijob
+  name: torch-mnist-mpijob
 spec:
   mca:
     btl: ^openib
@@ -19,10 +19,9 @@ spec:
       limit: 100
     cmd:
       - python
-      - job/mpijob/horovod-keras/keras_mnist_mpijob.py
+      - job/mpijob/horovod-torch/torch_mnist_mpijob.py
       - "--log_dir"
-      - "job/mpijob/horovod-keras/log"
-      - "--no_cuda"
+      - "job/mpijob/horovod-torch/log"
     template:
       spec:
         containers:
@@ -31,11 +30,13 @@ spec:
             workingDir: /t9k/mnt/tutorial-examples
             resources:
               requests:
-                cpu: 2
+                cpu: 1
                 memory: 2Gi
+                nvidia.com/gpu: 1
               limits:
-                cpu: 4
+                cpu: 2
                 memory: 4Gi
+                nvidia.com/gpu: 1
             volumeMounts:
               - mountPath: /t9k/mnt
                 name: data

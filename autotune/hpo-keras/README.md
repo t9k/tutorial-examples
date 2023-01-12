@@ -20,10 +20,12 @@
     # paste API Key as value of `spec.aimd.folder` field (line 11)
     ```
 
-1. 使用 `autotune.yaml` 创建 AutoTuneExperiment：
+1. 使用 `autotune.yaml`（CPU 训练）或 `autotune_gpu.yaml`（GPU 训练，需要 12 个 GPU）创建 AutoTuneExperiment：
 
     ```shell
-    kubectl create -f autotune.yaml
+    # choose one of the following:
+    kubectl create -f autotune.yaml      # CPU training
+    kubectl create -f autotune_gpu.yaml  # GPU training
     ```
 
 1. 前往模型构建控制台或实验管理控制台，查看实验的状态、搜索空间，以及各次试验的状态、指标、使用的超参数等详细信息。即使实验被删除，AIMD 服务存储的实验数据依然，因此仍可以在实验管理控制台中访问。
