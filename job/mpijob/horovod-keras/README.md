@@ -1,4 +1,4 @@
-# 使用 Horovod 进行 Keras 模型的多工作器同步训练¶
+# 使用 Horovod 进行 Keras 模型的多工作器同步训练
 
 本示例演示如何使用 MPIJob 对 Keras 模型进行多工作器同步训练（使用 [horovod.tensorflow.keras](https://horovod.readthedocs.io/en/stable/api.html#module-horovod.tensorflow.keras) 模块）。
 

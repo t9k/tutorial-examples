@@ -11,7 +11,7 @@
 
 1. 前往实验管理控制台，在根路径下创建一个名为 tutorial 的文件夹；然后复制该文件夹的 ID。
 
-1. 回到 Notebook 的终端，切换到当前目录下，编辑文件 `autotune.yaml`，在 `spec.aimd.folder` 字段（第 11 行）粘贴刚才复制的文件夹 ID。
+1. 回到 Notebook 的终端，切换到当前目录下，编辑文件 `autotune.yaml` 或 `autotune_gpu.yaml`（见下），在 `spec.aimd.folder` 字段（第 11 行）粘贴刚才复制的文件夹 ID。
 
     ```shell
     # cd into current directory

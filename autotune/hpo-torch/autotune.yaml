@@ -31,7 +31,6 @@ spec:
                   - "gloo"
                   - "--no_cuda"
                 workingDir: /t9k/mnt/tutorial-examples
-                imagePullPolicy: IfNotPresent
                 image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
                 resources:
                   requests:
