@@ -30,16 +30,17 @@ spec:
                 command:
                   - python
                   - autotune/hpo-keras/keras_mnist_autotune.py
-                  - "--no_cuda"
                 workingDir: /t9k/mnt/tutorial-examples
-                image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+                image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:gpu-sdk-0.5.2
                 resources:
                   requests:
-                    cpu: 2
-                    memory: 2Gi
-                  limits:
-                    cpu: 4
+                    cpu: 1
                     memory: 4Gi
+                    nvidia.com/gpu: 1
+                  limits:
+                    cpu: 2
+                    memory: 8Gi
+                    nvidia.com/gpu: 1
                 volumeMounts:
                   - mountPath: /t9k/mnt
                     name: data

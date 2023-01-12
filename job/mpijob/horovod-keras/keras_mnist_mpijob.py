@@ -22,6 +22,13 @@ hvd.init()
 if args.no_cuda:
     # Sets all GPUs invisible
     tf.config.set_visible_devices([], 'GPU')
+else:
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+    if gpus:
+        tf.config.experimental.set_visible_devices(gpus[hvd.local_rank()],
+                                                   'GPU')
 
 model = models.Sequential([
     layers.Conv2D(32, 3, activation='relu', input_shape=(28, 28, 1)),

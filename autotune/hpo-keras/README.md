@@ -11,7 +11,7 @@
 
 1. 前往实验管理控制台，在根路径下创建一个名为 tutorial 的文件夹；然后复制该文件夹的 ID。
 
-1. 回到 Notebook 的终端，切换到当前目录下，编辑文件 `autotune.yaml`，在 `spec.aimd.folder` 字段（第 11 行）粘贴刚才复制的文件夹 ID。
+1. 回到 Notebook 的终端，切换到当前目录下，编辑文件 `autotune.yaml` 或 `autotune_gpu.yaml`（见下），在 `spec.aimd.folder` 字段（第 11 行）粘贴刚才复制的文件夹 ID。
 
     ```shell
     # cd into current directory
@@ -20,10 +20,12 @@
     # paste API Key as value of `spec.aimd.folder` field (line 11)
     ```
 
-1. 使用 `autotune.yaml` 创建 AutoTuneExperiment：
+1. 使用 `autotune.yaml`（CPU 训练）或 `autotune_gpu.yaml`（GPU 训练，需要 12 个 GPU）创建 AutoTuneExperiment：
 
     ```shell
-    kubectl create -f autotune.yaml
+    # choose one of the following:
+    kubectl create -f autotune.yaml      # CPU training
+    kubectl create -f autotune_gpu.yaml  # GPU training
     ```
 
 1. 前往模型构建控制台或实验管理控制台，查看实验的状态、搜索空间，以及各次试验的状态、指标、使用的超参数等详细信息。即使实验被删除，AIMD 服务存储的实验数据依然，因此仍可以在实验管理控制台中访问。

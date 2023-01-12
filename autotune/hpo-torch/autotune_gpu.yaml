@@ -3,7 +3,7 @@ kind: AutoTuneExperiment
 metadata:
   name: torch-mnist-autotune
 spec:
-  maxExecSeconds: 7200
+  maxExecSeconds: 3600
   maxTrialNum: 20
   trialConcurrency: 3
   storage: 100Mi
@@ -28,17 +28,18 @@ spec:
                   - python
                   - autotune/hpo-torch/torch_mnist_autotune.py
                   - "--backend"
-                  - "gloo"
-                  - "--no_cuda"
+                  - "nccl"
                 workingDir: /t9k/mnt/tutorial-examples
                 image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
                 resources:
                   requests:
-                    cpu: 8
+                    cpu: 1
                     memory: 2Gi
+                    nvidia.com/gpu: 1
                   limits:
-                    cpu: 12
+                    cpu: 2
                     memory: 4Gi
+                    nvidia.com/gpu: 1
                 volumeMounts:
                   - mountPath: /t9k/mnt
                     name: data
@@ -58,17 +59,18 @@ spec:
                   - python
                   - autotune/hpo-torch/torch_mnist_autotune.py
                   - "--backend"
-                  - "gloo"
-                  - "--no_cuda"
+                  - "nccl"
                 workingDir: /t9k/mnt/tutorial-examples
                 image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
                 resources:
                   requests:
-                    cpu: 8
+                    cpu: 1
                     memory: 2Gi
+                    nvidia.com/gpu: 1
                   limits:
-                    cpu: 12
+                    cpu: 2
                     memory: 4Gi
+                    nvidia.com/gpu: 1
                 volumeMounts:
                   - mountPath: /t9k/mnt
                     name: data
