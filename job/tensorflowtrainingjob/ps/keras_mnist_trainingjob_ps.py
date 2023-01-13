@@ -20,20 +20,20 @@ if args.no_cuda:
 
 cluster_resolver = tf.distribute.cluster_resolver.TFConfigClusterResolver()
 
-if cluster_resolver.task_type in ("worker", "ps"):
+if cluster_resolver.task_type in ('worker', 'ps'):
     # Set the environment variable to allow reporting worker and ps failure to the
     # coordinator. This is a workaround and won't be necessary in the future.
-    os.environ["GRPC_FAIL_FAST"] = "use_caller"
+    os.environ['GRPC_FAIL_FAST'] = 'use_caller'
 
     server = tf.distribute.Server(cluster_resolver.cluster_spec(),
                                   job_name=cluster_resolver.task_type,
                                   task_index=cluster_resolver.task_id,
                                   protocol=cluster_resolver.rpc_layer
-                                  or "grpc",
+                                  or 'grpc',
                                   start=True)
     server.join()
 
-else:  # task_type == "chief"
+else:  # task_type == 'chief'
     import shutil
 
     from tensorflow.keras import callbacks, datasets, layers, models, optimizers

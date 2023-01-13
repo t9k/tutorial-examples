@@ -7,7 +7,7 @@ from minio.error import ResponseError
 
 def minio_mirror(minio_client, src_dir, dst_bucket, dst_key):
     """Recursively mirror all files in src_dir/<file> to dst_bucket/dst_key/<file>."""
-    # print("{} -> {} / {}".format(src_dir, dst_bucket, dst_key))
+    # print('{} -> {} / {}'.format(src_dir, dst_bucket, dst_key))
     for root, _, filenames in os.walk(src_dir):
         for f in filenames:
             file_path = os.path.join(root, f)
@@ -19,7 +19,7 @@ def minio_mirror(minio_client, src_dir, dst_bucket, dst_key):
             key_path = os.path.join(dst_key, key_path)
 
             try:
-                print("{} -> {} - {}".format(file_path, dst_bucket, key_path))
+                print('{} -> {} - {}'.format(file_path, dst_bucket, key_path))
                 minio_client.fput_object(dst_bucket, key_path, file_path)
             except ResponseError as err:
                 print(err)

@@ -71,13 +71,15 @@ def get_raw_feature_spec(schema):
 
 
 def make_tft_input_metadata(schema):
-    """Make a TFT Schema object
-  In the tft framework, this is where default values are recoreded for training.
-  Args:
-    schema: schema list of training data.
-  Returns:
-    TFT metadata object.
-  """
+    """Make a TFT Schema object.
+
+    In the tft framework, this is where default values are recoreded for training.
+
+    Args:
+        schema: schema list of training data.
+    Returns:
+        TFT metadata object.
+    """
     tft_schema = {}
 
     for col_schema in schema:
@@ -98,7 +100,7 @@ def run_analysis(output_dir, model_dir, eval_path, schema, slice_columns):
     column_names = [x['name'] for x in schema]
     for slice_column in slice_columns:
         if slice_column not in column_names:
-            raise ValueError("Unknown slice column: %s" % slice_column)
+            raise ValueError('Unknown slice column: %s' % slice_column)
 
     slice_spec = [
         tfma.slicer.SingleSliceSpec(
@@ -144,7 +146,7 @@ def generate_static_html_output(output_dir, slicing_columns):
                        views=[slicing_metrics_view],
                        title='Slicing Metrics')
 
-    print("ipywidgets.version:", ipywidgets.__version__)
+    print('ipywidgets.version:', ipywidgets.__version__)
 
     if os.path.isdir(static_html_path):
         for filename in os.listdir(static_html_path):

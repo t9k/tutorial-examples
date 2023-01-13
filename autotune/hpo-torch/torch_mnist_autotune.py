@@ -122,15 +122,14 @@ if __name__ == '__main__':
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     if use_cuda:
-        logger.info('NVIDIA_VISIBLE_DEVICES: {}'.format(
-            os.getenv('NVIDIA_VISIBLE_DEVICES')))
-        logger.info('T9K_GPU_PERCENT: {}'.format(os.getenv('T9K_GPU_PERCENT')))
-        logger.info('Device Name {}'.format(torch.cuda.get_device_name()))
+        logger.info('NVIDIA_VISIBLE_DEVICES: %s',
+                    os.getenv('NVIDIA_VISIBLE_DEVICES'))
+        logger.info('T9K_GPU_PERCENT: %s', os.getenv('T9K_GPU_PERCENT'))
+        logger.info('Device Name %s', torch.cuda.get_device_name())
     device = torch.device('cuda' if use_cuda else 'cpu')
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
-    logger.info('Using distributed PyTorch with {} backend'.format(
-        args.backend))
+    logger.info('Using distributed PyTorch with %s backend', args.backend)
     dist.init_process_group(backend=args.backend)
     rank = dist.get_rank()
     world_size = dist.get_world_size()
