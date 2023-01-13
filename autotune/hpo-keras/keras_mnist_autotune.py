@@ -5,7 +5,7 @@ import os
 import time
 
 import tensorflow as tf
-from tensorflow.keras import callbacks, datasets, layers, models, optimizers
+from tensorflow.keras import datasets, layers, models, optimizers
 
 from t9k import tuner
 
@@ -31,11 +31,10 @@ if args.no_cuda:
 gpus = tf.config.get_visible_devices('GPU')
 if gpus:
     # Print GPU info
-    logger.info('NVIDIA_VISIBLE_DEVICES: {}'.format(
-        os.getenv('NVIDIA_VISIBLE_DEVICES')))
-    logger.info('T9K_GPU_PERCENT: {}'.format(os.getenv('T9K_GPU_PERCENT')))
-    logger.info('Visible GPUs: {}'.format(
-        tf.config.get_visible_devices('GPU')))
+    logger.info('NVIDIA_VISIBLE_DEVICES: %s',
+                os.getenv('NVIDIA_VISIBLE_DEVICES'))
+    logger.info('T9K_GPU_PERCENT: %s', os.getenv('T9K_GPU_PERCENT'))
+    logger.info('Visible GPUs: %s', tf.config.get_visible_devices('GPU'))
     # Set memory growth
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
@@ -91,8 +90,8 @@ dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
 (train_images,
  train_labels), (test_images,
                  test_labels) = datasets.mnist.load_data(path=dataset_path)
-train_images = train_images.reshape((60000, 28, 28, 1)).astype("float32") / 255
-test_images = test_images.reshape((10000, 28, 28, 1)).astype("float32") / 255
+train_images = train_images.reshape((60000, 28, 28, 1)).astype('float32') / 255
+test_images = test_images.reshape((10000, 28, 28, 1)).astype('float32') / 255
 train_images, val_images = train_images[:48000], train_images[48000:]
 train_labels, val_labels = train_labels[:48000], train_labels[48000:]
 train_dataset = tf.data.Dataset.from_tensor_slices(

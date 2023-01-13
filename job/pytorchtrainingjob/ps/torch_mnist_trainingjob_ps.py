@@ -42,7 +42,7 @@ logger.propagate = False
 class Net(nn.Module):
 
     def __init__(self):
-        super(Net, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(1, params['conv_channels1'],
                                params['conv_kernel_size'], 1)
         self.conv2 = nn.Conv2d(params['conv_channels1'],
@@ -77,7 +77,7 @@ class ParameterServer(nn.Module):
         self.models_init_lock = Lock()
         self.use_cuda = not args.no_cuda and torch.cuda.is_available()
         self.num_cuda = torch.cuda.device_count() if self.use_cuda else 0
-        logger.info('Using {} GPUs for training'.format(self.num_cuda))
+        logger.info('Using %s GPUs for training', self.num_cuda)
 
     def forward(self, rank, inp):
         inp = inp.to(self.get_device(rank))
@@ -113,8 +113,8 @@ class ParameterServer(nn.Module):
                 torch.manual_seed(params['seed'])
                 device = self.get_device(rank)
                 self.models[rank] = Net().to(device)
-                logger.info('Putting model of worker {} on device {}'.format(
-                    rank, device))
+                logger.info('Putting model of worker %s on device %s', rank,
+                            device)
 
     def get_num_models(self):
         with self.models_init_lock:
@@ -253,9 +253,8 @@ def train(net):
 
             if step % 500 == 0:
                 train_loss = loss.item()
-                logger.info(
-                    'epoch {:d}/{:d}, batch {:5d}/{:d} with loss: {:.4f}'.
-                    format(epoch, epochs, step, steps_per_epoch, train_loss))
+                logger.info('epoch %d/%d, batch %5d/%d with loss: %.4f', epoch,
+                            epochs, step, steps_per_epoch, train_loss)
                 global_step = (epoch - 1) * steps_per_epoch + step
 
                 if args.log_dir:
@@ -296,11 +295,11 @@ def test(net, val=False, epoch=None):
 
 # Main loop for workers.
 def run_worker():
-    logger.info('Worker with rank {} initializing RPC'.format(rank))
+    logger.info('Worker with rank %d initializing RPC', rank)
     rpc.init_rpc(name='worker_{}'.format(rank),
                  rank=rank,
                  world_size=world_size)
-    logger.info('Worker with rank {} done initializing RPC'.format(rank))
+    logger.info('Worker with rank %d done initializing RPC', rank)
 
     global train_loader, val_loader, test_loader, steps_per_epoch
     transform = transforms.Compose(
@@ -308,7 +307,7 @@ def run_worker():
          transforms.Normalize((0.5), (0.5))])
     train_set = datasets.MNIST(root=dataset_path,
                                train=True,
-                               download=True,
+                               download=False,
                                transform=transform)
     train_set, val_set = torch.utils.data.random_split(train_set,
                                                        [48000, 12000])
@@ -320,7 +319,7 @@ def run_worker():
                                              shuffle=False)
     test_set = datasets.MNIST(root=dataset_path,
                               train=False,
-                              download=True,
+                              download=False,
                               transform=transform)
     test_loader = torch.utils.data.DataLoader(test_set,
                                               batch_size=500,

@@ -39,7 +39,7 @@ logging.basicConfig(format='%(message)s', level=logging.INFO)
 class Net(nn.Module):
 
     def __init__(self):
-        super(Net, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(1, params['conv_channels1'],
                                params['conv_kernel_size'], 1)
         self.conv2 = nn.Conv2d(params['conv_channels1'],
@@ -63,7 +63,7 @@ class Net(nn.Module):
         return output
 
 
-def train(scheduler):
+def train():
     global global_step
     for epoch in range(1, epochs + 1):
         model.train()
@@ -141,11 +141,10 @@ if __name__ == '__main__':
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     if use_cuda:
         logging.info('Using CUDA')
-    device = torch.device("cuda" if use_cuda else "cpu")
+    device = torch.device('cuda' if use_cuda else 'cpu')
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
-    logging.info('Using distributed PyTorch with {} backend'.format(
-        args.backend))
+    logging.info('Using distributed PyTorch with %s backend', args.backend)
     dist.init_process_group(backend=args.backend)
     rank = dist.get_rank()
     world_size = dist.get_world_size()
@@ -223,7 +222,7 @@ if __name__ == '__main__':
     global_step = 0
     epochs = params['epochs']
     steps_per_epoch = len(train_loader)
-    train(scheduler)
+    train()
     test()
 
     if rank == 0:
