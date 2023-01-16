@@ -1,0 +1,106 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: TensorFlowTrainingJob
+metadata:
+  name: keras-mnist-trainingjob-ps
+spec:
+  scheduler:
+    t9kScheduler:
+      queue: default
+      priority: 50
+  tensorboardSpec:
+    trainingLogFilesets:
+      - t9k://pvc/tutorial/tutorial-examples/job/tensorflowtrainingjob/ps/log
+    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+  replicaSpecs:
+    - type: chief
+      replicas: 1
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - command:
+                - python
+                - job/tensorflowtrainingjob/ps/keras_mnist_trainingjob_ps.py
+                - "--log_dir"
+                - "job/tensorflowtrainingjob/ps/log"
+              workingDir: /t9k/mnt/tutorial-examples
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              name: tensorflow
+              resources:
+                requests:
+                  cpu: 2
+                  memory: 4Gi
+                limits:
+                  cpu: 4
+                  memory: 8Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
+    - type: ps
+      replicas: 2
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - command:
+                - python
+                - job/tensorflowtrainingjob/ps/keras_mnist_trainingjob_ps.py
+                - "--log_dir"
+                - "job/tensorflowtrainingjob/ps/log"
+              workingDir: /t9k/mnt/tutorial-examples  
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              name: tensorflow
+              resources:
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+                limits:
+                  cpu: 2
+                  memory: 2Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
+    - type: worker
+      replicas: 4
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - command:
+                - python
+                - job/tensorflowtrainingjob/ps/keras_mnist_trainingjob_ps.py
+                - "--log_dir"
+                - "job/tensorflowtrainingjob/ps/log"
+              workingDir: /t9k/mnt/tutorial-examples  
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:gpu-sdk-0.5.2
+              name: tensorflow
+              resources:
+                requests:
+                  cpu: 1
+                  memory: 4Gi
+                  nvidia.com/gpu: 1
+                limits:
+                  cpu: 2
+                  memory: 8Gi
+                  nvidia.com/gpu: 1
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial

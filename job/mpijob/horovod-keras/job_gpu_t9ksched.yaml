@@ -1,0 +1,52 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: MPIJob
+metadata:
+  name: keras-mnist-mpijob
+spec:
+  mca:
+    btl: ^openib
+    pml: ob1
+  mpiHome: /usr/local
+  ssh:
+    sshdPath: /usr/sbin/sshd
+  scheduler:
+    t9kScheduler:
+      queue: default
+      priority: 50
+  runPolicy:
+    cleanUpWorkers: true
+  worker:
+    replicas: 4
+    processesPerWorker: 1
+    processRecovery:
+      enable: true
+      limit: 100
+    cmd:
+      - python
+      - job/mpijob/horovod-keras/keras_mnist_mpijob.py
+      - "--log_dir"
+      - "job/mpijob/horovod-keras/log"
+    template:
+      spec:
+        containers:
+          - name: mpi-worker
+            image: registry.tensorstack.cn/t9k/horovod:sdk-0.5.2
+            workingDir: /t9k/mnt/tutorial-examples
+            resources:
+              requests:
+                cpu: 1
+                memory: 4Gi
+                nvidia.com/gpu: 1
+              limits:
+                cpu: 2
+                memory: 8Gi
+                nvidia.com/gpu: 1
+            volumeMounts:
+              - mountPath: /t9k/mnt
+                name: data
+        volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: tutorial
+  runPolicy:
+    cleanUpWorkers: true
