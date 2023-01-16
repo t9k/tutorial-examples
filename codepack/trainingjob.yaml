@@ -1,0 +1,43 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: TensorFlowTrainingJob
+metadata:
+  name: codepack-example
+spec:
+  tensorboardSpec:
+    trainingLogFilesets:
+      - t9k://pvc/codepack-example/mnist-keras/log
+    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+  replicaSpecs:
+    - type: worker
+      replicas: 4
+      restartPolicy: OnFailure
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - command:
+                - python
+                - keras_mnist_trainingjob.py
+                - "--no_cuda"
+                - "--log_dir"
+                - "log"
+                - "--save_path"
+                - "saved_model"
+              workingDir: /t9k/mnt/codepack
+              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              name: tensorflow
+              resources:
+                requests:
+                  cpu: 2
+                  memory: 2Gi
+                limits:
+                  cpu: 4
+                  memory: 4Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: codepack-example
