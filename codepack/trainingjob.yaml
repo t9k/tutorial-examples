@@ -5,7 +5,7 @@ metadata:
 spec:
   tensorboardSpec:
     trainingLogFilesets:
-      - t9k://pvc/codepack-example/mnist-keras/log
+      - t9k://pvc/codepack-example/codepack/log
     image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
     - type: worker
