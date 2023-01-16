@@ -5,8 +5,8 @@ metadata:
 spec:
   scheduler:
     t9kScheduler:
-      queue:
-      priority: 0
+      queue: default
+      priority: 50
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log

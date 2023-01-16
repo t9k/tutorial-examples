@@ -11,8 +11,8 @@ spec:
     sshdPath: /usr/sbin/sshd
   scheduler:
     t9kScheduler:
-      queue:
-      priority: 0
+      queue: default
+      priority: 50
   runPolicy:
     cleanUpWorkers: true
   worker:

@@ -8,7 +8,7 @@
 
 * `job.yaml`：使用 CPU 训练
 * `job_gpu.yaml`：使用 GPU 训练
-* `job_gpu_t9ksched.yaml`：使用 GPU 训练，并且由 T9k 调度器进行调度（需要编辑文件，在 `spec.scheduler.t9kScheduler.queue` 字段（第 19 行）中填写队列的名称）
+* `job_gpu_t9ksched.yaml`：使用 GPU 训练，并且由 T9k 调度器进行调度（默认的队列名称为 `default`，在 `spec.scheduler.t9kScheduler.queue` 字段（第 19 行）进行修改）
 
 ```shell
 # cd into current directory
@@ -19,8 +19,8 @@ kubectl create -f job.yaml
 # 2. GPU training
 kubectl create -f job_gpu.yaml
 # 3. GPU training with Job scheduled by T9k scheduler
-vim job_gpu_t9ksched.yaml && kubectl create -f job_gpu_t9ksched.yaml
-    # fill in name of queue (line 19)
+# vim job_gpu_t9ksched.yaml  # optionally modify name of queue (line 19)
+kubectl create -f job_gpu_t9ksched.yaml
 ```
 
 在命令行监控训练的运行进度：

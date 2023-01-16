@@ -17,8 +17,8 @@ spec:
     type: pytorch
     scheduler:
       t9kScheduler:
-        queue:
-        priority: 0
+        queue: default
+        priority: 50
     tasks:
       - type: master
         replicas: 1

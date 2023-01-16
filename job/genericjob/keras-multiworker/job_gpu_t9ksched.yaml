@@ -16,8 +16,8 @@ spec:
         port: 2222
   scheduler:
     t9kScheduler:
-      queue:
-      priority: 0
+      queue: default
+      priority: 50
   replicaSpecs:
     - type: worker
       replicas: 4
