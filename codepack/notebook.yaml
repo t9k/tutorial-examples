@@ -7,14 +7,14 @@ spec:
     spec:
       containers:
         - name: notebook
-          image: 'tsz.io/t9k/tensorflow-2.8.0-notebook-cpu:1.50.0'
+          image: registry.tensorstack.cn/t9k/tensorflow-2.8.0-notebook-cpu:1.50.0
           resources:
             limits:
-              cpu: '1'
-              memory: 1Gi
+              cpu: 2
+              memory: 2Gi
             requests:
-              cpu: 500m
-              memory: 500Mi
+              cpu: 1
+              memory: 1Gi
           volumeMounts:
             - name: workingdir
               mountPath: /t9k/mnt
