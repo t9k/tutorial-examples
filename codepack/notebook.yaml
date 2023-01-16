@@ -1,0 +1,24 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: Notebook
+metadata:
+  name: codepack-example
+spec:
+  template:
+    spec:
+      containers:
+        - name: notebook
+          image: registry.tensorstack.cn/t9k/tensorflow-2.8.0-notebook-cpu:1.50.0
+          resources:
+            limits:
+              cpu: 2
+              memory: 2Gi
+            requests:
+              cpu: 1
+              memory: 1Gi
+          volumeMounts:
+            - name: workingdir
+              mountPath: /t9k/mnt
+      volumes:
+        - name: workingdir
+          persistentVolumeClaim:
+            claimName: codepack-example
