@@ -80,8 +80,16 @@ model.fit(train_dataset,
 
 model.evaluate(test_images, test_labels, verbose=2)
 
-if args.save_path and task_index == 0:
-    save_path = args.save_path
+if args.save_path:
+    if task_index == 0:
+        save_path = args.save_path
+    else:
+        dirname = os.path.dirname(args.save_path)
+        basename = os.path.basename(
+            args.save_path) + '_temp_' + str(task_index)
+        save_path = os.path.join(dirname, basename)
     if os.path.exists(save_path):
         shutil.rmtree(save_path, ignore_errors=True)
     model.save(save_path)
+    if task_index != 0:
+        shutil.rmtree(save_path, ignore_errors=True)
