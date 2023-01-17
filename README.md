@@ -43,4 +43,4 @@ git clone https://github.com/t9k/tutorial-examples.git
 * 工作流：
   * [建立从数据采样到模型导出的自动化工作流](./workflow/automatic-workflow/)
 * 平台工具：
-  * [Codepack 使用示例](./codepack/)：
+  * [Codepack 使用示例](./codepack/)
