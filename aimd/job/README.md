@@ -1,4 +1,4 @@
-# Job 使用 AIMD
+# Job 使用 AIMD 记录训练数据
 
 本示例使用 AIMD 在 Job 分布式训练中记录并展示模型的训练数据（以 PyTorch 模型的多工作器同步训练为例）。本示例的训练脚本修改自示例[使用 PyTorchTrainingJob 进行多工作器同步训练](../../job/pytorchtrainingjob/ddp)的训练脚本，在其基础上增加了创建试验、使用超参数配置模型、记录指标、结束和上传试验等步骤。
 
