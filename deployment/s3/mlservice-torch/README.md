@@ -1,4 +1,4 @@
-# 部署用于生产环境的模型推理服务（PyTorch 模型）
+# 部署用于生产环境的模型推理服务（PyTorch 模型，S3 存储）
 
 本示例使用 MLService 部署用于生产环境的模型推理服务（以 PyTorch 模型为例），主要包含以下操作：
 
@@ -19,7 +19,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/deployment/mlservice-torch
+cd ~/tutorial-examples/deployment/s3/mlservice-torch
 s3cmd mb s3://tutorial  # if necessary
 s3cmd sync mnist.mar s3://tutorial/torch-mnist/
 ```

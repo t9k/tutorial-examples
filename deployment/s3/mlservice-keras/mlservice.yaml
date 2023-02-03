@@ -1,7 +1,7 @@
 apiVersion: tensorstack.dev/v1beta1
 kind: MLService
 metadata:
-  name: torch-mnist-mlservice
+  name: keras-mnist-mlservice-s3
 spec:
   default: test
   releases:
@@ -9,9 +9,9 @@ spec:
       predictor:
         maxReplicas: 1
         minReplicas: 1
-        pytorch:
-          image: registry.tensorstack.cn/t9kmirror/pytorch-serve:0.4.2-cpu
-          modelUri: s3://tutorial/torch-mnist/
+        tensorflow:
+          image: registry.tensorstack.cn/t9kmirror/tensorflow-serving:2.6.0
+          modelUri: s3://tutorial/keras-mnist/
           resources:
             limits:
               cpu: 200m
