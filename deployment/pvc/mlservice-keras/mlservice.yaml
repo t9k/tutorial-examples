@@ -11,11 +11,8 @@ spec:
         minReplicas: 1
         tensorflow:
           image: registry.tensorstack.cn/t9kmirror/tensorflow-serving:2.6.0
-          modelUri: s3://tutorial/keras-mnist/
+          modelUri: pvc://tutorial/tutorial-examples/deployment/pvc/mlservice-keras/saved_model/
           resources:
             limits:
               cpu: 200m
               memory: 500M
-        storage:
-          s3Storage:
-            secretName: s3cfg

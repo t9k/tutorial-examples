@@ -1,0 +1,18 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLService
+metadata:
+  name: torch-mnist-mlservice
+spec:
+  default: test
+  releases:
+    - name: test
+      predictor:
+        maxReplicas: 1
+        minReplicas: 1
+        pytorch:
+          image: registry.tensorstack.cn/t9kmirror/pytorch-serve:0.4.2-cpu
+          modelUri: pvc://tutorial/tutorial-examples/deployment/pvc/mlservice-torch/
+          resources:
+            limits:
+              cpu: 200m
+              memory: 500M

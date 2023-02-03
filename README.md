@@ -19,17 +19,17 @@ git clone https://github.com/t9k/tutorial-examples.git
 
 ## 示例列表
 
-* 分布式训练
-  * TensorFlow 分布式框架
+* 分布式训练：
+  * TensorFlow 分布式框架：
     * [使用 TensorFlowTrainingJob 进行多工作器同步训练](./job/tensorflowtrainingjob/multiworker/)
     * [使用 TensorFlowTrainingJob 进行参数服务器训练](./job/tensorflowtrainingjob/ps/)
-  * PyTorch 分布式框架
+  * PyTorch 分布式框架：
     * [使用 PyTorchTrainingJob 进行多工作器同步训练](./job/pytorchtrainingjob/ddp/)
     * [使用 PyTorchTrainingJob 进行参数服务器训练](./job/pytorchtrainingjob/ps/)
-  * Horovod 分布式框架
+  * Horovod 分布式框架：
     * [使用 Horovod 进行 Keras 模型的多工作器同步训练](./job/mpijob/horovod-keras/)
     * [使用 Horovod 进行 PyTorch 模型的多工作器同步训练](./job/mpijob/horovod-torch/)
-  * 自定义分布式训练
+  * 自定义分布式训练：
     * [使用 GenericJob 实现 Keras 模型的多工作器同步训练](./job/genericjob/keras-multiworker/)
 * 自动超参数调优：
   * [使用 AutoTune 进行超参数优化（Keras 模型）](./autotune/hpo-keras/)
@@ -38,8 +38,12 @@ git clone https://github.com/t9k/tutorial-examples.git
   * [单工作器训练使用 AIMD 记录训练数据](./aimd/single-worker/)
   * [Job 使用 AIMD 记录训练数据](./aimd/job/)
 * 模型部署：
-  * [部署用于生产环境的模型推理服务（Keras 模型）](./deployment/mlservice-keras/)
-  * [部署用于生产环境的模型推理服务（PyTorch 模型）](./deployment/mlservice-torch/)
+  * 从 PVC 获取模型：
+    * [部署用于生产环境的模型推理服务（Keras 模型）](./deployment/pvc/mlservice-keras/)
+    * [部署用于生产环境的模型推理服务（PyTorch 模型）](./deployment/pvc/mlservice-torch/)
+  * 从 S3 存储获取模型：
+    * [部署用于生产环境的模型推理服务（Keras 模型，S3 存储）](./deployment/s3/mlservice-keras/)
+    * [部署用于生产环境的模型推理服务（PyTorch 模型，S3 存储）](./deployment/s3/mlservice-torch/)
 * 工作流：
   * [建立从数据采样到模型导出的自动化工作流](./workflow/automatic-workflow/)
 * 平台工具：
