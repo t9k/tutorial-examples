@@ -6,7 +6,7 @@ spec:
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/codepack-example/codepack/log
-    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+    image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
     - type: worker
       replicas: 4
@@ -25,7 +25,7 @@ spec:
                 - "--save_path"
                 - "saved_model"
               workingDir: /t9k/mnt/codepack
-              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               name: tensorflow
               resources:
                 requests:

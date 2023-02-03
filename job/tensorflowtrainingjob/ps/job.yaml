@@ -6,7 +6,7 @@ spec:
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/job/tensorflowtrainingjob/ps/log
-    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+    image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
     - type: chief
       replicas: 1
@@ -23,7 +23,7 @@ spec:
                 - "job/tensorflowtrainingjob/ps/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               name: tensorflow
               resources:
                 requests:
@@ -54,7 +54,7 @@ spec:
                 - "job/tensorflowtrainingjob/ps/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples  
-              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               name: tensorflow
               resources:
                 requests:
@@ -85,7 +85,7 @@ spec:
                 - "job/tensorflowtrainingjob/ps/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples  
-              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               name: tensorflow
               resources:
                 requests:

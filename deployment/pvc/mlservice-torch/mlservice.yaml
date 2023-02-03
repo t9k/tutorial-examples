@@ -10,7 +10,7 @@ spec:
         maxReplicas: 1
         minReplicas: 1
         pytorch:
-          image: registry.tensorstack.cn/t9kmirror/pytorch-serve:0.4.2-cpu
+          image: t9kpublicmirror/pytorch-serve:0.4.2-cpu
           modelUri: pvc://tutorial/tutorial-examples/deployment/pvc/mlservice-torch/
           resources:
             limits:
