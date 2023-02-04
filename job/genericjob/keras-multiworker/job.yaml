@@ -35,7 +35,7 @@ spec:
               env:
                 - name: TF_CONFIG
                   value: '{"cluster":{"worker":["$(service.worker[0].host):$(service.port[http])","$(service.worker[1].host):$(service.port[http])","$(service.worker[2].host):$(service.port[http])","$(service.worker[3].host):$(service.port[http])"]},"task":{"type":"$(type)","index":$(rank)}}'
-              image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+              image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               resources:
                 requests:
                   cpu: 2

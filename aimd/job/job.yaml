@@ -6,7 +6,7 @@ spec:
   tensorboardSpec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/aimd/job/log
-    image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:cpu-sdk-0.5.2
+    image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
     - type: master
       replicas: 1
@@ -28,7 +28,7 @@ spec:
                 - "aimd/job/log"
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
                   cpu: 8
@@ -57,7 +57,7 @@ spec:
                 - aimd/job/torch_mnist_trainingjob_aimd.py
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
                   cpu: 8

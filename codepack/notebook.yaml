@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: notebook
-          image: registry.tensorstack.cn/t9k/tensorflow-2.8.0-notebook-cpu:1.50.0
+          image: t9kpublic/tensorflow-2.8.0-notebook-cpu:1.64.1
           resources:
             limits:
               cpu: 2

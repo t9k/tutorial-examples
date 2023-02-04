@@ -31,7 +31,7 @@ spec:
                   - python
                   - autotune/hpo-keras/keras_mnist_autotune.py
                 workingDir: /t9k/mnt/tutorial-examples
-                image: registry.tensorstack.cn/t9k/tensorflow-2.11.0:gpu-sdk-0.5.2
+                image: t9kpublic/tensorflow-2.11.0:gpu-sdk-0.5.2
                 resources:
                   requests:
                     cpu: 1

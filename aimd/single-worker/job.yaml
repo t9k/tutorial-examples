@@ -22,7 +22,7 @@ spec:
                 - ""
                 - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
-              image: registry.tensorstack.cn/t9k/pytorch-1.13.0:sdk-0.5.2
+              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
                   cpu: 8

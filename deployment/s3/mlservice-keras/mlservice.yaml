@@ -10,7 +10,7 @@ spec:
         maxReplicas: 1
         minReplicas: 1
         tensorflow:
-          image: registry.tensorstack.cn/t9kmirror/tensorflow-serving:2.6.0
+          image: t9kpublicmirror/tensorflow-serving:2.6.0
           modelUri: s3://tutorial/keras-mnist/
           resources:
             limits:

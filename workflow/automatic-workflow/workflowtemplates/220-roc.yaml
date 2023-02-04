@@ -15,7 +15,7 @@ spec:
       default: output
     - name: RUNTIME_IMAGE
       description: The docker image for runnning this task.
-      default: "registry.tensorstack.cn/t9k/tfx:prod-2.1.1"
+      default: "t9kpublic/tfx:prod-2.1.1"
   type: SeqPod
   seqPod:
     steps:

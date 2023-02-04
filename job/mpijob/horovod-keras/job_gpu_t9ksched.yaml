@@ -30,7 +30,7 @@ spec:
       spec:
         containers:
           - name: mpi-worker
-            image: registry.tensorstack.cn/t9k/horovod:sdk-0.5.2
+            image: t9kpublic/horovod:sdk-0.5.2
             workingDir: /t9k/mnt/tutorial-examples
             resources:
               requests:
