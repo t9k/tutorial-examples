@@ -1,0 +1,48 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: BeamJob
+metadata:
+  name: count-word-beamjob
+spec:
+  flinkClusterTemplate:
+    spec:
+      flinkVersion: 1.10.1
+      image:
+        name: t9kpublic/flink:1.10.1
+      jobManager:
+        accessScope: Cluster
+        resources:
+          limits:
+            cpu: 100m
+            memory: 1Gi
+      taskManager:
+        replicas: 2
+        resources:
+          limits:
+            cpu: 100m
+            memory: 2Gi
+      flinkProperties:
+        taskmanager.numberOfTaskSlots: "1"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - image: t9kpublic/apache_beam_python3.7_sdk:2.22.0
+            name: submit-job
+            command:
+              - python
+            args:
+              - "-m"
+              - "apache_beam.examples.wordcount"
+              - "--input"
+              - "/t9k/mnt/tutorial-examples/job/beamjob/count-word/input.txt"
+              - "--output"
+              - "/t9k/mnt/tutorial-examples/job/beamjob/count-word/output.txt"
+            volumeMounts:
+              - mountPath: /t9k/mnt
+                name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial

@@ -1,8 +1,8 @@
-# 使用 TensorFlowTrainingJob 进行参数服务器训练
+# 使用 XGBoostTrainingJob 进行分布式训练和预测
 
-本示例使用 TensorFlowTrainingJob 对 Keras 模型进行参数服务器（parameter server）训练（采用 [`tf.distribute.experimental.ParameterServerStrategy`](https://www.tensorflow.org/api_docs/python/tf/distribute/experimental/ParameterServerStrategy) 分布式策略）。
+本示例使用 XGBoostTrainingJob 对 XGBoost 模型进行分布式训练和预测。
 
-切换到当前目录下，使用以下 YAML 配置之一创建 TensorFlowTrainingJob：
+切换到当前目录下，使用以下 YAML 配置之一创建 XGBoostTrainingJob：
 
 * `job.yaml`：使用 CPU 训练
 * `job_gpu.yaml`：使用 GPU 训练
@@ -10,7 +10,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/job/tensorflowtrainingjob/ps
+cd ~/tutorial-examples/job/xgboosttrainingjob/distributed/
 # choose one of the following:
 # 1. CPU training
 kubectl create -f job.yaml
@@ -27,4 +27,4 @@ kubectl create -f job_gpu_t9ksched.yaml
 kubectl get -f job.yaml -o wide -w
 ```
 
-或者前往模型构建控制台查看训练状态、日志和 TensorBoard 等。
+或者前往模型构建控制台查看训练状态和日志等。

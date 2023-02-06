@@ -11,6 +11,7 @@ log/
 
 # output files
 output/
+output.*
 
 # Jupyter notebook tmp directory
 .ipynb_checkpoints
@@ -26,3 +27,4 @@ local-test
 
 # Python generated files
 *.egg-info/
+
