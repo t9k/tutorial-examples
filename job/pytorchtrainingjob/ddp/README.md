@@ -1,6 +1,6 @@
 # 使用 PyTorchTrainingJob 进行多工作器同步训练
 
-本示例演示如何使用 PyTorchTrainingJob 对 PyTorch 模型进行多工作器同步训练（使用 [`torch.nn.parallel.DistributedDataParallel`](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html) 分布式数据并行模块）。
+本示例使用 PyTorchTrainingJob 对 PyTorch 模型进行多工作器同步训练（使用 [`torch.nn.parallel.DistributedDataParallel`](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html) 分布式数据并行模块）。
 
 切换到当前目录下，使用以下 YAML 配置之一创建 PyTorchTrainingJob：
 

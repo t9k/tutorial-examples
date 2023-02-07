@@ -1,6 +1,6 @@
 # 使用 Horovod 进行 PyTorch 模型的多工作器同步训练
 
-本示例演示如何使用 MPIJob 对 PyTorch 模型进行多工作器同步训练（使用 [`horovod.torch`](https://horovod.readthedocs.io/en/stable/api.html#module-horovod.torch) 模块）。
+本示例使用 MPIJob 对 PyTorch 模型进行多工作器同步训练（使用 [`horovod.torch`](https://horovod.readthedocs.io/en/stable/api.html#module-horovod.torch) 模块）。
 
 切换到当前目录下，使用以下 YAML 配置之一创建 MPIJob：
 

@@ -1,0 +1,78 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: XGBoostTrainingJob
+metadata:
+  name: xgb-iris-trainingjob
+spec:
+  scheduler:
+    t9kScheduler:
+      queue: default
+      priority: 50
+  replicaSpecs:
+    - type: master
+      replicas: 1
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - name: xgboost
+              command:
+                - python3
+                - job/xgboosttrainingjob/distributed/main.py
+                - --xgboost_parameter=objective:multi:softprob,num_class:3
+                - --n_estimators=10
+                - --learning_rate=0.1
+                - --model_path=job/xgboosttrainingjob/distributed/
+                - --use_gpu
+              workingDir: /t9k/mnt/tutorial-examples
+              image: t9kpublic/xgboost-1.7.3:sdk-0.5.2
+              ports:
+                - containerPort: 9991
+                  name: xgboost-port
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                  nvidia.com/gpu: 1
+              volumeMounts:
+                - name: data
+                  mountPath: /t9k/mnt
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
+    - type: worker
+      replicas: 1
+      restartPolicy: ExitCode
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - name: xgboost
+              command:
+                - python3
+                - job/xgboosttrainingjob/distributed/main.py
+                - --xgboost_parameter=objective:multi:softprob,num_class:3
+                - --n_estimators=10
+                - --learning_rate=0.1
+                - --model_path=job/xgboosttrainingjob/distributed/
+                - --use_gpu
+              workingDir: /t9k/mnt/tutorial-examples
+              image: t9kpublic/xgboost-1.7.3:sdk-0.5.2
+              ports:
+                - containerPort: 9991
+                  name: xgboost-port
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                  nvidia.com/gpu: 1
+              volumeMounts:
+                - name: data
+                  mountPath: /t9k/mnt
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial

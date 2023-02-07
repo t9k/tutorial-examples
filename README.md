@@ -29,6 +29,10 @@ git clone https://github.com/t9k/tutorial-examples.git
   * Horovod 分布式框架：
     * [使用 Horovod 进行 Keras 模型的多工作器同步训练](./job/mpijob/horovod-keras/)
     * [使用 Horovod 进行 PyTorch 模型的多工作器同步训练](./job/mpijob/horovod-torch/)
+  * XGBoost：
+    * [使用 XGBoostTrainingJob 进行分布式训练和预测](./job/xgboosttrainingjob/distributed/)
+  * Apache Beam：
+    * [使用 BeamJob 运行 Apache Beam 分布式计算任务](./job/beamjob/count-word/)
   * 自定义分布式训练：
     * [使用 GenericJob 实现 Keras 模型的多工作器同步训练](./job/genericjob/keras-multiworker/)
 * 自动超参数调优：
