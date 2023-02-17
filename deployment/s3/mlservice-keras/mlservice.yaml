@@ -10,12 +10,12 @@ spec:
         maxReplicas: 1
         minReplicas: 1
         tensorflow:
-          image: t9kpublicmirror/tensorflow-serving:2.6.0
+          image: t9kpublic/tensorflow-serving:2.6.0
           modelUri: s3://tutorial/keras-mnist/
           resources:
             limits:
-              cpu: 200m
-              memory: 500M
+              cpu: 1
+              memory: 1Gi
         storage:
           s3Storage:
             secretName: s3cfg

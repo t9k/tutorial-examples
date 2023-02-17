@@ -46,3 +46,5 @@ spec:
             - name: data
               persistentVolumeClaim:
                 claimName: tutorial
+  runPolicy:
+    cleanUpCluster: true
