@@ -12,7 +12,7 @@ spec:
     workingDir: /workspace/ColossalAI/examples/language/palm
   worker:
     replicas: 4
-    procPerNode: 1
+    procPerWorker: 1
     command:
       - train.py
       - "--distplan=colossalai"
