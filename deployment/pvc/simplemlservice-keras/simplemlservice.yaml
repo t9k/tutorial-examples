@@ -1,0 +1,13 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: SimpleMLService
+metadata:
+  name: keras-mnist-simplemlservice
+spec:
+  replicas: 1
+  tensorflow:
+    image: 'tsz.io/t9kmirror/tensorflow-serving:2.6.0'
+    modelUri: pvc://tutorial/tutorial-examples/deployment/pvc/mlservice-keras/saved_model/
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500M
