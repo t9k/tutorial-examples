@@ -52,3 +52,5 @@ git clone https://github.com/t9k/tutorial-examples.git
   * [建立从数据采样到模型导出的自动化工作流](./workflow/automatic-workflow/)
 * 平台工具：
   * [Codepack 使用示例](./codepack/)
+* 其他功能：
+  * [构建自定义镜像](./build-custom-image/)
