@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # initialize the variables
-secret=""
+secret="docker-config"
 registry=""
 username=""
 password=""
