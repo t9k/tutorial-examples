@@ -34,7 +34,7 @@ done
 
 # check if any arguments are missing
 if [[ -z "$secret" || -z "$registry" || -z "$username" || -z "$password" ]]; then
-  echo "Usage: $0 -s <secret> -r <registry> -u <username> -p <password>" >&2
+  echo "Usage: $0 -r <registry> -u <username> -p <password> [-s <secret>]" >&2
   exit 1
 fi
 
