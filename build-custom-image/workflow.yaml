@@ -9,7 +9,7 @@ spec:
     - default: Dockerfile
       description: The relative path of the Dockerfile in the build context.
       name: dockerfile
-    - default: 'registry.tensorstack.cn/t9kmirror/kaniko-project-executor:latest'
+    - default: 't9kpublic/kaniko-project-executor:latest'
       description: Kaniko builder image.
       name: builderImage
     - default: ''
@@ -38,13 +38,15 @@ spec:
         image: $(params.builderImage)
         name: builder
         resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
           limits:
-            cpu: '1'
+            cpu: 1
             memory: 64Gi
       - args: []
         command: []
-        image: >-
-          docker.io/library/bash:5.1.4@sha256:c523c636b722339f41b6a431b44588ab2f762c5de5ec3bd7964420ff982fb1d9
+        image: bash:5.1.4
         name: write-url
         resources:
           limits:

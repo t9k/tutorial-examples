@@ -13,7 +13,7 @@ spec:
     - name: dstImage
       value: '<HOST>/<REPO>/nanogpt:latest'
     - name: builderImage
-      value: 'registry.tensorstack.cn/t9kmirror/kaniko-project-executor:latest'
+      value: 't9kpublic/kaniko-project-executor:latest'
   serviceAccountName: managed-project-sa
   timeout: 1h0m0s
   workflowTemplateRef: build-custom-image
