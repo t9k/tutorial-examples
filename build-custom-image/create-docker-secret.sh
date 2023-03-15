@@ -50,9 +50,11 @@ if [[ -z "$password" ]]; then
 fi
 
 # print the arguments
+echo "\n"
 echo "Secret: $secret"
 echo "Registry: $registry"
 echo "Username: $username"
+echo "\n"
 
 auth=$(echo -n $username:$password | base64 -w 0)
 configJSON='{"auths":{"'$registry'/v1/":{"username":"'$username'","password":"'$password'","auth":"'$auth'"}}}'
