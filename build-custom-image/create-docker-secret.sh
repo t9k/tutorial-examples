@@ -32,17 +32,27 @@ while getopts ":s:r:u:p:" opt; do
   esac
 done
 
-# check if any arguments are missing
-if [[ -z "$secret" || -z "$registry" || -z "$username" || -z "$password" ]]; then
-  echo "Usage: $0 -r <registry> -u <username> -p <password> [-s <secret>]" >&2
+# check if registry is missing
+if [[ -z "$registry" ]]; then
+  echo "Usage: $0 -r <registry> [-u <username>] [-p <password>] [-s <secret>]" >&2
   exit 1
+fi
+
+# check if username is missing
+if [[ -z "$username" ]]; then
+  read -p "Enter username: " username
+fi
+
+# check if password is missing
+if [[ -z "$password" ]]; then
+  read -s -p "Enter password: " password
+  echo ""
 fi
 
 # print the arguments
 echo "Secret: $secret"
 echo "Registry: $registry"
 echo "Username: $username"
-echo "Password: $password"
 
 auth=$(echo -n $username:$password | base64 -w 0)
 configJSON='{"auths":{"'$registry'/v1/":{"username":"'$username'","password":"'$password'","auth":"'$auth'"}}}'
@@ -52,7 +62,9 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: $secret
+  labels:
+    tensorstack.dev/resource: docker
 data:
-  config.json: $(echo $configJSON | base64 -w 0)
+  .dockerconfigjson: $(echo $configJSON | base64 -w 0)
 type: Opaque
 EOF

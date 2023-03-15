@@ -13,7 +13,7 @@ spec:
     - name: dstImage
       value: '<HOST>/<REPO>/nanogpt:latest'
     - name: builderImage
-      value: 't9kpublic/kaniko-project-executor:latest'
+      value: 't9kpublic/kaniko-project-executor:debug'
   serviceAccountName: managed-project-sa
   timeout: 1h0m0s
   workflowTemplateRef: build-custom-image
