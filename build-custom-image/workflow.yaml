@@ -9,7 +9,7 @@ spec:
     - default: Dockerfile
       description: The relative path of the Dockerfile in the build context.
       name: dockerfile
-    - default: 't9kpublic/kaniko-project-executor:debug'
+    - default: 't9kpublic/kaniko-project-executor'
       description: Kaniko builder image.
       name: builderImage
     - default: ''
