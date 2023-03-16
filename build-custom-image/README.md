@@ -7,8 +7,9 @@
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/build-custom-image
-# create a Secret of docker config, 
-./create-docker-secret.sh -r <REGISTRY_HOST> -u <USERNAME> -p <PASSWORD> [-s <SECRET_NAME>]
+# create a Secret of docker config
+# you can provide the username and password via arguments or enter them interactively
+./create-docker-secret.sh -r <registry> [-u <username>] [-p <password>] [-s <secret-name>]
 # create a WorkflowTemplate
 kubectl apply -f workflow.yaml
 ```
