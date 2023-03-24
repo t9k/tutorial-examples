@@ -1,0 +1,151 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+# Copy from https://github.com/kubeflow/kubeflow/blob/v0.7.0/components/tensorflow-notebook-image/Dockerfile
+
+FROM t9kpublic/build-sdk:latest as buildsdk
+
+FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-devel
+
+USER root
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV NB_PREFIX=/
+
+# Use bash instead of sh
+SHELL ["/bin/bash", "-c"]
+
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+  apt-transport-https \
+  build-essential \
+  bzip2 \
+  ca-certificates \
+  curl \
+  emacs \
+  g++ \
+  git \
+  gnupg \
+  graphviz \
+  htop \
+  locales \
+  lsb-release \
+  openssh-client \
+  openssh-server \
+  python3-dev \
+  python3-pip \
+  python3-setuptools \
+  python3-venv \
+  rsync \
+  s3cmd \
+  sudo \
+  unzip \
+  vim \
+  wget \
+  zip \
+  # new Debian packages
+  iputils-ping \
+  && apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install Nodejs for jupyterlab-manager
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+  nodejs \
+  && apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+  locale-gen
+ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
+ENV SHELL=/bin/bash
+
+# NOTE: Beyond this point be careful of breaking out
+# or otherwise adding new layers with RUN, chown, etc.
+# The image size can grow significantly.
+
+RUN pip uninstall enum34 -y
+
+# Unset http proxy, pip3 --proxy="" doesn't work
+ENV http_proxy= \
+    HTTP_PROXY= \
+    https_proxy= \
+    HTTPS_PROXY=
+
+# Copy files
+WORKDIR /t9k/export
+COPY . .
+
+# Install base python3 packages
+RUN pip3 install --no-cache-dir -i https://pypi.douban.com/simple --upgrade pip && \
+  pip3 install --no-cache-dir -i https://pypi.douban.com/simple --default-timeout=100 \
+    datasets \
+    h5py \
+    ipywidgets \
+    jupyter \
+    jupyter-console \
+    jupyter-http-over-ws \
+    jupyterlab \
+    jupyterlab-widgets \
+    lightning \
+    pytorch-lightning \
+    pandas \
+    matplotlib \
+    scikit-learn \
+    torch-model-archiver \
+    torch-tb-profiler \
+    torch-workflow-archiver \
+    torchmetrics \
+    transformers \
+    # new Python packages
+    -r requirements.txt
+
+RUN jupyter serverextension enable --py jupyter_http_over_ws
+
+ARG GID=1000
+ARG UID=1000
+RUN groupadd --gid=$GID t9kuser && mkdir -p /t9k && \
+  useradd -rm --create-home -d /t9k/mnt --shell /bin/bash \
+  --uid=$UID --gid=$GID t9kuser
+
+# https://unix.stackexchange.com/questions/4484/ssh-prompts-for-password-despite-ssh-copy-id
+# sshd has strict requirements about permissions on $HOME, $HOME/.ssh
+RUN chmod 755 /t9k/mnt
+WORKDIR /t9k/mnt
+
+COPY build/bashrc /etc/bash.bashrc
+
+# Install Notebook extensions
+COPY build/notebook2workflow-0.1.0-py3-none-any.whl /tmp/notebook2workflow-0.1.0-py3-none-any.whl
+COPY build/install-extension.sh /tmp/install-extension.sh
+RUN bash /tmp/install-extension.sh
+
+COPY --from=buildsdk /usr/local/bin/* /usr/local/bin/
+
+# Install TensorStack tools
+RUN pip install -i https://pypi.douban.com/simple /usr/local/bin/t9k.tar.gz && \
+    pip install -i https://pypi.douban.com/simple /usr/local/bin/codepack.tar.gz && \
+    rm -rf /usr/local/bin/t9k.tar.gz && \
+    rm -rf /usr/local/bin/codepack.tar.gz && \
+    chmod a+rx /usr/local/bin/*
+
+ENV REGISTRY_AUTH_FILE=/t9k/mnt/.docker/config.json
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY build/ssh_server.sh /t9k/app/ssh_server.sh
+COPY build/entrypoint.sh /t9k/app/entrypoint.sh
+RUN chown -R 1000:1000 /t9k/app && chmod 755 /t9k/app
+RUN chmod u+rx /t9k/app/ssh_server.sh
+RUN chmod u+rx /t9k/app/entrypoint.sh
+
+# Set `sudo` command
+# RUN echo 't9kuser:tensorstack' | chpasswd && echo "t9kuser ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+USER t9kuser
+
+# Configure container startup
+EXPOSE 2222
+EXPOSE 8888
+
+ENTRYPOINT ["tini", "--"]
+CMD ["sh","-c", "/t9k/app/entrypoint.sh"]

@@ -1,0 +1,67 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowTemplate
+metadata:
+  labels:
+    workflowtemplate/tags: image-build
+  name: build-image
+spec:
+  params:
+    - default: Dockerfile
+      description: The relative path of the Dockerfile in the build context.
+      name: dockerfile
+    - default: 't9kpublic/kaniko-project-executor'
+      description: Kaniko builder image.
+      name: builderImage
+    - default: ''
+      description: Destination image name.
+      name: dstImage
+    - default: .
+      description: Build context used by Kaniko.
+      name: contextPath
+  results:
+    - description: Digest of the image just built.
+      name: imageDigest
+    - description: URL of the image just built.
+      name: imageURL
+  seqPod:
+    steps:
+      - args:
+          - -c
+          - >-
+              ln -s /t9k/workspaces/dockerConfig/.dockerconfigjson /kaniko/.docker/config.json &&
+              /kaniko/executor
+              --context=$(workspaces.source.path)/$(params.contextPath)
+              --destination=$(params.dstImage)
+              --dockerfile=$(workspaces.source.path)/$(params.contextPath)/$(params.dockerfile)
+              --digest-file=$(results.imageDigest.path)
+        command:
+          - /bin/sh
+        image: $(params.builderImage)
+        name: builder
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 1
+            memory: 64Gi
+      - args: []
+        command: []
+        image: bash:5.1.4
+        name: write-url
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+        script: |-
+          #!/usr/local/bin/bash
+          set -e
+
+          image="$(params.dstImage)"
+          echo -n "${image}" | tee "$(results.imageURL.path)"
+  type: SeqPod
+  workspaces:
+    - description: PVC that holds the context and Dockerfile
+      name: source
+    - description: Secret that includes a docker `config.json`.
+      name: dockerConfig

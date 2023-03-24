@@ -1,0 +1,26 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowRun
+metadata:
+  labels:
+    batch.tensorstack.dev/workflowTemplate: build-image
+  generateName: build-image-run-
+spec:
+  params:
+    - name: contextPath
+      value: ./tutorial-examples/build-image/build-image-on-platform
+    - name: dockerfile
+      value: Dockerfile
+    - name: dstImage
+      value: '<HOST>/<REPO>/nanogpt:latest'
+    - name: builderImage
+      value: 't9kpublic/kaniko-project-executor'
+  serviceAccountName: managed-project-sa
+  timeout: 1h0m0s
+  workflowTemplateRef: build-image
+  workspaces:
+    - name: source
+      persistentVolumeClaim:
+        claimName: tutorial
+    - name: dockerConfig
+      secret:
+        secretName: docker-config
