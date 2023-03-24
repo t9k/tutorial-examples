@@ -1,4 +1,4 @@
-# Tutorials Examles
+# Tutorial Examles
 
 <div id="top" align="center">
 
@@ -12,9 +12,9 @@ This git repository stores all tutorial examples of **TensorStack AI Computing P
 
 ## Usage
 
-1. In your project, create a PVC named `tutorial` with a size of 4 GiB or more, and create a Notebook with the same name. The new Notebook need to be configured to use the just-created PVC (mounted to `/t9k/mnt`). If you want to access your notebook remotely, please toggle SSH. Other options for the notebook are at your choice (For the steps to create a PVC and Notebook, please refer to [Create a Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/create-notebook.html)).
+1. In your project, create a PVC named `tutorial` with a size of 4 GiB or more, and a Notebook with the same name. The new Notebook need to be configured to use the just-created PVC (mounted to `/t9k/mnt`). If you want to access your notebook remotely, please toggle SSH on. Other options for the notebook are at your choice. For more details on how to create a PVC and Notebook, please refer to [User doc: Create a Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/create-notebook.html).
 
-2. Open Notebook from Web UI or connect remotely using ssh to get a terminal. Then execute the following command to clone this repository (see [Using Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/use-notebook.html)).
+2. Open Notebook from Web UI or connect remotely using ssh to get a terminal. Then execute the following command to clone this repository (see [User doc: Use Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/use-notebook.html)).
 
 ```shell
 cd ~
@@ -27,20 +27,20 @@ git clone https://github.com/t9k/tutorial-examples.git
 
 * Distributed Training
   * TensorFlow
-    * [TensorFlowTrainingJob parallel training with multi-worker](./job/tensorflowtrainingjob/multiworker/)
-    * [TensorFlowTrainingJob parallel training with parameter server](./job/tensorflowtrainingjob/ps/)
+    * [Distributed training with multi-worker](./job/tensorflowtrainingjob/multiworker/)
+    * [Distributed training with parameter server](./job/tensorflowtrainingjob/ps/)
   * PyTorch
-    * [PyTorchTrainingJob parallel training with multi-worker](./job/pytorchtrainingjob/ddp/)
-    * [PyTorchTrainingJob parallel training with parameter server](./job/pytorchtrainingjob/ps/)
+    * [Distributed training with multi-worker](./job/pytorchtrainingjob/ddp/)
+    * [Distributed training with parameter server](./job/pytorchtrainingjob/ps/)
   * Horovod
-    * [Horovod - Keras parallel training with multi-worker](./job/mpijob/horovod-keras/)
-    * [Horovod - PyTorch parallel training with multi-worker](./job/mpijob/horovod-torch/)
+    * [Horovod - Keras distributed training with multi-worker](./job/mpijob/horovod-keras/)
+    * [Horovod - PyTorch distributed training with multi-worker](./job/mpijob/horovod-torch/)
   * XGBoost
-    * [XGBoostTrainingJob parallel training](./job/xgboosttrainingjob/distributed/)
+    * [XGBoostTrainingJob distributed training](./job/xgboosttrainingjob/distributed/)
   * Apache Beam
-    * [BeamJob for parallel data procesing with Apache Beam](./job/beamjob/count-word/)
+    * [BeamJob for distributed data procesing with Apache Beam](./job/beamjob/count-word/)
   * Custom
-    * [GenericJob - Keras parallel training with multi-worker](./job/genericjob/keras-multiworker/)
+    * [GenericJob - Keras distributed training with multi-worker](./job/genericjob/keras-multiworker/)
 * HyperParameter Tuning
   * [AutoTune - HPO for Keras](./autotune/hpo-keras/)
   * [AutoTune - HPO for PyTorch）](./autotune/hpo-torch/)
