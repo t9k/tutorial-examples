@@ -28,3 +28,5 @@ local-test
 # Python generated files
 *.egg-info/
 
+# tmp dirs for running examples
+runs/
