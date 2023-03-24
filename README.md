@@ -1,5 +1,7 @@
 # 平台教程示例
 
+<img src="./assets/illustration.png" alt="illustration" width="300" align="center"><br>
+
 `t9k/tutorial-examples` 仓库存放了 TensorStack AI 计算平台的所有教程示例。
 
 大部分示例都基于“识别 MNIST 手写数字”这一入门级机器学习任务，便于用户理解和上手平台的各项功能。
