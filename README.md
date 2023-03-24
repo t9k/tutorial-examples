@@ -1,4 +1,4 @@
-# Tutorial Examles
+# Tutorial Examples
 
 <div id="top" align="center">
 
@@ -16,8 +16,9 @@ This git repository stores all tutorial examples of **TensorStack AI Computing P
 
 2. Open Notebook from Web UI or connect remotely using ssh to get a terminal. Then execute the following command to clone this repository (see [User doc: Use Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/use-notebook.html)).
 
-```shell
-cd ~
+```
+# change dir to $HOME, /t9k/mnt
+cd
 git clone https://github.com/t9k/tutorial-examples.git
 ```
 
@@ -38,7 +39,7 @@ git clone https://github.com/t9k/tutorial-examples.git
   * XGBoost
     * [XGBoostTrainingJob distributed training](./job/xgboosttrainingjob/distributed/)
   * Apache Beam
-    * [BeamJob for distributed data procesing with Apache Beam](./job/beamjob/count-word/)
+    * [BeamJob for distributed data processing with Apache Beam](./job/beamjob/count-word/)
   * Custom
     * [GenericJob - Keras distributed training with multi-worker](./job/genericjob/keras-multiworker/)
 * HyperParameter Tuning
@@ -47,7 +48,7 @@ git clone https://github.com/t9k/tutorial-examples.git
 * Recording Training metadata
   * [Using AIMD with a single worker](./aimd/single-worker/)
   * [Using AIMD with Job](./aimd/job/)
-* Model Depolyment
+* Model Deployment
   * Models stored in PVC
     * [Keras](./deployment/pvc/mlservice-keras/)
     * [PyTorch](./deployment/pvc/mlservice-torch/)
