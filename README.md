@@ -12,7 +12,7 @@ This git repository stores all tutorial examples of **TensorStack AI Computing P
 
 ## Usage
 
-1. In your project, create a PVC named `tutorial` with a size of 4 GiB or more, and create a Notebook with the same name. The new Notebook need to be configured to use the just-created PVC (mounted to `/t9k/mount`). If you want to access your notebook remotely, please toggle SSH. Other options for the notebook are at your choice (For the steps to create a PVC and Notebook, please refer to [Create a Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/create-notebook.html)).
+1. In your project, create a PVC named `tutorial` with a size of 4 GiB or more, and create a Notebook with the same name. The new Notebook need to be configured to use the just-created PVC (mounted to `/t9k/mnt`). If you want to access your notebook remotely, please toggle SSH. Other options for the notebook are at your choice (For the steps to create a PVC and Notebook, please refer to [Create a Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/create-notebook.html)).
 
 2. Open Notebook from Web UI or connect remotely using ssh to get a terminal. Then execute the following command to clone this repository (see [Using Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/use-notebook.html)).
 
