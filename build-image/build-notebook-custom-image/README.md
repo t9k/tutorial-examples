@@ -14,7 +14,7 @@
 
 ### 准备 Dockerfile 文件
 
-例如我们要在 `t9kpublic/torch-1.13.1-notebook:latest` 这一标准镜像的基础上增加文件、安装 Python 包和 Debian 软件包，于是写出镜像的 Dockerfile 如下（即 `Dockerfile.modify` 文件）：
+例如我们要在 `t9kpublic/torch-1.13.1-notebook:latest` 这一标准镜像的基础上增加文件、安装 Python 包和 Debian 软件包，于是写出镜像的 Dockerfile 如下（即 `Dockerfile.patched` 文件）：
 
 ```dockerfile
 FROM t9kpublic/torch-1.13.1-notebook:latest
@@ -38,13 +38,13 @@ WORKDIR /t9k/mnt
 
 ### 运行工作流
 
-切换到当前目录下，修改 `workflowrun.modify.yaml` 中构建的镜像名称（位于第 14 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
+切换到当前目录下，修改 `workflowrun.patched.yaml` 中构建的镜像名称（位于第 12 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
 
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/build-image/build-notebook-custom-image
 # create a WorkflowRun
-kubectl create -f workflowrun.modify.yaml
+kubectl create -f workflowrun.patched.yaml
 ```
 
 ## 从零开始构建 Notebook 自定义镜像
@@ -53,26 +53,26 @@ kubectl create -f workflowrun.modify.yaml
 
 ### 准备 Dockerfile 文件
 
-为便于演示说明，这里构建与第一种方法相同的镜像。`Dockerfile.new` 文件给出了完整的构建指令，其中：
+为便于演示说明，这里构建与第一种方法相同的镜像。`Dockerfile.full` 文件给出了完整的构建指令，其中：
 
 * 第 7 行指定了基础镜像，这里为 PyTorch 官方镜像 `pytorch/pytorch:1.13.1-cuda11.6-cudnn8-devel`。
 * 第 45-46 行指定了新安装的 Debian 软件包。
 * 第 74-76 行指定了要复制的文件。
 * 第 99-100 行指定了新安装的 Python 包。
 
-> 如果您想要从零开始构建自己的 Notebook 自定义镜像（PyTorch 1/2 环境），推荐基于 `Dockerfile.new` 文件，并对上述说明的各行进行相应的修改。
+> 如果您想要从零开始构建自己的 Notebook 自定义镜像（PyTorch 1/2 环境），推荐基于 `Dockerfile.full` 文件，并对上述说明的各行进行相应的修改。
 > 
-> 如果想要构建 Notebook 自定义镜像（TensorFlow 2 环境），推荐基于 `Dockerfile.new.tf2` 文件进行修改。
+> 如果想要构建 Notebook 自定义镜像（TensorFlow 2 环境），推荐基于 `Dockerfile.full.tf2` 文件进行修改。
 
 ### 运行工作流
 
-切换到当前目录下，修改 `workflowrun.new.yaml` 中构建的镜像名称（位于第 14 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
+切换到当前目录下，修改 `workflowrun.full.yaml` 中构建的镜像名称（位于第 12 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
 
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/build-image/build-notebook-custom-image
 # create a WorkflowRun
-kubectl create -f workflowrun.new.yaml
+kubectl create -f workflowrun.full.yaml
 ```
 
 ## 检查构建进度和结果

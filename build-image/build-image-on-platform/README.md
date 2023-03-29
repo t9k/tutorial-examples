@@ -38,7 +38,7 @@ kubectl apply -f workflow.yaml
 
 ## 运行工作流
 
-修改 `workflowrun.yaml` 中构建的镜像名称（位于第 14 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
+修改 `workflowrun.yaml` 中构建的镜像名称（位于第 12 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
 
 ```shell
 kubectl create -f workflowrun.yaml
@@ -46,11 +46,11 @@ kubectl create -f workflowrun.yaml
 
 `workflowrun.yaml` 中的各重要参数如下：
 
-* `contextPath`（9-10 行）：Docker 构建上下文在 PVC 中的路径，这里取 `./tutorial-examples/build-custom-image`。
-* `dockerfile`（11-12 行）：dockerfile 在构建上下文中的相对路径，这里取 `Dockerfile`。
-* `dstImage`（13-14 行）：构建的镜像名称。
-* PVC 名称（23 行）：这里取 `tutorial`。
-* Secret 名称（26 行）：这里取 `docker-config`（如果在创建 Secret 时指定了名称，请修改为该名称）。
+* `contextPath`（7-8 行）：Docker 构建上下文在 PVC 中的路径，这里取 `./tutorial-examples/build-custom-image`。
+* `dockerfile`（9-10 行）：dockerfile 在构建上下文中的相对路径，这里取 `Dockerfile`。
+* `dstImage`（11-12 行）：构建的镜像名称。
+* PVC 名称（19 行）：这里取 `tutorial`。
+* Secret 名称（22 行）：这里取 `docker-config`（如果在创建 Secret 时指定了名称，请修改为该名称）。
 
 ## 检查构建进度和结果
 

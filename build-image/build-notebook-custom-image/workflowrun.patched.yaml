@@ -1,21 +1,17 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: WorkflowRun
 metadata:
-  labels:
-    batch.tensorstack.dev/workflowTemplate: build-image
-  generateName: build-notebook-custom-image-2-run-
+  generateName: build-notebook-custom-image-run-
 spec:
   params:
     - name: contextPath
       value: ./tutorial-examples/build-image/build-notebook-custom-image
     - name: dockerfile
-      value: Dockerfile.new
+      value: Dockerfile.patched
     - name: dstImage
-      value: '<HOST>/<REPO>/torch-1.13.1-notebook:custom-2'
+      value: '<REGISTRY>/<NAMESPACE>/torch-1.13.1-notebook:custom-patched'
     - name: builderImage
       value: 't9kpublic/kaniko-project-executor'
-  serviceAccountName: managed-project-sa
-  timeout: 1h0m0s
   workflowTemplateRef: build-image
   workspaces:
     - name: source
