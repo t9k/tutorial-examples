@@ -44,7 +44,7 @@ git clone https://github.com/t9k/tutorial-examples.git
     * [GenericJob - Keras distributed training with multi-worker](./job/genericjob/keras-multiworker/)
 * HyperParameter Tuning
   * [AutoTune - HPO for Keras](./autotune/hpo-keras/)
-  * [AutoTune - HPO for PyTorch）](./autotune/hpo-torch/)
+  * [AutoTune - HPO for PyTorch](./autotune/hpo-torch/)
 * Recording Training metadata
   * [Using AIMD with a single worker](./aimd/single-worker/)
   * [Using AIMD with Job](./aimd/job/)
@@ -58,6 +58,7 @@ git clone https://github.com/t9k/tutorial-examples.git
 * Workflow
   * [E2E Workflow - from processing data to deploying model](./workflow/automatic-workflow/)
 * Tools
-  * [Codepack ](./codepack/)
+  * [Codepack](./codepack/)
 * Others
-  * [Build container images](./build-custom-image/)
+  * [Build image on platform](./build-image/build-image-on-platform/)
+  * [Build Notebook custom image](./build-image/build-notebook-custom-image/)
