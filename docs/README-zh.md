@@ -61,4 +61,5 @@ git clone https://github.com/t9k/tutorial-examples.git
 * 平台工具：
   * [Codepack 使用示例](./codepack/)
 * 其他功能：
-  * [构建自定义镜像](./build-custom-image/)
+  * [在平台上构建镜像](./build-image/build-image-on-platform/)
+  * [构建 Notebook 自定义镜像](./build-image/build-notebook-custom-image/)
