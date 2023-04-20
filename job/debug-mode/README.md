@@ -4,7 +4,7 @@
 
 在 debug 模式下，所有 replica 的容器的启动命令都会被替换为 `sleep inf`，这时由用户进入容器执行任意命令以进行调试。用户可以自由地使用各种命令检查环境，或尝试启动训练（这里训练脚本出错不会造成 Job 的失败）。
 
-注意：目前 debug 模式**仅支持** PyTorchTrainingJob 和 ColossalAIJob，之后将支持所有类型的 Job。这里以 PyTorchTrainingJob 为例进行演示，代码和 YAML 配置来自示例[使用 PyTorchTrainingJob 进行多工作器同步训练](../pytorchtrainingjob/ddp/)，其中 YAML 配置增加了 `spec.runMode`（第 6-11 行）来启用 debug 模式。
+注意：目前 debug 模式**仅支持** PyTorchTrainingJob 和 ColossalAIJob，之后将支持所有类型的 Job。这里以 PyTorchTrainingJob 为例进行演示，代码和 YAML 配置来自示例[使用 PyTorchTrainingJob 进行多工作器同步训练](../pytorchtrainingjob/ddp/)，其中 YAML 配置增加了 `spec.runMode` 字段（第 6-11 行）来启用 debug 模式。
 
 切换到当前目录下，使用 `job_debug.yaml` 创建 PyTorchTrainingJob：
 
@@ -25,13 +25,13 @@ kubectl get pod -w
 
 ```shell
 # in one terminal
-kubectl exec -it torch-mnist-trainingjob-debug-worker-0
+kubectl exec -it torch-mnist-trainingjob-debug-worker-0 -- bash
 python job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --log_dir job/pytorchtrainingjob/ddp/log --backend gloo --no_cuda
 ```
 
 ```shell
 # in another terminal
-kubectl exec -it torch-mnist-trainingjob-debug-worker-1
+kubectl exec -it torch-mnist-trainingjob-debug-worker-1 -- bash
 python job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --log_dir job/pytorchtrainingjob/ddp/log --backend gloo --no_cuda
 ```
 
