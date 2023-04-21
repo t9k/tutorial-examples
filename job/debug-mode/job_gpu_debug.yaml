@@ -9,10 +9,6 @@ spec:
       replicaSpecs:
         - type: worker
           skipInitContainer: true
-  tensorboardSpec:
-    trainingLogFilesets:
-      - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log
-    image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
     - type: worker
       replicas: 2
@@ -29,17 +25,18 @@ spec:
                 - "--log_dir"
                 - "job/pytorchtrainingjob/ddp/log"
                 - "--backend"
-                - "gloo"
-                - "--no_cuda"
+                - "nccl"
               workingDir: /t9k/mnt/tutorial-examples
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 8
+                  cpu: 1
                   memory: 2Gi
+                  nvidia.com/gpu: 1
                 limits:
-                  cpu: 12
+                  cpu: 2
                   memory: 4Gi
+                  nvidia.com/gpu: 1
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
