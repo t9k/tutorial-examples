@@ -9,6 +9,7 @@ spec:
       replicaSpecs:
         - type: worker
           skipInitContainer: true
+          command: ["sleep inf"]
   replicaSpecs:
     - type: worker
       replicas: 2

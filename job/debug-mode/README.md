@@ -1,8 +1,8 @@
 # 使用 Job 的 debug 模式进行调试
 
-本示例使用 Job 的 debug 模式这一功能对要运行的计算任务进行调试。
+本示例使用 Job 的 debug 模式这一功能对计算任务进行调试。
 
-在 debug 模式下，所有 replica 的容器的启动命令都会被替换，用户可以指定新的启动命令（默认为 `sleep inf`）。这里以 `sleep inf` 命令进行演示，用户将手动进入容器，自由地使用各种命令检查环境，或尝试启动训练。
+debug 模式的设计目标是在保留 Job 原有配置的条件下，方便地对要运行的计算任务进行调试。在 debug 模式下，所有 replica 的容器的启动命令都会被替换，用户可以指定新的启动命令（默认为 `sleep inf`）。这里以 `sleep inf` 命令进行演示，用户将手动进入容器，自由地使用各种命令检查环境，或尝试启动训练。
 
 目前 debug 模式**仅支持** PyTorchTrainingJob 和 ColossalAIJob，之后将支持所有类型的 Job。这里以 PyTorchTrainingJob 为例进行演示，代码和 YAML 配置来自示例[使用 PyTorchTrainingJob 进行多工作器同步训练](../pytorchtrainingjob/ddp/)，其中 YAML 配置增加了 `spec.runMode` 字段（第 6-11 行）来启用 debug 模式。
 
