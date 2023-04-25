@@ -12,7 +12,7 @@ spec:
       - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ps/log
     image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   replicaSpecs:
-    - type: master
+    - type: ps
       replicas: 1
       restartPolicy: OnFailure
       template:

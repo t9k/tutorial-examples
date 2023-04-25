@@ -16,39 +16,8 @@ spec:
   trainingConfig:
     type: pytorch
     tasks:
-      - type: master
-        replicas: 1
-        template:
-          spec:
-            securityContext:
-              runAsUser: 1000
-            containers:
-              - name: pytorch
-                command:
-                  - python
-                  - autotune/hpo-torch/torch_mnist_autotune.py
-                  - "--backend"
-                  - "nccl"
-                workingDir: /t9k/mnt/tutorial-examples
-                image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
-                resources:
-                  requests:
-                    cpu: 1
-                    memory: 2Gi
-                    nvidia.com/gpu: 1
-                  limits:
-                    cpu: 2
-                    memory: 4Gi
-                    nvidia.com/gpu: 1
-                volumeMounts:
-                  - mountPath: /t9k/mnt
-                    name: data
-            volumes:
-              - name: data
-                persistentVolumeClaim:
-                  claimName: tutorial
       - type: worker
-        replicas: 3
+        replicas: 4
         template:
           spec:
             securityContext:
