@@ -4,7 +4,7 @@ metadata:
   name: torch-mnist-single-aimd
 spec:
   replicaSpecs:
-    - type: master
+    - type: worker
       replicas: 1
       restartPolicy: ExitCode
       template:
