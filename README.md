@@ -34,14 +34,15 @@ git clone https://github.com/t9k/tutorial-examples.git
     * [Distributed training with multi-worker](./job/pytorchtrainingjob/ddp/)
     * [Distributed training with parameter server](./job/pytorchtrainingjob/ps/)
   * Horovod
-    * [Horovod - Keras distributed training with multi-worker](./job/mpijob/horovod-keras/)
-    * [Horovod - PyTorch distributed training with multi-worker](./job/mpijob/horovod-torch/)
+    * [Keras distributed training with multi-worker](./job/mpijob/horovod-keras/)
+    * [PyTorch distributed training with multi-worker](./job/mpijob/horovod-torch/)
   * XGBoost
     * [XGBoostTrainingJob distributed training](./job/xgboosttrainingjob/distributed/)
   * Apache Beam
     * [BeamJob for distributed data processing with Apache Beam](./job/beamjob/count-word/)
   * Custom
     * [GenericJob - Keras distributed training with multi-worker](./job/genericjob/keras-multiworker/)
+  * [Debugging with debug mode of Job](./job/debug-mode/)
 * HyperParameter Tuning
   * [AutoTune - HPO for Keras](./autotune/hpo-keras/)
   * [AutoTune - HPO for PyTorch](./autotune/hpo-torch/)
