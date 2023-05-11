@@ -13,8 +13,8 @@ spec:
     run:
       python:
         - cifar10_deepspeed.py
-        - "-deepspeed"
-        - "-deepspeed_config=ds_config.json"
+        - "--deepspeed"
+        - "--deepspeed_config=ds_config.json"
   worker:
     replicas: 1
     template:
@@ -27,20 +27,20 @@ spec:
             limits:
               cpu: 8
               memory: 16Gi
-              nvidia.com/gpu: 4
+              nvidia.com/gpu: 2
             requests:
               cpu: 4
               memory: 8Gi
-              nvidia.com/gpu: 4
+              nvidia.com/gpu: 2
           volumeMounts:
           - mountPath: /t9k/mnt
             name: code
-          # - mountPath: /dev/shm
-          #   name: dshm  
+          - mountPath: /dev/shm
+            name: dshm  
         volumes:
         - name: code
           persistentVolumeClaim:
             claimName: tutorial
-        # - name: dshm
-        #   emptyDir:
-        #     medium: Memory
+        - name: dshm
+          emptyDir:
+            medium: Memory

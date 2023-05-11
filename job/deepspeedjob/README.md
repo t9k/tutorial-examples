@@ -15,7 +15,7 @@ kubectl create -f job.yaml
 在命令行监控训练的运行进度：
 
 ```shell
-kubectl get -f job_gpu.yaml -o wide -w
+kubectl get -f job.yaml -o wide -w
 ```
 
 或者前往模型构建控制台查看训练状态和日志等。
