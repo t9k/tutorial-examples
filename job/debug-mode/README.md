@@ -27,26 +27,26 @@ spec:
 
 <!-- 用户文档添加后移除 -->
 
-切换到当前目录下，使用 `job_gpu_debug.yaml` 创建 PyTorchTrainingJob：
+切换到当前目录下，使用 `job_debug.yaml` 创建 PyTorchTrainingJob：
 
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/job/debug-mode
 # GPU training with debug mode
-kubectl create -f job_gpu_debug.yaml
+kubectl create -f job_debug.yaml
 ```
 
-在命令行监控作为工作器的 Pod `torch-mnist-trainingjob-debug-worker-0` 和 `torch-mnist-trainingjob-debug-worker-1` 的状态直到变为 `Running`：
+在命令行监控作为节点的 Pod `torch-mnist-trainingjob-debug-node-0` 的状态直到变为 `Running`：
 
 ```shell
 kubectl get pod -w
 ```
 
-使用一个终端进入 Pod `torch-mnist-trainingjob-debug-worker-0`：
+使用一个终端进入 Pod `torch-mnist-trainingjob-debug-node-0`：
 
 ```shell
 # in one terminal
-kubectl exec -it torch-mnist-trainingjob-debug-worker-0 -- bash
+kubectl exec -it torch-mnist-trainingjob-debug-node-0 -- bash
 ```
 
 使用 `nvidia-smi` 命令检查当前可用的 GPU，再使用 `ls` 命令检查示例路径是否正确：
@@ -56,18 +56,10 @@ nvidia-smi
 ls job/pytorchtrainingjob/ddp
 ```
 
-然后运行 Python 脚本以启动训练：
+然后使用 `torchrun` 命令启动训练：
 
 ```shell
-python job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --log_dir job/pytorchtrainingjob/ddp/log --backend nccl
-```
-
-使用一个终端进入 Pod `torch-mnist-trainingjob-debug-worker-1`，同样启动训练：
-
-```shell
-# in another terminal
-kubectl exec -it torch-mnist-trainingjob-debug-worker-1 -- bash
-python job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --log_dir job/pytorchtrainingjob/ddp/log --backend nccl
+torchrun --nnodes 1 --nproc_per_node 4 --rdzv_backend c10d job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --log_dir job/pytorchtrainingjob/ddp/log --backend nccl
 ```
 
 随即分布式训练开始进行。如果训练脚本出错，则可以立即在终端中进行调试，不会造成 Job 的失败。调试完成后禁用 debug 模式（将 `spec.runMode.debug.enable` 设为 `false`，或直接注释第 6-12 行），再次创建 PyTorchTrainingJob 则正常启动训练。

@@ -7,9 +7,14 @@ spec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log
     image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
+  torchrunConfig:
+    enable: true
+    maxRestarts: 3
+    procPerNode: "4"
+    rdzvBackend: c10d
   replicaSpecs:
-    - type: worker
-      replicas: 4
+    - type: node
+      replicas: 1
       restartPolicy: ExitCode
       template:
         spec:
@@ -17,24 +22,22 @@ spec:
             runAsUser: 1000
           containers:
             - name: pytorch
-              command:
-                - python
+              args:
                 - job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py
                 - "--log_dir"
                 - "job/pytorchtrainingjob/ddp/log"
                 - "--backend"
-                - "nccl"
+                - "gloo"
+                - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 1
-                  memory: 2Gi
-                  nvidia.com/gpu: 1
+                  cpu: 16
+                  memory: 8Gi
                 limits:
-                  cpu: 2
-                  memory: 4Gi
-                  nvidia.com/gpu: 1
+                  cpu: 32
+                  memory: 16Gi
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data

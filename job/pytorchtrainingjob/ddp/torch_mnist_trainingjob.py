@@ -112,23 +112,22 @@ def test(val=False, epoch=None):
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    use_cuda = not args.no_cuda and torch.cuda.is_available()
-    if use_cuda:
-        logging.info('Using CUDA')
-    device = torch.device('cuda' if use_cuda else 'cpu')
-    kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-
     logging.info('Using distributed PyTorch with %s backend', args.backend)
     dist.init_process_group(backend=args.backend)
     rank = dist.get_rank()
     world_size = dist.get_world_size()
+
+    use_cuda = not args.no_cuda and torch.cuda.is_available()
+    if use_cuda:
+        logging.info('Using CUDA')
+    device = torch.device('cuda:{}'.format(rank) if use_cuda else 'cpu')
+    kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'data')
     # rank 0 downloads datasets in advance
     if rank == 0:
         datasets.MNIST(root=dataset_path, train=True, download=True)
-        datasets.MNIST(root=dataset_path, train=False, download=True)
 
     model = Net().to(device)
     model = DDP(model)

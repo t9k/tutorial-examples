@@ -2,23 +2,18 @@
 
 本示例使用 PyTorchTrainingJob 对 PyTorch 模型进行多工作器同步训练（使用 [`torch.nn.parallel.DistributedDataParallel`](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html) 分布式数据并行模块）。
 
-切换到当前目录下，使用以下 YAML 配置之一创建 PyTorchTrainingJob：
+切换到当前目录下，使用 `job.yaml` 或 `job_cpu.yaml` 创建 PyTorchTrainingJob 以启动训练，您可以如下修改训练配置：
 
-* `job.yaml`：使用 CPU 训练
-* `job_gpu.yaml`：使用 GPU 训练
-* `job_gpu_t9ksched.yaml`：使用 GPU 训练，并且由 T9k 调度器进行调度（默认的队列名称为 `default`，在 `spec.scheduler.t9kScheduler.queue` 字段（第 8 行）进行修改）
+* 如要使用队列，取消第 6-9 行的注释，并修改第 8 行的队列名称（默认为 `default`）。
 
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/job/pytorchtrainingjob/ddp
 # choose one of the following:
-# 1. CPU training
+# 1. GPU training
 kubectl create -f job.yaml
-# 2. GPU training
-kubectl create -f job_gpu.yaml
-# 3. GPU training with Job scheduled by T9k scheduler
-# vim job_gpu_t9ksched.yaml  # optionally modify name of queue (line 8)
-kubectl create -f job_gpu_t9ksched.yaml
+# 2. CPU training
+kubectl create -f job_cpu.yaml
 ```
 
 在命令行监控训练的运行进度：
