@@ -1,0 +1,46 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: DeepspeedJob
+metadata:
+  name: deepspeed-cifar
+spec:
+  # scheduler:
+  #   t9kScheduler:
+  #     queue: default
+  #     priority: 50
+  config:
+    localRank: true
+    slotsPerWorker: 2
+    run:
+      python:
+        - cifar10_deepspeed.py
+        - "-deepspeed"
+        - "-deepspeed_config=ds_config.json"
+  worker:
+    replicas: 1
+    template:
+      spec:
+        containers:
+        - name: worker
+          image: tsz.io/lmh/deepspeed-0.9.1-torch112-cu117:test
+          workingDir: /t9k/mnt/tutorial-examples/job/deepspeedjob
+          resources:
+            limits:
+              cpu: 8
+              memory: 16Gi
+              nvidia.com/gpu: 4
+            requests:
+              cpu: 4
+              memory: 8Gi
+              nvidia.com/gpu: 4
+          volumeMounts:
+          - mountPath: /t9k/mnt
+            name: code
+          # - mountPath: /dev/shm
+          #   name: dshm  
+        volumes:
+        - name: code
+          persistentVolumeClaim:
+            claimName: tutorial
+        # - name: dshm
+        #   emptyDir:
+        #     medium: Memory
