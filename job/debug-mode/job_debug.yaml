@@ -10,9 +10,14 @@ spec:
         - type: worker
           skipInitContainer: true
           command: ["sleep", "inf"]
+  torchrunConfig:
+    enable: true
+    maxRestarts: 3
+    procPerNode: "4"
+    rdzvBackend: c10d
   replicaSpecs:
-    - type: worker
-      replicas: 2
+    - type: node
+      replicas: 1
       restartPolicy: ExitCode
       template:
         spec:
@@ -20,8 +25,7 @@ spec:
             runAsUser: 1000
           containers:
             - name: pytorch
-              command:
-                - python
+              args:
                 - job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py
                 - "--log_dir"
                 - "job/pytorchtrainingjob/ddp/log"
@@ -31,13 +35,13 @@ spec:
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 1
-                  memory: 2Gi
-                  nvidia.com/gpu: 1
+                  cpu: 4
+                  memory: 8Gi
+                  nvidia.com/gpu: 4
                 limits:
-                  cpu: 2
-                  memory: 4Gi
-                  nvidia.com/gpu: 1
+                  cpu: 8
+                  memory: 16Gi
+                  nvidia.com/gpu: 4
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data

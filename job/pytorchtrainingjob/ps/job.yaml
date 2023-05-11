@@ -3,6 +3,10 @@ kind: PyTorchTrainingJob
 metadata:
   name: torch-mnist-trainingjob-ps
 spec:
+  # scheduler:
+  #   t9kScheduler:
+  #     queue: default
+  #     priority: 50
   runPolicy:
     cleanUpPolicy: Unfinished
     backoffLimit: 20
@@ -22,17 +26,18 @@ spec:
             - command:
                 - python
                 - job/pytorchtrainingjob/ps/torch_mnist_trainingjob_ps.py
-                - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               name: pytorch
               resources:
                 requests:
-                  cpu: 8
+                  cpu: 4
                   memory: 4Gi
+                  nvidia.com/gpu: 4
                 limits:
-                  cpu: 16
+                  cpu: 8
                   memory: 8Gi
+                  nvidia.com/gpu: 4
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
@@ -55,7 +60,6 @@ spec:
                 - "job/pytorchtrainingjob/ps/log"
                 - "--save_path"
                 - "job/pytorchtrainingjob/ps/model_state_dict.pt"
-                - "--no_cuda"
               workingDir: /t9k/mnt/tutorial-examples
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               name: pytorch

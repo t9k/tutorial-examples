@@ -7,9 +7,14 @@ spec:
     trainingLogFilesets:
       - t9k://pvc/tutorial/tutorial-examples/aimd/job/log
     image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
+  torchrunConfig:
+    enable: true
+    maxRestarts: 3
+    procPerNode: "4"
+    rdzvBackend: c10d  
   replicaSpecs:
-    - type: worker
-      replicas: 4
+    - type: node
+      replicas: 1
       restartPolicy: ExitCode
       template:
         spec:
@@ -26,16 +31,19 @@ spec:
                 - ""
                 - "--log_dir"
                 - "aimd/job/log"
-                - "--no_cuda"
+                - "--backend"
+                - "nccl"
               workingDir: /t9k/mnt/tutorial-examples
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
-                  cpu: 8
-                  memory: 2Gi
+                  cpu: 4
+                  memory: 8Gi
+                  nvidia.com/gpu: 4
                 limits:
-                  cpu: 12
-                  memory: 4Gi
+                  cpu: 8
+                  memory: 16Gi
+                  nvidia.com/gpu: 4
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
