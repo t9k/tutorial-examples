@@ -3,13 +3,13 @@ kind: ColossalAIJob
 metadata:
   name: colossal-palm
 spec:
-  scheduler:
-    t9kScheduler:
-      queue: default
-      priority: 50
+  # scheduler:
+  #   t9kScheduler:
+  #     queue: default
+  #     priority: 50
   launcher:
     image: t9kpublic/colossalai:0.2.5-palm
-    workingDir: /workspace/ColossalAI/examples/language/palm
+    workingDir: /workspace/ColossalAI/examples/language
   worker:
     replicas: 4
     procPerWorker: 1
@@ -22,8 +22,8 @@ spec:
       spec:
         restartPolicy: OnFailure
         containers:
-          - image: t9kpublic/colossalai:0.2.5-palm
-            name: worker
+          - name: worker
+            image: t9kpublic/colossalai:0.2.5-palm
             resources:
               limits:
                 cpu: 4
