@@ -28,20 +28,20 @@ git clone https://github.com/t9k/tutorial-examples.git
 
 * Distributed Training
   * TensorFlow
-    * [Distributed training with multi-worker](./job/tensorflowtrainingjob/multiworker/)
-    * [Distributed training with parameter server](./job/tensorflowtrainingjob/ps/)
+    * [Distributed data parallel training](./job/tensorflowtrainingjob/multiworker/)
+    * [Distributed parameter server training](./job/tensorflowtrainingjob/ps/)
   * PyTorch
-    * [Distributed training with multi-worker](./job/pytorchtrainingjob/ddp/)
-    * [Distributed training with parameter server](./job/pytorchtrainingjob/ps/)
+    * [Distributed data parallel training](./job/pytorchtrainingjob/ddp/)
+    * [Distributed parameter server training](./job/pytorchtrainingjob/ps/)
   * Horovod
-    * [Keras distributed training with multi-worker](./job/mpijob/horovod-keras/)
-    * [PyTorch distributed training with multi-worker](./job/mpijob/horovod-torch/)
+    * [Keras distributed data parallel training](./job/mpijob/horovod-keras/)
+    * [PyTorch distributed data parallel training](./job/mpijob/horovod-torch/)
   * XGBoost
     * [XGBoostTrainingJob distributed training](./job/xgboosttrainingjob/distributed/)
   * Apache Beam
     * [BeamJob for distributed data processing with Apache Beam](./job/beamjob/count-word/)
   * Custom
-    * [GenericJob - Keras distributed training with multi-worker](./job/genericjob/keras-multiworker/)
+    * [GenericJob - Keras distributed data parallel training](./job/genericjob/keras-multiworker/)
   * [Debugging with debug mode of Job](./job/debug-mode/)
 * HyperParameter Tuning
   * [AutoTune - HPO for Keras](./autotune/hpo-keras/)
