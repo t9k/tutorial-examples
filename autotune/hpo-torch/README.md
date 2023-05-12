@@ -1,6 +1,6 @@
 # 使用 AutoTune 进行超参数优化（PyTorch 模型）
 
-本示例使用 AutoTune 对模型进行超参数优化（以 PyTorch 模型的多工作器同步训练为例）。
+本示例使用 AutoTune 对模型进行超参数优化（以 PyTorch 模型的数据并行训练为例）。
 
 ## 操作步骤
 
