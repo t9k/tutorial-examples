@@ -9,7 +9,7 @@ spec:
   #     priority: 50
   config:
     localRank: true
-    slotsPerWorker: 2
+    slotsPerWorker: 4
     run:
       python:
         - cifar10_deepspeed.py
@@ -21,17 +21,17 @@ spec:
       spec:
         containers:
         - name: worker
-          image: tsz.io/lmh/deepspeed-0.9.1-torch112-cu117:test
+          image: t9kpublic/deepspeed:0.9.2-cifar
           workingDir: /t9k/mnt/tutorial-examples/job/deepspeedjob
           resources:
-            limits:
+            requests:
               cpu: 8
               memory: 16Gi
-              nvidia.com/gpu: 2
-            requests:
-              cpu: 4
-              memory: 8Gi
-              nvidia.com/gpu: 2
+              nvidia.com/gpu: 4
+            limits:
+              cpu: 16
+              memory: 32Gi
+              nvidia.com/gpu: 4
           volumeMounts:
           - mountPath: /t9k/mnt
             name: code

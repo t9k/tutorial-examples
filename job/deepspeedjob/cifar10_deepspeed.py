@@ -28,7 +28,7 @@ def add_argument():
                         help='mini-batch size (default: 32)')
     parser.add_argument('-e',
                         '--epochs',
-                        default=30,
+                        default=300,
                         type=int,
                         help='number of total epochs (default: 30)')
     parser.add_argument('--local_rank',
