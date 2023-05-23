@@ -13,10 +13,13 @@ spec:
     cleanUpWorkers: true
   worker:
     replicas: 4
-    processesPerWorker: 1
-    processRecovery:
-      enable: true
-      limit: 100
+    extraMPIArgs:
+      - -N
+      - "1"
+      - --enable-recovery
+      - --max-restarts
+      - "100"
+      - --allow-run-as-root
     cmd:
       - python
       - job/mpijob/horovod-torch/torch_mnist_mpijob.py
