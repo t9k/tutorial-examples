@@ -28,13 +28,17 @@ git clone https://github.com/t9k/tutorial-examples.git
 ## 示例列表
 
 * 分布式训练：
-  * TensorFlow 分布式框架：
-    * [使用 TensorFlowTrainingJob 进行数据并行训练](../job/tensorflowtrainingjob/multiworker/)
-    * [使用 TensorFlowTrainingJob 进行参数服务器训练](../job/tensorflowtrainingjob/ps/)
   * PyTorch 分布式框架：
     * [使用 PyTorchTrainingJob 进行数据并行训练](../job/pytorchtrainingjob/ddp/)
     * [使用 PyTorchTrainingJob 进行参数服务器训练](../job/pytorchtrainingjob/ps/)
-  * Horovod 分布式框架：
+  * DeepSpeed：
+    * [使用 DeepSpeedJob 进行数据并行训练](../job/deepspeedjob/)
+  * ColossalAI：
+    * [使用 ColossalAIJob 进行数据并行训练](../job/colossalaijob/)
+  * TensorFlow 分布式框架：
+    * [使用 TensorFlowTrainingJob 进行数据并行训练](../job/tensorflowtrainingjob/multiworker/)
+    * [使用 TensorFlowTrainingJob 进行参数服务器训练](../job/tensorflowtrainingjob/ps/)
+  * Horovod：
     * [使用 Horovod 进行 Keras 模型的数据并行训练](../job/mpijob/horovod-keras/)
     * [使用 Horovod 进行 PyTorch 模型的数据并行训练](../job/mpijob/horovod-torch/)
   * XGBoost：

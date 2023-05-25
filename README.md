@@ -27,21 +27,25 @@ git clone https://github.com/t9k/tutorial-examples.git
 ## Examples
 
 * Distributed Training
-  * TensorFlow
-    * [Distributed data parallel training](./job/tensorflowtrainingjob/multiworker/)
-    * [Distributed parameter server training](./job/tensorflowtrainingjob/ps/)
   * PyTorch
-    * [Distributed data parallel training](./job/pytorchtrainingjob/ddp/)
-    * [Distributed parameter server training](./job/pytorchtrainingjob/ps/)
+    * [Data parallel training with PyTorchTrainingJob](./job/pytorchtrainingjob/ddp/)
+    * [Parameter server training with PyTorchTrainingJob](./job/pytorchtrainingjob/ps/)
+  * DeepSpeed
+    * [Data parallel training with DeepSpeedJob](./job/deepspeedjob/)
+  * ColossalAI
+    * [Data parallel training with ColossalAIJob](./job/colossalaijob/)
+  * TensorFlow
+    * [Data parallel training with TensorFlowTrainingJob](./job/tensorflowtrainingjob/multiworker/)
+    * [Parameter server training with TensorFlowTrainingJob](./job/tensorflowtrainingjob/ps/)
   * Horovod
-    * [Keras distributed data parallel training](./job/mpijob/horovod-keras/)
-    * [PyTorch distributed data parallel training](./job/mpijob/horovod-torch/)
+    * [Keras data parallel training](./job/mpijob/horovod-keras/)
+    * [PyTorch data parallel training](./job/mpijob/horovod-torch/)
   * XGBoost
     * [XGBoostTrainingJob distributed training](./job/xgboosttrainingjob/distributed/)
   * Apache Beam
     * [BeamJob for distributed data processing with Apache Beam](./job/beamjob/count-word/)
   * Custom
-    * [GenericJob - Keras distributed data parallel training](./job/genericjob/keras-multiworker/)
+    * [GenericJob - Keras data parallel training](./job/genericjob/keras-multiworker/)
   * [Debugging with debug mode of Job](./job/debug-mode/)
 * HyperParameter Tuning
   * [AutoTune - HPO for Keras](./autotune/hpo-keras/)
