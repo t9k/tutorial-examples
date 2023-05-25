@@ -1,0 +1,54 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: PyTorchTrainingJob
+metadata:
+  name: nanogpt
+spec:
+  scheduler:
+    t9kScheduler:
+      queue: default
+      priority: 50
+  torchrunConfig:
+    enable: true
+    maxRestarts: 3
+    procPerNode: "8"
+    rdzvBackend: c10d
+  replicaSpecs:
+    - type: node
+      replicas: 1
+      restartPolicy: ExitCode
+      template:
+        spec:
+          containers:
+            - name: pytorch
+              args:
+                - train_download.py
+                - config/train_gpt2.py
+                - --ais_host=
+                - --ah_host=
+                - --api_key=
+              workingDir: /t9k/mnt/tutorial-examples/em/large-scale-data-parallel-training/
+              image: t9kpublic/nanogpt:test-sdk-v2
+              securityContext:
+                capabilities:
+                  add: [ "IPC_LOCK" ]
+              resources:
+                requests:
+                  cpu: 16
+                  memory: 256Gi
+                  nvidia.com/gpu: 8
+                limits:
+                  cpu: 32
+                  memory: 512Gi
+                  nvidia.com/gpu: 8
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: code
+                - mountPath: /dev/shm
+                  name: dshm  
+          volumes:
+            - name: code
+              persistentVolumeClaim:
+                claimName: tutorial
+            - name: dshm
+              emptyDir:
+                medium: Memory

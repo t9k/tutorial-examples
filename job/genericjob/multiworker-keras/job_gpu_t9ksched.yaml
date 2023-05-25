@@ -30,9 +30,9 @@ spec:
             - name: tensorflow
               command:
                 - python
-                - job/genericjob/keras-multiworker/keras_mnist_genericjob.py
+                - job/genericjob/multiworker-keras/keras_mnist_genericjob.py
                 - "--log_dir"
-                - "job/genericjob/keras-multiworker/log"
+                - "job/genericjob/multiworker-keras/log"
               workingDir: /t9k/mnt/tutorial-examples
               env:
                 - name: TF_CONFIG
