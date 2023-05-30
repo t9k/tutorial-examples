@@ -1,4 +1,4 @@
-# 建立从数据采样到模型导出的自动化工作流
+# 建立从数据采样到模型导出的端到端的工作流
 
 本示例建立并运行一个端到端的机器学习工作流，包括数据预处理、模型训练、模型分析、模型上传等步骤。本示例使用的机器学习应用样例是一个二分类问题，根据乘客搭乘出租车的位置、路程、用时等特征数据预测乘客是否会付小费。
 
@@ -16,7 +16,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/workflow/automatic-workflow
+cd ~/tutorial-examples/workflow/e2e-workflow
 kubectl apply -f workflowtemplates
 kubectl create -f workflowrun.yaml
 ```

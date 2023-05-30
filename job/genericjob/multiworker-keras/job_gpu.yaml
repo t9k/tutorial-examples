@@ -27,22 +27,23 @@ spec:
             - name: tensorflow
               command:
                 - python
-                - job/genericjob/keras-multiworker/keras_mnist_genericjob.py
+                - job/genericjob/multiworker-keras/keras_mnist_genericjob.py
                 - "--log_dir"
-                - "job/genericjob/keras-multiworker/log"
-                - "--no_cuda"
+                - "job/genericjob/multiworker-keras/log"
               workingDir: /t9k/mnt/tutorial-examples
               env:
                 - name: TF_CONFIG
                   value: '{"cluster":{"worker":["$(service.worker[0].host):$(service.port[http])","$(service.worker[1].host):$(service.port[http])","$(service.worker[2].host):$(service.port[http])","$(service.worker[3].host):$(service.port[http])"]},"task":{"type":"$(type)","index":$(rank)}}'
-              image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
+              image: t9kpublic/tensorflow-2.11.0:gpu-sdk-0.5.2
               resources:
                 requests:
-                  cpu: 2
-                  memory: 2Gi
-                limits:
-                  cpu: 4
+                  cpu: 1
                   memory: 4Gi
+                  nvidia.com/gpu: 1
+                limits:
+                  cpu: 2
+                  memory: 8Gi
+                  nvidia.com/gpu: 1
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data

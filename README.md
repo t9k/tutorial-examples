@@ -26,44 +26,45 @@ git clone https://github.com/t9k/tutorial-examples.git
 
 ## Examples
 
-* Distributed Training
-  * PyTorch
+* Distributed Training:
+  * PyTorch distributed framework:
     * [Data parallel training with PyTorchTrainingJob](./job/pytorchtrainingjob/ddp/)
     * [Parameter server training with PyTorchTrainingJob](./job/pytorchtrainingjob/ps/)
-  * DeepSpeed
+  * DeepSpeed:
     * [Data parallel training with DeepSpeedJob](./job/deepspeedjob/)
-  * ColossalAI
+  * ColossalAI:
     * [Data parallel training with ColossalAIJob](./job/colossalaijob/)
-  * TensorFlow
+  * TensorFlow distributed framework:
     * [Data parallel training with TensorFlowTrainingJob](./job/tensorflowtrainingjob/multiworker/)
     * [Parameter server training with TensorFlowTrainingJob](./job/tensorflowtrainingjob/ps/)
-  * Horovod
-    * [Keras data parallel training](./job/mpijob/horovod-keras/)
-    * [PyTorch data parallel training](./job/mpijob/horovod-torch/)
-  * XGBoost
-    * [XGBoostTrainingJob distributed training](./job/xgboosttrainingjob/distributed/)
-  * Apache Beam
-    * [BeamJob for distributed data processing with Apache Beam](./job/beamjob/count-word/)
-  * Custom
-    * [GenericJob - Keras data parallel training](./job/genericjob/keras-multiworker/)
-  * [Debugging with debug mode of Job](./job/debug-mode/)
-* HyperParameter Tuning
-  * [AutoTune - HPO for Keras](./autotune/hpo-keras/)
-  * [AutoTune - HPO for PyTorch](./autotune/hpo-torch/)
-* Recording Training metadata
-  * [Using AIMD with a single worker](./aimd/single-worker/)
-  * [Using AIMD with Job](./aimd/job/)
-* Model Deployment
-  * Models stored in PVC
-    * [Keras](./deployment/pvc/mlservice-keras/)
-    * [PyTorch](./deployment/pvc/mlservice-torch/)
-  * Models stored in S3
-    * [Keras，S3](./deployment/s3/mlservice-keras/)
-    * [PyTorch, S3](./deployment/s3/mlservice-torch/)
-* Workflow
-  * [E2E Workflow - from processing data to deploying model](./workflow/automatic-workflow/)
-* Tools
-  * [Codepack](./codepack/)
-* Others
+  * Horovod:
+    * [Horovod data parallel training with MPIJob (Keras model)](./job/mpijob/horovod-keras/)
+    * [Horovod data parallel training with MPIJob (PyTorch model)](./job/mpijob/horovod-torch/)
+  * XGBoost:
+    * [Distributed training and prediction with XGBoostTrainingJob](./job/xgboosttrainingjob/distributed/)
+  * Apache Beam:
+    * [Run Apache Beam distributed computing tasks with BeamJob](./job/beamjob/count-word/)
+  * Custom distributed training:
+    * [Data parallel training with GenericJob (Keras model)](./job/genericjob/multiworker-keras/)
+  * [Debug mode with Job](./job/debug-mode/)
+* Automatic Hyperparameter Tuning:
+  * [HPO with AutoTune (Keras model)](./autotune/hpo-keras/)
+  * [HPO with AutoTune (PyTorch model)](./autotune/hpo-torch/)
+* Record Training Data and Metadata:
+  * [Record training with EM for single-worker training](./em/single-worker-training/)
+  * [Record training with EM for data parallel training](./em/data-parallel-training/)
+  * [Record training with EM and save/load datasets/models with Asset Hub for large-scale data parallel training](./em/large-scale-data-parallel-training/)
+* Model Deployment:
+  * Get model from PVC:
+    * [Deploy production-ready model inference service (Keras model)](./deployment/pvc/mlservice-keras/)
+    * [Deploy production-ready model inference service (PyTorch model)](./deployment/pvc/mlservice-torch/)
+  * Get model from S3:
+    * [Deploy production-ready model inference service (Keras model, S3 storage)](./deployment/s3/mlservice-keras/)
+    * [Deploy production-ready model inference service (PyTorch model, S3 storage)](./deployment/s3/mlservice-torch/)
+* Workflow:
+  * [Build end-to-end workflow from data sampling to model export](./workflow/e2e-workflow/)
+* Platform Tools:
+  * [Codepack usage example](./codepack/)
+* Other Features:
   * [Build image on platform](./build-image/build-image-on-platform/)
   * [Build Notebook custom image](./build-image/build-notebook-custom-image/)

@@ -11,4 +11,4 @@ spec:
     - name: shared-workspace
       persistentVolumeClaim:
         claimName: tutorial
-      subPath: tutorial-examples/workflow/automatic-workflow
+      subPath: tutorial-examples/workflow/e2e-workflow
