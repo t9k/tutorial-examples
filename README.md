@@ -53,6 +53,7 @@ git clone https://github.com/t9k/tutorial-examples.git
 * Record Training Data and Metadata:
   * [Record training with EM for single-worker training](./em/single-worker-training/)
   * [Record training with EM for data parallel training](./em/data-parallel-training/)
+  * [Record training with EM and save/load datasets/models with Asset Hub for large-scale data parallel training](./em/large-scale-data-parallel-training/)
 * Model Deployment:
   * Get model from PVC:
     * [Deploy production-ready model inference service (Keras model)](./deployment/pvc/mlservice-keras/)

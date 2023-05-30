@@ -54,6 +54,7 @@ git clone https://github.com/t9k/tutorial-examples.git
 * 记录训练数据和元数据：
   * [单工作器训练使用 EM 记录训练](../em/single-worker-training/)
   * [数据并行训练使用 EM 记录训练](../em/data-parallel-training/)
+  * [大规模数据并行训练使用 EM 记录训练，使用 Asset Hub 保存/加载数据集/模型](../em/large-scale-data-parallel-training/)
 * 模型部署：
   * 从 PVC 获取模型：
     * [部署用于生产环境的模型推理服务（PyTorch 模型）](../deployment/pvc/mlservice-torch/)
