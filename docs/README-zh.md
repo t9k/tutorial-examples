@@ -39,30 +39,31 @@ git clone https://github.com/t9k/tutorial-examples.git
     * [使用 TensorFlowTrainingJob 进行数据并行训练](../job/tensorflowtrainingjob/multiworker/)
     * [使用 TensorFlowTrainingJob 进行参数服务器训练](../job/tensorflowtrainingjob/ps/)
   * Horovod：
-    * [使用 Horovod 进行 Keras 模型的数据并行训练](../job/mpijob/horovod-keras/)
-    * [使用 Horovod 进行 PyTorch 模型的数据并行训练](../job/mpijob/horovod-torch/)
+    * [使用 MPIJob 进行 Horovod 数据并行训练（PyTorch 模型）](../job/mpijob/horovod-torch/)
+    * [使用 MPIJob 进行 Horovod 数据并行训练（Keras 模型）](../job/mpijob/horovod-keras/)
   * XGBoost：
     * [使用 XGBoostTrainingJob 进行分布式训练和预测](../job/xgboosttrainingjob/distributed/)
   * Apache Beam：
     * [使用 BeamJob 运行 Apache Beam 分布式计算任务](../job/beamjob/count-word/)
   * 自定义分布式训练：
-    * [使用 GenericJob 实现 Keras 模型的数据并行训练](../job/genericjob/keras-multiworker/)
+    * [使用 GenericJob 实现数据并行训练（Keras 模型）](../job/genericjob/multiworker-keras/)
   * [使用 Job 的 debug 模式进行调试](../job/debug-mode/)
 * 自动超参数调优：
-  * [使用 AutoTune 进行超参数优化（Keras 模型）](../autotune/hpo-keras/)
   * [使用 AutoTune 进行超参数优化（PyTorch 模型）](../autotune/hpo-torch/)
-* 记录训练数据：
-  * [单工作器训练使用 AIMD 记录训练数据](../aimd/single-worker/)
-  * [Job 使用 AIMD 记录训练数据](../aimd/job/)
+  * [使用 AutoTune 进行超参数优化（Keras 模型）](../autotune/hpo-keras/)
+* 记录训练数据和元数据：
+  * [单工作器训练使用 EM 记录训练](../em/single-worker-training/)
+  * [数据并行训练使用 EM 记录训练](../em/data-parallel-training/)
+  * [大规模数据并行训练使用 EM 记录训练，使用 Asset Hub 保存/加载数据集/模型](../em/large-scale-data-parallel-training/)
 * 模型部署：
   * 从 PVC 获取模型：
-    * [部署用于生产环境的模型推理服务（Keras 模型）](../deployment/pvc/mlservice-keras/)
     * [部署用于生产环境的模型推理服务（PyTorch 模型）](../deployment/pvc/mlservice-torch/)
+    * [部署用于生产环境的模型推理服务（Keras 模型）](../deployment/pvc/mlservice-keras/)
   * 从 S3 存储获取模型：
-    * [部署用于生产环境的模型推理服务（Keras 模型，S3 存储）](../deployment/s3/mlservice-keras/)
     * [部署用于生产环境的模型推理服务（PyTorch 模型，S3 存储）](../deployment/s3/mlservice-torch/)
+    * [部署用于生产环境的模型推理服务（Keras 模型，S3 存储）](../deployment/s3/mlservice-keras/)
 * 工作流：
-  * [建立从数据采样到模型导出的自动化工作流](../workflow/automatic-workflow/)
+  * [建立从数据采样到模型导出的端到端的工作流](../workflow/e2e-workflow/)
 * 平台工具：
   * [Codepack 使用示例](../codepack/)
 * 其他功能：

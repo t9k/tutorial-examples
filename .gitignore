@@ -1,5 +1,5 @@
 # dataset files
-data/
+MNIST/
 mnist.npz
 
 # model files
@@ -7,7 +7,8 @@ saved_model/
 
 # log files
 log/
-.aimd/
+.em/
+.ah/
 
 # output files
 output/

@@ -1,4 +1,4 @@
-# 使用 GenericJob 实现 Keras 模型的数据并行训练
+# 使用 GenericJob 实现数据并行训练（Keras 模型）
 
 本示例使用 GeneribJob 对 Keras 模型进行数据并行训练（采用 [`tf.distribute.MultiWorkerMirroredStrategy`](https://www.tensorflow.org/api_docs/python/tf/distribute/MultiWorkerMirroredStrategy) 分布式策略）。
 
@@ -12,7 +12,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/job/genericjob/keras-multiworker
+cd ~/tutorial-examples/job/genericjob/multiworker-keras
 # choose one of the following:
 # 1. CPU training
 kubectl create -f job.yaml

@@ -1,4 +1,4 @@
-# 使用 Horovod 进行 PyTorch 模型的数据并行训练
+# 使用 MPIJob 进行 Horovod 数据并行训练（PyTorch 模型）
 
 本示例使用 MPIJob 对 PyTorch 模型进行数据并行训练（使用 [`horovod.torch`](https://horovod.readthedocs.io/en/stable/api.html#module-horovod.torch) 模块）。
 
