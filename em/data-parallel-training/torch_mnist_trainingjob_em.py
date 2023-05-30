@@ -12,14 +12,12 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
 
-from t9k import aimd
+from t9k import em
 
 parser = argparse.ArgumentParser(
     description='Distributed training of Keras model for MNIST with DDP.')
-parser.add_argument('--aimd_host', type=str, help='URL of AIMD server.')
-parser.add_argument('--api_key',
-                    type=str,
-                    help='API Key for communicating with AIMD server.')
+parser.add_argument('--ais_host', type=str, help='URL of AIStore server.')
+parser.add_argument('--api_key', type=str, help='API Key of user.')
 parser.add_argument(
     '--backend',
     type=str,
@@ -40,18 +38,18 @@ class Net(nn.Module):
 
     def __init__(self):
         super().__init__()
-        self.conv1 = nn.Conv2d(1, params['conv_channels1'],
-                               params['conv_kernel_size'], 1)
-        self.conv2 = nn.Conv2d(params['conv_channels1'],
-                               params['conv_channels2'],
-                               params['conv_kernel_size'], 1)
-        self.conv3 = nn.Conv2d(params['conv_channels2'],
-                               params['conv_channels3'],
-                               params['conv_kernel_size'], 1)
-        self.pool = nn.MaxPool2d(params['maxpool_size'],
-                                 params['maxpool_size'])
-        self.dense1 = nn.Linear(576, params['linear_features1'])
-        self.dense2 = nn.Linear(params['linear_features1'], 10)
+        self.conv1 = nn.Conv2d(1, hparams['conv_channels1'],
+                               hparams['conv_kernel_size'], 1)
+        self.conv2 = nn.Conv2d(hparams['conv_channels1'],
+                               hparams['conv_channels2'],
+                               hparams['conv_kernel_size'], 1)
+        self.conv3 = nn.Conv2d(hparams['conv_channels2'],
+                               hparams['conv_channels3'],
+                               hparams['conv_kernel_size'], 1)
+        self.pool = nn.MaxPool2d(hparams['maxpool_size'],
+                                 hparams['maxpool_size'])
+        self.dense1 = nn.Linear(576, hparams['linear_features1'])
+        self.dense2 = nn.Linear(hparams['linear_features1'], 10)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -86,10 +84,10 @@ def train():
                     writer.add_scalar('train/loss', train_loss, global_step)
 
                 if rank == 0:
-                    trial.log(metrics_type='train',
-                              metrics={'loss': train_loss},
-                              step=global_step,
-                              epoch=epoch)
+                    run.log(type='train',
+                            metrics={'loss': train_loss},
+                            step=global_step,
+                            epoch=epoch)
 
         scheduler.step()
         global_step = epoch * steps_per_epoch
@@ -126,13 +124,13 @@ def test(val=False, epoch=None):
                           global_step)
 
     if rank == 0:
-        trial.log(metrics_type=label,
-                  metrics={
-                      'loss': test_loss,
-                      'accuracy': test_accuracy,
-                  },
-                  step=global_step,
-                  epoch=epoch)
+        run.log(type=label,
+                metrics={
+                    'loss': test_loss,
+                    'accuracy': test_accuracy,
+                },
+                step=global_step,
+                epoch=epoch)
 
 
 if __name__ == '__main__':
@@ -149,7 +147,7 @@ if __name__ == '__main__':
     device = torch.device('cuda:{}'.format(rank) if use_cuda else 'cpu')
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
-    params = {
+    hparams = {
         'batch_size': 32 * world_size,
         'epochs': 10,
         'learning_rate': 0.001 * world_size,
@@ -165,9 +163,8 @@ if __name__ == '__main__':
     }
 
     if rank == 0:
-        trial = aimd.create_trial(trial_name='mnist_torch_distributed',
-                                  folder_path='aimd-example')
-        trial.params.update(params)
+        run = em.create_run(name='mnist_torch_distributed')
+        run.hparams.update(hparams)
 
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'data')
@@ -175,16 +172,16 @@ if __name__ == '__main__':
     if rank == 0:
         datasets.MNIST(root=dataset_path, train=True, download=True)
 
-    torch.manual_seed(params['seed'])
+    torch.manual_seed(hparams['seed'])
 
     model = Net().to(device)
     model = DDP(model)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=params['learning_rate'])
+    optimizer = optim.Adam(model.parameters(), lr=hparams['learning_rate'])
     scheduler = optim.lr_scheduler.StepLR(
         optimizer,
-        step_size=params['learning_rate_decay_period'],
-        gamma=params['learning_rate_decay_factor'])
+        step_size=hparams['learning_rate_decay_period'],
+        gamma=hparams['learning_rate_decay_factor'])
 
     transform = transforms.Compose(
         [transforms.ToTensor(),
@@ -199,10 +196,11 @@ if __name__ == '__main__':
                                   train=False,
                                   download=False,
                                   transform=transform)
-    train_loader = torch.utils.data.DataLoader(train_dataset,
-                                               batch_size=params['batch_size'],
-                                               shuffle=True,
-                                               **kwargs)
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset,
+        batch_size=hparams['batch_size'],
+        shuffle=True,
+        **kwargs)
     val_loader = torch.utils.data.DataLoader(val_dataset,
                                              batch_size=400,
                                              shuffle=False,
@@ -219,12 +217,12 @@ if __name__ == '__main__':
         writer = SummaryWriter(log_dir)
 
     global_step = 0
-    epochs = params['epochs']
+    epochs = hparams['epochs']
     steps_per_epoch = len(train_loader)
     train()
     test()
 
     if rank == 0:
-        trial.finish()
-        aimd.login(host=args.aimd_host, api_key=args.api_key)
-        trial.upload(make_folder=True)
+        run.finish()
+        em.login(ais_host=args.ais_host, api_key=args.api_key)
+        run.upload(folder='em-example', make_folder=True)

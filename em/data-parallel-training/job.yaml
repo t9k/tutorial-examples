@@ -1,11 +1,11 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: PyTorchTrainingJob
 metadata:
-  name: torch-mnist-trainingjob-aimd
+  name: torch-mnist-trainingjob-em
 spec:
   tensorboardSpec:
     trainingLogFilesets:
-      - t9k://pvc/tutorial/tutorial-examples/aimd/job/log
+      - t9k://pvc/tutorial/tutorial-examples/em/data-parallel-training/log
     image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   torchrunConfig:
     enable: true
@@ -22,19 +22,18 @@ spec:
             runAsUser: 1000
           containers:
             - name: pytorch
-              command:
-                - python
-                - aimd/job/torch_mnist_trainingjob_aimd.py
-                - "--aimd_host"
+              args:
+                - torch_mnist_trainingjob_em.py
+                - "--ais_host"
                 - ""
                 - "--api_key"
                 - ""
                 - "--log_dir"
-                - "aimd/job/log"
+                - "log"
                 - "--backend"
                 - "nccl"
-              workingDir: /t9k/mnt/tutorial-examples
-              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
+              workingDir: /t9k/mnt/tutorial-examples/em/data-parallel-training
+              image: t9kpublic/pytorch-2.0.1:sdk-0.6.0-test
               resources:
                 requests:
                   cpu: 4
