@@ -110,7 +110,7 @@ data_dir = os.path.join('data', dataset)
 if master_process:
     ### create a Run ###
     em.login(ais_host=ais_host, api_key=api_key)
-    run = em.create_run(name='nanogpt_8gpu' if ddp else 'nanogpt_1gpu',
+    run = em.create_run(name='nanogpt',
                         labels=['GPT2'],
                         auto_upload=True,
                         folder='em-example',
