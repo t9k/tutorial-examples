@@ -116,11 +116,12 @@ if __name__ == '__main__':
     dist.init_process_group(backend=args.backend)
     rank = dist.get_rank()
     world_size = dist.get_world_size()
+    local_rank = int(os.environ['LOCAL_RANK'])
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     if use_cuda:
         logging.info('Using CUDA')
-    device = torch.device('cuda:{}'.format(rank) if use_cuda else 'cpu')
+    device = torch.device('cuda:{}'.format(local_rank) if use_cuda else 'cpu')
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
