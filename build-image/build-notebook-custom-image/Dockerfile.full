@@ -4,7 +4,7 @@
 
 FROM t9kpublic/build-sdk:latest as buildsdk
 
-FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-devel
+FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-devel
 
 USER root
 
@@ -84,7 +84,7 @@ RUN pip3 install --no-cache-dir -i https://pypi.douban.com/simple --upgrade pip 
     jupyter \
     jupyter-console \
     jupyter-http-over-ws \
-    jupyterlab \
+    jupyterlab~=3.6.0 \
     jupyterlab-widgets \
     lightning \
     pytorch-lightning \

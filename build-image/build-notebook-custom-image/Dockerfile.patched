@@ -1,4 +1,4 @@
-FROM t9kpublic/torch-1.13.1-notebook:1.70.2
+FROM t9kpublic/torch-2.0.0-notebook:1.72.0
 
 USER root
 WORKDIR /t9k/export

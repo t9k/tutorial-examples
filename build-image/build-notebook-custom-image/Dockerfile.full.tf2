@@ -80,14 +80,14 @@ ENV http_proxy= \
 # Install base python3 packages
 RUN pip3 install --no-cache-dir -i https://pypi.douban.com/simple --upgrade pip && \
   pip3 install --no-cache-dir -i https://pypi.douban.com/simple --default-timeout=100 \
-    h5py==3.8.0 \
-    ipywidgets==8.0.4 \
-    jupyter-console==6.6.3 \
-    jupyterlab==3.6.1 \
-    pandas==1.5.3 \
-    scikit-learn==1.2.1 \
-    tensorflow-datasets==4.8.3 \
-    tensorflow-metadata==1.12.0
+    h5py \
+    ipywidgets \
+    jupyter-console \
+    jupyterlab~=3.6.0 \
+    pandas \
+    scikit-learn \
+    tensorflow-datasets \
+    tensorflow-metadata
     # new Python packages
     # ...
 
