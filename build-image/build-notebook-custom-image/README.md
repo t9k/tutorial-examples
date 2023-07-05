@@ -14,10 +14,10 @@
 
 ### 准备 Dockerfile 文件
 
-例如我们要在 `t9kpublic/torch-1.13.1-notebook:latest` 这一标准镜像的基础上增加文件、安装 Python 包和 Debian 软件包，于是写出镜像的 Dockerfile 如下（即 `Dockerfile.patched` 文件）：
+例如我们要在 `t9kpublic/torch-2.0.0-notebook:latest` 这一标准镜像的基础上增加文件、安装 Python 包和 Debian 软件包，于是写出镜像的 Dockerfile 如下（即 `Dockerfile.patched` 文件）：
 
 ```dockerfile
-FROM t9kpublic/torch-1.13.1-notebook:latest
+FROM t9kpublic/torch-2.0.0-notebook:latest
 
 USER root
 WORKDIR /t9k/export
@@ -55,7 +55,7 @@ kubectl create -f workflowrun.patched.yaml
 
 为便于演示说明，这里构建与第一种方法相同的镜像。`Dockerfile.full` 文件给出了完整的构建指令，其中：
 
-* 第 7 行指定了基础镜像，这里为 PyTorch 官方镜像 `pytorch/pytorch:1.13.1-cuda11.6-cudnn8-devel`。
+* 第 7 行指定了基础镜像，这里为 PyTorch 官方镜像 `pytorch/pytorch:2.0.0-cuda11.7-cudnn8-devel`。
 * 第 45-46 行指定了新安装的 Debian 软件包。
 * 第 74-76 行指定了要复制的文件。
 * 第 99-100 行指定了新安装的 Python 包。
