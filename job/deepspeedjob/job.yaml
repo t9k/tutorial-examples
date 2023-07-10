@@ -1,5 +1,5 @@
 apiVersion: batch.tensorstack.dev/v1beta1
-kind: DeepspeedJob
+kind: DeepSpeedJob
 metadata:
   name: deepspeed-cifar
 spec:
