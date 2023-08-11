@@ -28,7 +28,7 @@ spec:
       - args:
           - -c
           - >-
-              ln -s /t9k/workspaces/dockerConfig/.dockerconfigjson /kaniko/.docker/config.json &&
+              ln -s $(workspaces.dockerConfig.path)/.dockerconfigjson /kaniko/.docker/config.json &&
               /kaniko/executor
               --context=$(workspaces.source.path)/$(params.contextPath)
               --destination=$(params.dstImage)
