@@ -4,8 +4,6 @@
 
 切换到当前目录下，使用 `job.yaml` 或 `job_cpu.yaml` 创建 PyTorchTrainingJob 以启动训练，您可以如下修改训练配置：
 
-* 如要使用队列，取消第 6-9 行的注释，并修改第 8 行的队列名称（默认为 `default`）。
-
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/job/pytorchtrainingjob/ddp
@@ -22,4 +20,30 @@ kubectl create -f job_cpu.yaml
 kubectl get -f job.yaml -o wide -w
 ```
 
-或者前往模型构建控制台查看训练状态、日志和 TensorBoard 等。
+查看训练产生的 logs：
+
+```shell
+kubectl logs -f  torch-mnist-trainingjob-node-0
+```
+
+或者前往模型构建控制台，通过 Web UI 查看训练状态、日志和 TensorBoard 等更加丰富的内容。
+
+## 其它
+
+如需要使用 T9k scheduler 并指定 queue 和 priority，可做如下修改：
+
+```diff
+--- job.yaml
++++ job_scheduler.yaml
+@@ -3,6 +3,10 @@
+ metadata:
+   name: torch-mnist-trainingjob
+ spec:
++  scheduler:
++    t9kScheduler:
++      queue: default
++      priority: 50
+   tensorboardSpec:
+     trainingLogFilesets:
+       - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log
+```
