@@ -5,13 +5,13 @@ metadata:
 spec:
   runMode:
     debug:
-      enable: true
+      enabled: true
       replicaSpecs:
         - type: worker
           skipInitContainer: true
           command: ["sleep", "inf"]
   torchrunConfig:
-    enable: true
+    enabled: true
     maxRestarts: 3
     procPerNode: "4"
     rdzvBackend: c10d
