@@ -12,7 +12,7 @@ debug 模式的设计目标是在保留 Job 原有配置的条件下，方便地
 spec:
   runMode:
     debug:
-      enable: true
+      enabled: true
       replicaSpecs:
         - type: worker
           skipInitContainer: true
