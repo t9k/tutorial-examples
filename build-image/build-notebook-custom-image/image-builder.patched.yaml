@@ -1,0 +1,16 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: ImageBuilder
+metadata:
+  name: build-notebook-custom-patched-image
+spec:
+  builder:
+    kaniko: {}
+  dockerConfig:
+    secret: docker-config
+    subPath: .dockerconfigjson
+  tag: <REGISTRY>/<NAMESPACE>/torch-2.1.0-notebook:custom-patched
+  workspace:
+    pvc:
+      contextPath: ./tutorial-examples/build-image/build-notebook-custom-image
+      dockerfilePath: ./tutorial-examples/build-image/build-notebook-custom-image/Dockerfile.patched
+      name: tutorial

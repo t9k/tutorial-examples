@@ -5,14 +5,13 @@
 FROM t9kpublic/build-sdk:latest as buildsdk
 
 # CPU image
-FROM tensorflow/tensorflow:2.11.0-jupyter
+FROM tensorflow/tensorflow:2.14.0-jupyter
 # GPU image
-# FROM tensorflow/tensorflow:2.11.0-gpu-jupyter
+# FROM tensorflow/tensorflow:2.14.0-gpu-jupyter
 
 USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
-
 ENV NB_PREFIX=/
 
 # Use bash instead of sh
@@ -27,6 +26,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
   emacs \
   g++ \
   git \
+  git-lfs \
   gnupg \
   graphviz \
   htop \
@@ -34,10 +34,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
   lsb-release \
   openssh-client \
   openssh-server \
-  python3-dev \
-  python3-pip \
-  python3-setuptools \
-  python3-venv \
   rsync \
   s3cmd \
   sudo \
@@ -45,15 +41,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
   vim \
   wget \
   zip \
-  # new Debian packages
-  # ...
-  && apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-
-# Install Nodejs for jupyterlab-manager
-RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-  nodejs \
   && apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -68,32 +55,25 @@ ENV SHELL=/bin/bash
 
 RUN pip uninstall enum34 -y
 
-# unset http proxy, pip3 --proxy="" doesn't work
+# unset http proxy, pip --proxy="" doesn't work
 ENV http_proxy= \
-    HTTP_PROXY= \
-    https_proxy= \
-    HTTPS_PROXY=
+  HTTP_PROXY= \
+  https_proxy= \
+  HTTPS_PROXY=
 
-# Copy files
-# ...
-
-# Install base python3 packages
-RUN pip3 install --no-cache-dir -i https://pypi.douban.com/simple --upgrade pip && \
-  pip3 install --no-cache-dir -i https://pypi.douban.com/simple --default-timeout=100 \
-    h5py \
-    ipywidgets \
-    jupyter-console \
-    jupyterlab~=3.6.0 \
-    pandas \
-    scikit-learn \
-    tensorflow-datasets \
-    tensorflow-metadata
-    # new Python packages
-    # ...
+# Install base python packages
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip && \
+  pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple --default-timeout=100 \
+  jupyterlab==4.0.7 \
+  jupyterlab-language-pack-zh-CN==4.0.post3 \
+  pandas==2.1.2 \
+  tensorflow-datasets==4.9.3 \
+  tensorflow-metadata==1.14.0
+# tf2onnx
 
 ARG GID=1000
 ARG UID=1000
-RUN groupadd --gid=$GID t9kuser && mkdir -p /t9k && \
+RUN groupadd --gid=$GID t9kuser && mkdir /t9k && \
   useradd -rm --create-home -d /t9k/mnt --shell /bin/bash \
   --uid=$UID --gid=$GID t9kuser
 
@@ -105,15 +85,14 @@ WORKDIR /t9k/mnt
 COPY bashrc /etc/bash.bashrc
 
 # Install Notebook extensions
-COPY build/notebook2workflow-0.1.0-py3-none-any.whl /tmp/notebook2workflow-0.1.0-py3-none-any.whl
 COPY build/install-extension.sh /tmp/install-extension.sh
 RUN bash /tmp/install-extension.sh
 
 COPY --from=buildsdk /usr/local/bin/* /usr/local/bin/
 
 # Install TensorStack tools
-RUN pip install -i https://pypi.douban.com/simple /usr/local/bin/t9k.tar.gz && \
-    pip install -i https://pypi.douban.com/simple /usr/local/bin/codepack.tar.gz && \
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple /usr/local/bin/t9k.tar.gz && \
+    pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple /usr/local/bin/codepack.tar.gz && \
     rm -rf /usr/local/bin/t9k.tar.gz && \
     rm -rf /usr/local/bin/codepack.tar.gz && \
     chmod a+rx /usr/local/bin/*
@@ -127,9 +106,6 @@ COPY build/entrypoint.sh /t9k/app/entrypoint.sh
 RUN chown -R 1000:1000 /t9k/app && chmod 755 /t9k/app
 RUN chmod u+rx /t9k/app/ssh_server.sh
 RUN chmod u+rx /t9k/app/entrypoint.sh
-
-# Set `sudo` command
-# RUN echo 't9kuser:tensorstack' | chpasswd && echo "t9kuser ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 USER t9kuser
 

@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y libibverbs1 librdmacm1 libibumad3 && rm -rf /var/lib/apt/lists/*
 
 # install Python packages
-RUN pip install --no-cache-dir -i https://pypi.douban.com/simple/ \
+RUN pip install --no-cache-dir \
     transformers \
     datasets \
     tiktoken \

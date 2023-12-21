@@ -13,7 +13,6 @@ HostKey ${SSH_PATH}/ssh_host_rsa_key
 PubkeyAuthentication yes
 AuthorizedKeysFile  ${SSH_PATH}/authorized_keys
 ChallengeResponseAuthentication no
-UsePAM yes
 Subsystem   sftp    internal-sftp
 PidFile ${SSH_PATH}/sshd.pid" > ${SSH_PATH}/sshd_config
 

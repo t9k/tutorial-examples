@@ -1,4 +1,4 @@
-FROM t9kpublic/torch-2.0.0-notebook:1.72.0
+FROM t9kpublic/torch-2.1.0-notebook:1.77.1
 
 USER root
 WORKDIR /t9k/export
@@ -7,7 +7,7 @@ WORKDIR /t9k/export
 COPY . .
 
 # install Python packages, e.g. tiktoken
-RUN pip install --no-cache-dir -i https://pypi.douban.com/simple/ -r requirements.txt
+RUN pip install --no-cache-dir -r ./requirements.txt
 
 # install Debian packages, e.g. iputils-ping
 ENV DEBIAN_FRONTEND=noninteractive

@@ -1,6 +1,6 @@
 # 在平台上构建镜像
 
-本示例建立并运行一个工作流，以在平台上构建自定义 Docker 镜像并推送到指定的 registry。
+本示例使用 Image Builder 在平台上构建自定义 Docker 镜像并推送到指定的 registry。
 
 ## 准备 Dockerfile 文件
 
@@ -15,16 +15,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y libibverbs1 librdmacm1 libibumad3 && rm -rf /var/lib/apt/lists/*
 
 # install Python packages
-RUN pip install --no-cache-dir -i https://pypi.douban.com/simple/ \
+RUN pip install --no-cache-dir \
     transformers \
     datasets \
     tiktoken \
     wandb
 ```
 
-## 创建 Secret 和工作流
+## 创建 Secret
 
-切换到当前目录下，先使用 `create-docker-secret.sh` 创建包含身份信息的 Secret（需要提供 registry host、用户名和密码，可选地指定 Secret 的名称），再使用 `workflow.yaml` 创建 WorkflowTemplate：
+切换到当前目录下，使用 `create-docker-secret.sh` 创建包含身份信息的 Secret（需要提供 registry host、用户名和密码，可选地指定 Secret 的名称）：
 
 ```shell
 # cd into current directory
@@ -32,26 +32,25 @@ cd ~/tutorial-examples/build-image/build-image-on-platform
 # create a Secret of docker config
 # you can provide the username and password via arguments or enter them interactively
 ./create-docker-secret.sh -r <registry> [-u <username>] [-p <password>] [-s <secret-name>]
-# create a WorkflowTemplate
-kubectl apply -f workflow.yaml
 ```
 
-## 运行工作流
+## 创建 Image Builder
 
-修改 `workflowrun.yaml` 中构建的镜像名称（位于第 12 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
+修改 `image-builder.yaml` 中构建的镜像名称（位于第 11 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 Image Builder：
 
 ```shell
-kubectl create -f workflowrun.yaml
+kubectl create -f image-builder.yaml
 ```
 
-`workflowrun.yaml` 中的各重要参数如下：
+`image-builder.yaml` 中的各重要参数如下：
 
-* `contextPath`（7-8 行）：Docker 构建上下文在 PVC 中的路径，这里取 `./tutorial-examples/build-custom-image`。
-* `dockerfile`（9-10 行）：dockerfile 在构建上下文中的相对路径，这里取 `Dockerfile`。
-* `dstImage`（11-12 行）：构建的镜像名称。
-* PVC 名称（19 行）：这里取 `tutorial`。
-* Secret 名称（22 行）：这里取 `docker-config`（如果在创建 Secret 时指定了名称，请修改为该名称）。
+* Image Builder 名称（第 4 行）：这里取 `build-image`（注意不要重名）。
+* Secret 名称（第 9 行）：这里取 `docker-config`（如果在创建 Secret 时指定了名称，请修改为该名称）。
+* `tag`（第 11 行）：构建的镜像名称。
+* `contextPath`（第 14 行）：Docker 构建上下文在 PVC 中的路径，这里取 `./tutorial-examples/build-image/build-image-on-platform`。
+* `dockerfilePath`（第 15 行）：dockerfile 在 PVC 中的路径，这里取 `./tutorial-examples/build-image/build-image-on-platform/Dockerfile`。
+* PVC 名称（第 16 行）：这里取 `tutorial`。
 
 ## 检查构建进度和结果
 
-前往工作流控制台查看镜像的构建日志；构建完成的镜像将被推送到相应的 registry 中。
+前往模型构建控制台，查看 Image Builder 的详情和日志；构建完成的镜像将被推送到相应的 registry 中。

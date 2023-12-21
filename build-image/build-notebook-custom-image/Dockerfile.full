@@ -4,12 +4,11 @@
 
 FROM t9kpublic/build-sdk:latest as buildsdk
 
-FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-devel
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-devel
 
 USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
-
 ENV NB_PREFIX=/
 
 # Use bash instead of sh
@@ -24,6 +23,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
   emacs \
   g++ \
   git \
+  git-lfs \
   gnupg \
   graphviz \
   htop \
@@ -31,10 +31,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
   lsb-release \
   openssh-client \
   openssh-server \
-  python3-dev \
-  python3-pip \
-  python3-setuptools \
-  python3-venv \
   rsync \
   s3cmd \
   sudo \
@@ -42,15 +38,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
   vim \
   wget \
   zip \
-  # new Debian packages
-  iputils-ping \
-  && apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-
-# Install Nodejs for jupyterlab-manager
-RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-  nodejs \
   && apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -65,45 +52,38 @@ ENV SHELL=/bin/bash
 
 RUN pip uninstall enum34 -y
 
-# Unset http proxy, pip3 --proxy="" doesn't work
+# unset http proxy, pip --proxy="" doesn't work
 ENV http_proxy= \
-    HTTP_PROXY= \
-    https_proxy= \
-    HTTPS_PROXY=
-
-# Copy files
-WORKDIR /t9k/export
-COPY . .
+  HTTP_PROXY= \
+  https_proxy= \
+  HTTPS_PROXY=
 
 # Install base python3 packages
-RUN pip3 install --no-cache-dir -i https://pypi.douban.com/simple --upgrade pip && \
-  pip3 install --no-cache-dir -i https://pypi.douban.com/simple --default-timeout=100 \
-    datasets \
-    h5py \
-    ipywidgets \
-    jupyter \
-    jupyter-console \
-    jupyter-http-over-ws \
-    jupyterlab~=3.6.0 \
-    jupyterlab-widgets \
-    lightning \
-    pytorch-lightning \
-    pandas \
-    matplotlib \
-    scikit-learn \
-    torch-model-archiver \
-    torch-tb-profiler \
-    torch-workflow-archiver \
-    torchmetrics \
-    transformers \
-    # new Python packages
-    -r requirements.txt
-
-RUN jupyter serverextension enable --py jupyter_http_over_ws
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip && \
+  pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple --default-timeout=100 \
+  datasets==2.14.6 \
+  h5py==3.10.0 \
+  huggingface-hub==0.17.3 \
+  ipywidgets==8.1.1 \
+  jupyter==1.0.0 \
+  jupyterlab==4.0.7 \
+  jupyterlab-widgets==3.0.9 \
+  jupyterlab-language-pack-zh-CN==4.0.post3 \
+  lightning==2.1.0 \
+  pytorch-lightning==2.1.0 \
+  matplotlib==3.8.1 \
+  pandas==2.1.2 \
+  sentencepiece==0.1.99 \
+  torch-model-archiver==0.9.0 \
+  torch-tb-profiler==0.4.3 \
+  torch-workflow-archiver==0.2.11 \
+  torchmetrics==1.2.0 \
+  torchtext==0.16.0 \
+  transformers==4.34.1
 
 ARG GID=1000
 ARG UID=1000
-RUN groupadd --gid=$GID t9kuser && mkdir -p /t9k && \
+RUN groupadd --gid=$GID t9kuser && mkdir /t9k && \
   useradd -rm --create-home -d /t9k/mnt --shell /bin/bash \
   --uid=$UID --gid=$GID t9kuser
 
@@ -112,18 +92,17 @@ RUN groupadd --gid=$GID t9kuser && mkdir -p /t9k && \
 RUN chmod 755 /t9k/mnt
 WORKDIR /t9k/mnt
 
-COPY build/bashrc /etc/bash.bashrc
+COPY bashrc-conda /etc/bash.bashrc
 
 # Install Notebook extensions
-COPY build/notebook2workflow-0.1.0-py3-none-any.whl /tmp/notebook2workflow-0.1.0-py3-none-any.whl
 COPY build/install-extension.sh /tmp/install-extension.sh
 RUN bash /tmp/install-extension.sh
 
 COPY --from=buildsdk /usr/local/bin/* /usr/local/bin/
 
 # Install TensorStack tools
-RUN pip install -i https://pypi.douban.com/simple /usr/local/bin/t9k.tar.gz && \
-    pip install -i https://pypi.douban.com/simple /usr/local/bin/codepack.tar.gz && \
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple /usr/local/bin/t9k.tar.gz && \
+    pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple /usr/local/bin/codepack.tar.gz && \
     rm -rf /usr/local/bin/t9k.tar.gz && \
     rm -rf /usr/local/bin/codepack.tar.gz && \
     chmod a+rx /usr/local/bin/*
@@ -137,9 +116,6 @@ COPY build/entrypoint.sh /t9k/app/entrypoint.sh
 RUN chown -R 1000:1000 /t9k/app && chmod 755 /t9k/app
 RUN chmod u+rx /t9k/app/ssh_server.sh
 RUN chmod u+rx /t9k/app/entrypoint.sh
-
-# Set `sudo` command
-# RUN echo 't9kuser:tensorstack' | chpasswd && echo "t9kuser ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 USER t9kuser
 

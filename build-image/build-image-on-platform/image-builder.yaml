@@ -1,0 +1,16 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: ImageBuilder
+metadata:
+  name: build-image
+spec:
+  builder:
+    kaniko: {}
+  dockerConfig:
+    secret: docker-config
+    subPath: .dockerconfigjson
+  tag: <REGISTRY>/<NAMESPACE>/nanogpt:latest
+  workspace:
+    pvc:
+      contextPath: ./tutorial-examples/build-image/build-image-on-platform
+      dockerfilePath: ./tutorial-examples/build-image/build-image-on-platform/Dockerfile
+      name: tutorial

@@ -1,12 +1,12 @@
 # 构建 Notebook 自定义镜像
 
-本示例建立并运行一个工作流，以在平台上构建自定义 Docker 镜像并推送到指定的 registry。
+本示例使用 Image Builder 在平台上构建 Notebook 的自定义镜像并推送到指定的 registry。
 
 运行本示例之前，请先完成示例[在平台上构建镜像](../build-image-on-platform)。
 
 ## 准备工作
 
-参照示例*在平台上构建镜像*的[创建 Secret 和工作流](../build-image-on-platform/README.md#创建-secret-和工作流)部分，创建包含身份信息的 Secret 以及 WorkflowTemplate。
+参照示例*在平台上构建镜像*的[创建 Secret](../build-image-on-platform/README.md#创建-secret)部分，创建包含身份信息的 Secret。
 
 ## 修改 Notebook 标准镜像
 
@@ -14,10 +14,10 @@
 
 ### 准备 Dockerfile 文件
 
-例如我们要在 `t9kpublic/torch-2.0.0-notebook:latest` 这一标准镜像的基础上增加文件、安装 Python 包和 Debian 软件包，于是写出镜像的 Dockerfile 如下（即 `Dockerfile.patched` 文件）：
+例如我们要在 `t9kpublic/torch-2.1.0-notebook:1.77.1` 这一标准镜像的基础上增加文件、安装 Python 包和 Debian 软件包，于是写出镜像的 Dockerfile 如下（即 `Dockerfile.patched` 文件）：
 
 ```dockerfile
-FROM t9kpublic/torch-2.0.0-notebook:latest
+FROM t9kpublic/torch-2.1.0-notebook:1.77.1
 
 USER root
 WORKDIR /t9k/export
@@ -26,7 +26,7 @@ WORKDIR /t9k/export
 COPY . .
 
 # install Python packages, e.g. tiktoken
-RUN pip install --no-cache-dir -i https://pypi.douban.com/simple/ -r ./requirements.txt
+RUN pip install --no-cache-dir -r ./requirements.txt
 
 # install Debian packages, e.g. iputils-ping
 ENV DEBIAN_FRONTEND=noninteractive
@@ -36,15 +36,15 @@ USER t9kuser
 WORKDIR /t9k/mnt
 ```
 
-### 运行工作流
+### 创建 Image Builder
 
-切换到当前目录下，修改 `workflowrun.patched.yaml` 中构建的镜像名称（位于第 12 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 WorkflowRun：
+切换到当前目录下，修改 `image-builder.patched.yaml` 中构建的镜像名称（位于第 11 行）（镜像将被推送到相应的 registry 中，请确保 Secret 包含的身份信息具有相应的上传权限），然后使用它创建 Image Builder：
 
 ```shell
 # cd into current directory
 cd ~/tutorial-examples/build-image/build-notebook-custom-image
-# create a WorkflowRun
-kubectl create -f workflowrun.patched.yaml
+# create an Image Builder
+kubectl create -f image-builder.patched.yaml
 ```
 
 ## 从零开始构建 Notebook 自定义镜像
