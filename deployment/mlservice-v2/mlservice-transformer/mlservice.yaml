@@ -19,4 +19,4 @@ spec:
           modelFormat:
             name: tensorflow
             version: "1"
-          modelUri: pvc://tutorial/tutorial-examples/deployment/v2/mlservice-transformer/model/
+          modelUri: pvc://tutorial/tutorial-examples/deployment/model/tensorflow/mnist/
