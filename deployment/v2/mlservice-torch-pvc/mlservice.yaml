@@ -1,0 +1,17 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLService
+metadata:
+  name: torch-mnist-pvc
+spec:
+  default: origin
+  releases:
+    - name: origin
+      predictor:
+        minReplicas: 1
+        model:
+          parameters:
+            "MODEL_PATH": "mnist=model.mar"
+          modelFormat:
+            name: pytorch
+            version: "1"
+          modelUri: pvc://tutorial/tutorial-examples/deployment/v2/mlservice-torch-pvc/
