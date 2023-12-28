@@ -1,0 +1,22 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLService
+metadata:
+  name: pic-mnist
+spec:
+  default: origin
+  transformer:
+    minReplicas: 1
+    template:
+      spec:
+        containers:
+        - name: user-container
+          image: t9kpublic/transformer-example:0.1.0
+  releases:
+    - name: origin
+      predictor:
+        minReplicas: 1
+        model:
+          modelFormat:
+            name: tensorflow
+            version: "1"
+          modelUri: pvc://tutorial/tutorial-examples/deployment/v2/mlservice-transformer/model/
