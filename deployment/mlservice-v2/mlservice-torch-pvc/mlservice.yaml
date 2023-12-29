@@ -14,4 +14,4 @@ spec:
           modelFormat:
             name: pytorch
             version: "1"
-          modelUri: pvc://tutorial/tutorial-examples/deployment/v2/mlservice-torch-pvc/
+          modelUri: pvc://tutorial/tutorial-examples/deployment/mlservice-v2/mlservice-torch-pvc/

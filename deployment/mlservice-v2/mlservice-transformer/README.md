@@ -12,7 +12,7 @@
 切换到当前目录下，使用 `mlservice.yaml` 创建 MLService：
 
 ``` shell
-$ cd ~/tutorial-examples/deployment/v2/mlservice-transformer
+$ cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-transformer
 $ kubectl apply -f ./mlservice.yaml
 ```
 

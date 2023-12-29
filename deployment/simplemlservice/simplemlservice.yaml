@@ -1,0 +1,13 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: SimpleMLService
+metadata:
+  name: mnist
+spec:
+  replicas: 1
+  storage:
+    pvc:
+      containerPath: /var/lib/t9k/models/mnist
+      name: tutorial
+      subPath: tutorial-examples/deployment/model/tensorflow/mnist
+  tensorflow:
+    image: t9kpublic/tensorflow-serving:2.6.0
