@@ -1,0 +1,17 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: TensorBoard
+metadata:
+  name: tensorboard
+  namespace: demo
+spec:
+  image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
+  resources:
+    limits:
+      cpu: 100m
+      memory: 200Mi
+    requests:
+      cpu: 10m
+      memory: 100Mi
+  runMode: running
+  trainingLogFilesets:
+  - t9k://pvc/tutorial/tutorial-examples/tensorboard/log
