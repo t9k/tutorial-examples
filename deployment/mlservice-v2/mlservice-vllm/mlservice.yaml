@@ -1,0 +1,23 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLService
+metadata:
+  name: tutorial-vllm
+spec:
+  default: qwen
+  releases:
+    - name: qwen
+      predictor:
+        minReplicas: 1
+        model:
+          runtime: t9k-vllm
+          parameters:
+            MODEL_PATH: /var/lib/t9k/model
+            MODEL_NAME: qwen
+          modelUri: pvc://tutorial/modelscope/qwen/Qwen-1_8B-Chat
+          modelFormat:
+            name: huggingface-transformers
+        template:
+          spec:
+            containers:
+              - name: user-container
+                image: t9kpublic/vllm-openai:qwen
