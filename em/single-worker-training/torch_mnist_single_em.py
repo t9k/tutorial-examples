@@ -1,11 +1,13 @@
 import argparse
 import logging
 import os
+import shutil
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
 
 from t9k import em
@@ -13,6 +15,11 @@ from t9k import em
 parser = argparse.ArgumentParser(
     description='Recording of training data of PyTorch model for MNIST with EM.'
 )
+parser.add_argument('--ais_host', type=str, help='URL of AIStore server.')
+parser.add_argument('--api_key', type=str, help='API Key of user.')
+parser.add_argument('--log_dir',
+                    type=str,
+                    help='Path of the TensorBoard log directory.')
 parser.add_argument('--no_cuda',
                     action='store_true',
                     default=False,
@@ -66,6 +73,9 @@ def train(scheduler):
                     format(epoch, epochs, step, steps_per_epoch, train_loss))
                 global_step = (epoch - 1) * steps_per_epoch + step
 
+                if log_dir:
+                    writer.add_scalar('train/loss', train_loss, global_step)
+
                 run.log(type='train',
                         metrics={'loss': train_loss},
                         step=global_step,
@@ -99,6 +109,11 @@ def test(val=False, epoch=None):
     if val:
         msg = 'epoch {:d}/{:d} with '.format(epoch, epochs) + msg
     logging.info(msg)
+
+    if log_dir:
+        writer.add_scalar('{:s}/loss'.format(label), test_loss, global_step)
+        writer.add_scalar('{:s}/accuracy'.format(label), test_accuracy,
+                          global_step)
 
     run.log(type=label,
             metrics={
@@ -175,12 +190,23 @@ if __name__ == '__main__':
                                               shuffle=False,
                                               **kwargs)
 
+    if args.log_dir:
+        log_dir = args.log_dir
+        if os.path.exists(log_dir):
+            shutil.rmtree(log_dir, ignore_errors=True)
+        writer = SummaryWriter(log_dir)
+
     global_step = 0
     epochs = hparams['epochs']
     steps_per_epoch = len(train_loader)
     train(scheduler)
     test()
 
+    torch.save(model.state_dict(), 'model_state_dict.pt')
+    model_artifact = em.create_artifact(name='mnist_torch_saved_model')
+    model_artifact.add_file('model_state_dict.pt')
+    run.mark_output(model_artifact)
+
     run.finish()
-    em.login()
-    run.upload(folder='em-example', make_folder=True)
+    em.login(ais_host=args.ais_host, api_key=args.api_key)
+    run.upload(folder='em-examples', make_folder=True)

@@ -80,7 +80,7 @@ def train():
                     format(epoch, epochs, step, steps_per_epoch, train_loss))
                 global_step = (epoch - 1) * steps_per_epoch + step
 
-                if args.log_dir and rank == 0:
+                if log_dir and rank == 0:
                     writer.add_scalar('train/loss', train_loss, global_step)
 
                 if rank == 0:
@@ -118,7 +118,7 @@ def test(val=False, epoch=None):
         msg = 'epoch {:d}/{:d} with '.format(epoch, epochs) + msg
     logging.info(msg)
 
-    if args.log_dir and rank == 0:
+    if log_dir and rank == 0:
         writer.add_scalar('{:s}/loss'.format(label), test_loss, global_step)
         writer.add_scalar('{:s}/accuracy'.format(label), test_accuracy,
                           global_step)
@@ -223,6 +223,11 @@ if __name__ == '__main__':
     test()
 
     if rank == 0:
+        torch.save(model.state_dict(), 'model_state_dict.pt')
+        model_artifact = em.create_artifact(name='mnist_torch_saved_model')
+        model_artifact.add_file('model_state_dict.pt')
+        run.mark_output(model_artifact)
+
         run.finish()
         em.login(ais_host=args.ais_host, api_key=args.api_key)
-        run.upload(folder='em-example', make_folder=True)
+        run.upload(folder='em-examples', make_folder=True)
