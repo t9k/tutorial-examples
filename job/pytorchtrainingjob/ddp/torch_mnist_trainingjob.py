@@ -23,6 +23,9 @@ parser.add_argument(
 parser.add_argument('--log_dir',
                     type=str,
                     help='Path of the TensorBoard log directory.')
+parser.add_argument('--save_path',
+                    type=str,
+                    help='Path of the saved model.')
 parser.add_argument('--no_cuda',
                     action='store_true',
                     default=False,
@@ -176,4 +179,4 @@ if __name__ == '__main__':
     test()
 
     if rank == 0:
-        torch.save(model.state_dict(), 'model_state_dict.pt')
+        torch.save(model.state_dict(), args.save_path)
