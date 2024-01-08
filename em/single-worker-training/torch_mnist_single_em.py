@@ -13,8 +13,7 @@ from torchvision import datasets, transforms
 from t9k import em
 
 parser = argparse.ArgumentParser(
-    description='Recording of training data of PyTorch model for MNIST with EM.'
-)
+    description='Recording training of PyTorch model for MNIST with EM.')
 parser.add_argument('--ais_host', type=str, help='URL of AIStore server.')
 parser.add_argument('--api_key', type=str, help='API Key of user.')
 parser.add_argument('--log_dir',
@@ -54,7 +53,7 @@ class Net(nn.Module):
         return output
 
 
-def train(scheduler):
+def train():
     global global_step
     for epoch in range(1, epochs + 1):
         model.train()
@@ -199,7 +198,7 @@ if __name__ == '__main__':
     global_step = 0
     epochs = hparams['epochs']
     steps_per_epoch = len(train_loader)
-    train(scheduler)
+    train()
     test()
 
     torch.save(model.state_dict(), 'model_state_dict.pt')

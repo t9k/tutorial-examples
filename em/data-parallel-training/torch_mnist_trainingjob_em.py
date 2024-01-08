@@ -15,7 +15,7 @@ from torchvision import datasets, transforms
 from t9k import em
 
 parser = argparse.ArgumentParser(
-    description='Distributed training of Keras model for MNIST with DDP.')
+    description='Recording DDP training of PyTorch model for MNIST with EM.')
 parser.add_argument('--ais_host', type=str, help='URL of AIStore server.')
 parser.add_argument('--api_key', type=str, help='API Key of user.')
 parser.add_argument(
@@ -140,11 +140,12 @@ if __name__ == '__main__':
     dist.init_process_group(backend=args.backend)
     rank = dist.get_rank()
     world_size = dist.get_world_size()
+    local_rank = int(os.environ['LOCAL_RANK'])
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     if use_cuda:
         logging.info('Using CUDA')
-    device = torch.device('cuda:{}'.format(rank) if use_cuda else 'cpu')
+    device = torch.device('cuda:{}'.format(local_rank) if use_cuda else 'cpu')
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
     hparams = {
