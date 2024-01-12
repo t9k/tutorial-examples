@@ -14,7 +14,7 @@
 
 ## 使用方法
 
-1. 在您的项目中创建一个名为 tutorial、大小 4 Gi 以上的 PVC，然后创建一个同样名为 tutorial 的 Notebook 挂载该 PVC，镜像和资源不限（创建 PVC 和 Notebook 的操作步骤请参阅[创建 Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/create-notebook.html)；如要使用远程操作，请开启 SSH）。
+1. 在您的项目中创建一个名为 tutorial、大小 20 Gi 以上的 PVC，然后创建一个同样名为 tutorial 的 Notebook 挂载该 PVC，镜像和资源不限（创建 PVC 和 Notebook 的操作步骤请参阅[创建 Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/create-notebook.html)；如要使用远程操作，请开启 SSH）。
 
 2. 进入 Notebook 或远程连接到 Notebook，启动一个终端，执行以下命令以克隆此仓库（使用 Notebook 的方法请参阅[使用 Notebook](https://t9k.github.io/user-docs/guide/develop-and-test-model/use-notebook.html)）。
 

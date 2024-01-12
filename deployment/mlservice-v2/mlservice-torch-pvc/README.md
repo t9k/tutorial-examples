@@ -13,7 +13,7 @@
 
 ```shell
 # cd into current directory
-cd ~/tutorial-examples/deployment/v2/mlservice-torch-pvc
+cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-torch-pvc
 kubectl create -f mlservice.yaml
 ```
 

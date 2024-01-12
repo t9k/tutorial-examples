@@ -12,8 +12,8 @@
 切换到当前目录下，使用 `mlservice.yaml` 创建 MLService：
 
 ``` shell
-$ cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-transformer
-$ kubectl apply -f ./mlservice.yaml
+cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-transformer
+kubectl apply -f ./mlservice.yaml
 ```
 
 ## 测试服务
@@ -21,7 +21,7 @@ $ kubectl apply -f ./mlservice.yaml
 查看 MLService 状态，并等待 `Ready` 一栏变为 `True`
 
 ``` bash
-$ kubectl get -f ./mlservice.yaml -w
+kubectl get -f ./mlservice.yaml -w
 ```
 
 待其 `READY` 值变为 `true` 后，通过发送如下请求测试该推理服务：
