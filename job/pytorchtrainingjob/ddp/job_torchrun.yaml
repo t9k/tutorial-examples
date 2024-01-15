@@ -1,0 +1,51 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: PyTorchTrainingJob
+metadata:
+  name: torchrun-mnist
+spec:
+  replicaSpecs:
+    - type: node
+      replicas: 2
+      restartPolicy: OnFailure
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - name: pytorch
+              command:
+                - torchrun 
+                - --nnodes 
+                - '2' 
+                - --nproc_per_node 
+                - '2' 
+                - --rdzv_backend 
+                - c10d
+                - --rdzv_endpoint 
+                - $(MASTER_ADDR):$(MASTER_PORT)
+                - --max_restarts 
+                - '3' 
+                - --role 
+                - node
+                - job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py
+                - "--log_dir"
+                - "job/pytorchtrainingjob/ddp/log"
+                - "--backend"
+                - "gloo"
+                - "--no_cuda"
+              workingDir: /t9k/mnt/tutorial-examples
+              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
+              resources:
+                requests:
+                  cpu: 8
+                  memory: 4Gi
+                limits:
+                  cpu: 16
+                  memory: 8Gi
+              volumeMounts:
+                - mountPath: /t9k/mnt
+                  name: data
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tutorial
