@@ -1,0 +1,25 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLServiceRuntime
+metadata:
+  name: t9k-tensorflow-serving
+spec:
+  enabled: true
+  template:
+    spec:
+      containers:
+      - name: user-container
+        image: t9kpublic/tensorflow-serving:2.13.1
+        command:
+          - /usr/bin/tensorflow_model_server
+        args:
+          - --model_name={{if .MODEL_NAME}}{{.MODEL_NAME}}{{else}}model{{end}}
+          - --port={{if .GRPC_PORT}}{{.GRPC_PORT}}{{else}}9000{{end}}
+          - --rest_api_port=8000
+          - --model_base_path=/var/lib/t9k/model
+        resources:
+          limits:
+            cpu: "200m"
+            memory: 200Mi
+        ports:
+        - containerPort: 8000
+          protocol: TCP

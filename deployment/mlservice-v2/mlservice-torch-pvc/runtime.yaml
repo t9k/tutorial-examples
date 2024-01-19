@@ -1,0 +1,20 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: MLServiceRuntime
+metadata:
+  name: t9k-torchserve
+spec:
+  enabled: true
+  template:
+    spec:
+      containers:
+      - name: user-container
+        image: t9kpublic/pytorch-serve:0.4.2-cpu
+        args:
+          - torchserve
+          - --start
+          - --model-store=/var/lib/t9k/model
+          - --models {{if .MODEL_PATH}}{{.MODEL_PATH}}{{else}}all{{end}}
+        resources:
+          limits:
+            cpu: "200m"
+            memory: 200Mi
