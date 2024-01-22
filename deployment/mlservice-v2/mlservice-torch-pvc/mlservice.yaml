@@ -11,7 +11,5 @@ spec:
         model:
           parameters:
             "MODEL_PATH": "mnist=model.mar"
-          modelFormat:
-            name: pytorch
-            version: "1"
+          runtime: t9k-torchserve
           modelUri: pvc://tutorial/tutorial-examples/deployment/mlservice-v2/mlservice-torch-pvc/

@@ -14,8 +14,6 @@ spec:
             MODEL_PATH: /var/lib/t9k/model
             MODEL_NAME: qwen
           modelUri: pvc://tutorial/modelscope/qwen/Qwen-1_8B-Chat
-          modelFormat:
-            name: huggingface-transformers
         template:
           spec:
             containers:

@@ -18,6 +18,12 @@ python download.py
 
 ## 部署模型
 
+创建 MLServiceRuntime：
+
+```bash
+kubectl create -f runtime.yaml
+```
+
 执行以下命令来部署服务：
 
 ``` bash

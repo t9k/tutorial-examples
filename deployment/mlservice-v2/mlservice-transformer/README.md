@@ -9,10 +9,17 @@
 
 ## 部署服务
 
-切换到当前目录下，使用 `mlservice.yaml` 创建 MLService：
+切换到当前目录下，使用 `runtime.yaml` 创建 MLServiceRuntime：
+
+```shell
+cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-transformer
+kubectl create -f runtime.yaml
+```
+
+
+使用 `mlservice.yaml` 创建 MLService：
 
 ``` shell
-cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-transformer
 kubectl apply -f ./mlservice.yaml
 ```
 
