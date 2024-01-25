@@ -19,11 +19,11 @@ spec:
             - name: tensorflow
               command:
                 - python
-                - job/tensorflowtrainingjob/multiworker/keras_mnist_trainingjob.py
+                - keras_mnist_trainingjob.py
                 - "--log_dir"
-                - "job/tensorflowtrainingjob/multiworker/log"
+                - "log"
                 - "--no_cuda"
-              workingDir: /t9k/mnt/tutorial-examples
+              workingDir: /t9k/mnt/tutorial-examples/job/tensorflowtrainingjob/multiworker
               image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               resources:
                 requests:

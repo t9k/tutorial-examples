@@ -26,12 +26,14 @@ spec:
           containers:
             - name: pytorch
               args:
-                - job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py
+                - torch_mnist_trainingjob.py
+                - "--save_path"
+                - "model_state_dict.pt"
                 - "--log_dir"
-                - "job/pytorchtrainingjob/ddp/log"
+                - "log"
                 - "--backend"
                 - "nccl"
-              workingDir: /t9k/mnt/tutorial-examples
+              workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ddp
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:

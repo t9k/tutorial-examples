@@ -73,7 +73,7 @@ def train():
                     format(epoch, epochs, step, steps_per_epoch, train_loss))
                 global_step = (epoch - 1) * steps_per_epoch + step
 
-                if log_dir and rank == 0:
+                if args.log_dir and rank == 0:
                     writer.add_scalar('train/loss', train_loss, global_step)
 
         scheduler.step()
@@ -105,7 +105,7 @@ def test(val=False, epoch=None):
         msg = 'epoch {:d}/{:d} with '.format(epoch, epochs) + msg
     logging.info(msg)
 
-    if log_dir and rank == 0:
+    if args.log_dir and rank == 0:
         writer.add_scalar('{:s}/loss'.format(label), test_loss, global_step)
         writer.add_scalar('{:s}/accuracy'.format(label), test_accuracy,
                           global_step)
@@ -167,10 +167,9 @@ if __name__ == '__main__':
                                               **kwargs)
 
     if args.log_dir and rank == 0:
-        log_dir = args.log_dir
-        if os.path.exists(log_dir):
-            shutil.rmtree(log_dir, ignore_errors=True)
-        writer = SummaryWriter(log_dir)
+        if os.path.exists(args.log_dir):
+            shutil.rmtree(args.log_dir, ignore_errors=True)
+        writer = SummaryWriter(args.log_dir)
 
     global_step = 0
     epochs = 10

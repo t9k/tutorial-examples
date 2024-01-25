@@ -25,9 +25,9 @@ spec:
           containers:
             - command:
                 - python
-                - job/pytorchtrainingjob/ps/torch_mnist_trainingjob_ps.py
+                - torch_mnist_trainingjob_ps.py
                 - "--no_cuda"
-              workingDir: /t9k/mnt/tutorial-examples
+              workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ps
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               name: pytorch
               resources:
@@ -54,13 +54,13 @@ spec:
           containers:
             - command:
                 - python
-                - job/pytorchtrainingjob/ps/torch_mnist_trainingjob_ps.py
-                - "--log_dir"
-                - "job/pytorchtrainingjob/ps/log"
+                - torch_mnist_trainingjob_ps.py
                 - "--save_path"
-                - "job/pytorchtrainingjob/ps/model_state_dict.pt"
+                - "./model_state_dict.pt"
+                - "--log_dir"
+                - "log"
                 - "--no_cuda"
-              workingDir: /t9k/mnt/tutorial-examples
+              workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ps
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               name: pytorch
               resources:

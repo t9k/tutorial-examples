@@ -6,7 +6,7 @@
 
 ```shell
 cd ~/tutorial-examples/em/single-worker-training
-python torch_mnist_single_em.py
+python torch_mnist_single_em.py --save_path model_state_dict.pt
 ```
 
 训练完成后，其数据将被上传到 EM 服务器，此时前往实验管理控制台，找到文件夹 em-example 下的 Run mnist_torch（文件夹路径和 Run 名称被硬编码在 `torch_mnist_single_em.py` 的第 132-133 行），进入以查看 Run 的元数据、运行环境、指标以及超参数。

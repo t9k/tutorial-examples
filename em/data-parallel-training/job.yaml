@@ -28,6 +28,8 @@ spec:
                 - ""
                 - "--api_key"
                 - ""
+                - "--save_path"
+                - "model_state_dict.pt"
                 - "--log_dir"
                 - "log"
                 - "--backend"

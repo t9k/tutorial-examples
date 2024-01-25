@@ -22,16 +22,16 @@ spec:
       - --allow-run-as-root
     cmd:
       - python
-      - job/mpijob/horovod-torch/torch_mnist_mpijob.py
+      - torch_mnist_mpijob.py
       - "--log_dir"
-      - "job/mpijob/horovod-torch/log"
+      - "log"
       - "--no_cuda"
     template:
       spec:
         containers:
           - name: mpi-worker
             image: t9kpublic/horovod:sdk-0.5.2
-            workingDir: /t9k/mnt/tutorial-examples
+            workingDir: /t9k/mnt/tutorial-examples/job/mpijob/horovod-torch
             resources:
               requests:
                 cpu: 4

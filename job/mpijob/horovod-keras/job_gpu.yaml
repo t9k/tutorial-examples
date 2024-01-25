@@ -22,15 +22,15 @@ spec:
       - --allow-run-as-root
     cmd:
       - python
-      - job/mpijob/horovod-keras/keras_mnist_mpijob.py
+      - keras_mnist_mpijob.py
       - "--log_dir"
-      - "job/mpijob/horovod-keras/log"
+      - "log"
     template:
       spec:
         containers:
           - name: mpi-worker
             image: t9kpublic/horovod:sdk-0.5.2
-            workingDir: /t9k/mnt/tutorial-examples
+            workingDir: /t9k/mnt/tutorial-examples/job/mpijob/horovod-keras
             resources:
               requests:
                 cpu: 1

@@ -59,7 +59,7 @@ ls job/pytorchtrainingjob/ddp
 然后使用 `torchrun` 命令启动训练：
 
 ```shell
-torchrun --nnodes 1 --nproc_per_node 4 --rdzv_backend c10d job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --log_dir job/pytorchtrainingjob/ddp/log --backend nccl
+torchrun --nnodes 1 --nproc_per_node 4 --rdzv_backend c10d job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --save_path model_state_dict.pt --log_dir job/pytorchtrainingjob/ddp/log --backend nccl
 ```
 
 随即分布式训练开始进行。如果训练脚本出错，则可以立即在终端中进行调试，不会造成 Job 的失败。调试完成后禁用 debug 模式（将 `spec.runMode.debug.enable` 设为 `false`，或直接注释第 6-12 行），再次创建 PyTorchTrainingJob 则正常启动训练。

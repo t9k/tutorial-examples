@@ -18,10 +18,10 @@ spec:
           containers:
             - command:
                 - python
-                - job/tensorflowtrainingjob/ps/keras_mnist_trainingjob_ps.py
+                - keras_mnist_trainingjob_ps.py
                 - "--log_dir"
-                - "job/tensorflowtrainingjob/ps/log"
-              workingDir: /t9k/mnt/tutorial-examples
+                - "log"
+              workingDir: /t9k/mnt/tutorial-examples/job/tensorflowtrainingjob/ps
               image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               name: tensorflow
               resources:
@@ -48,10 +48,10 @@ spec:
           containers:
             - command:
                 - python
-                - job/tensorflowtrainingjob/ps/keras_mnist_trainingjob_ps.py
+                - keras_mnist_trainingjob_ps.py
                 - "--log_dir"
-                - "job/tensorflowtrainingjob/ps/log"
-              workingDir: /t9k/mnt/tutorial-examples  
+                - "log"
+              workingDir: /t9k/mnt/tutorial-examples/job/tensorflowtrainingjob/ps
               image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
               name: tensorflow
               resources:
@@ -78,10 +78,10 @@ spec:
           containers:
             - command:
                 - python
-                - job/tensorflowtrainingjob/ps/keras_mnist_trainingjob_ps.py
+                - keras_mnist_trainingjob_ps.py
                 - "--log_dir"
-                - "job/tensorflowtrainingjob/ps/log"
-              workingDir: /t9k/mnt/tutorial-examples  
+                - "log"
+              workingDir: /t9k/mnt/tutorial-examples/job/tensorflowtrainingjob/ps
               image: t9kpublic/tensorflow-2.11.0:gpu-sdk-0.5.2
               name: tensorflow
               resources:
