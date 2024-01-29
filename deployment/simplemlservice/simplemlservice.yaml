@@ -8,6 +8,6 @@ spec:
     pvc:
       containerPath: /var/lib/t9k/models/mnist
       name: tutorial
-      subPath: tutorial-examples/deployment/model/tensorflow/mnist
+      subPath: tutorial-examples/deployment/simplemlservice/saved_model
   tensorflow:
     image: t9kpublic/tensorflow-serving:2.6.0
