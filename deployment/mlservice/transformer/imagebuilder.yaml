@@ -1,0 +1,16 @@
+apiVersion: tensorstack.dev/v1beta1
+kind: ImageBuilder
+metadata:
+  name: mlservice-transformer-example
+spec:
+  builder:
+    kaniko: {}
+  dockerConfig:
+    secret: <dockerconfig-secret>
+    subPath: .dockerconfigjson
+  tag: <target-image>
+  workspace:
+    pvc:
+      contextPath: ./tutorial-examples/deployment/mlservice/transformer
+      dockerfilePath: ./tutorial-examples/deployment/mlservice/transformer/Dockerfile
+      name: tutorial
