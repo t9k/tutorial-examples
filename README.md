@@ -54,12 +54,12 @@ git clone https://github.com/t9k/tutorial-examples.git
   * [Record training with EM for single-worker training](./em/single-worker-training/)
   * [Record training with EM for data parallel training](./em/data-parallel-training/)
 * Model Deployment:
-  * Get model from PVC:
-    * [Deploy production-ready model inference service (Keras model)](./deployment/pvc/mlservice-keras/)
-    * [Deploy production-ready model inference service (PyTorch model)](./deployment/pvc/mlservice-torch/)
-  * Get model from S3:
-    * [Deploy production-ready model inference service (Keras model, S3 storage)](./deployment/s3/mlservice-keras/)
-    * [Deploy production-ready model inference service (PyTorch model, S3 storage)](./deployment/s3/mlservice-torch/)
+  * MLService:
+    * [Deploy PyTorch model from PVC](./deployment/mlservice/torch-pvc/)
+    * [Deploy TensorFlow model with Transformer](./deployment/mlservice/transformer/)
+    * [Deploy LLM using vLLM](./deployment/mlservice/vllm/)
+  * SimpleMLService:
+    * [Deploy TensorFlow model](./deployment/simplemlservice/)
 * Workflow:
   * [Build end-to-end workflow from data sampling to model export](./workflow/e2e-workflow/)
 * Platform Tools:

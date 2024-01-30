@@ -68,5 +68,5 @@ metadata:
     tensorstack.dev/resource: docker
 data:
   .dockerconfigjson: $(echo $configJSON | base64 -w 0)
-type: Opaque
+type: kubernetes.io/dockerconfigjson
 EOF

@@ -10,7 +10,7 @@
 
 ```
 # cd into current directory
-cd ~/tutorial-examples/deployment/mlservice-v2/mlservice-vllm
+cd ~/tutorial-examples/deployment/mlservice/mlservice-vllm
 pip install modelscope -i https://pypi.tuna.tsinghua.edu.cn/simple
 export MODELSCOPE_CACHE=/t9k/mnt/modelscope
 python download.py
