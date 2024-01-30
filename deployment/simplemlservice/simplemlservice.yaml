@@ -11,4 +11,7 @@ spec:
       subPath: tutorial-examples/deployment/simplemlservice/saved_model
   tensorflow:
     image: t9kpublic/tensorflow-serving:2.6.0
-    
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500Mi
