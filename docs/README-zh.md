@@ -55,12 +55,11 @@ git clone https://github.com/t9k/tutorial-examples.git
   * [单工作器训练使用 EM 记录训练](../em/single-worker-training/)
   * [数据并行训练使用 EM 记录训练](../em/data-parallel-training/)
 * 模型部署：
-  * 从 PVC 获取模型：
-    * [部署用于生产环境的模型推理服务（PyTorch 模型）](../deployment/pvc/mlservice-torch/)
-    * [部署用于生产环境的模型推理服务（Keras 模型）](../deployment/pvc/mlservice-keras/)
-  * 从 S3 存储获取模型：
-    * [部署用于生产环境的模型推理服务（PyTorch 模型，S3 存储）](../deployment/s3/mlservice-torch/)
-    * [部署用于生产环境的模型推理服务（Keras 模型，S3 存储）](../deployment/s3/mlservice-keras/)
+  * MLService：
+    * [部署用于生产环境的模型推理服务（PyTorch 模型）](../deployment/mlservice/torch-pvc/)
+    * [部署包含 Transformer 的模型推理服务（Keras 模型）](../deployment/mlservice/transformer/)
+  * SimpleMLService：
+    * [部署简单的模型推理服务（Keras 模型）](../deployment/mlservice/transformer/)
 * 工作流：
   * [建立从数据采样到模型导出的端到端的工作流](../workflow/e2e-workflow/)
 * 平台工具：

@@ -57,7 +57,6 @@ git clone https://github.com/t9k/tutorial-examples.git
   * MLService:
     * [Deploy PyTorch model from PVC](./deployment/mlservice/torch-pvc/)
     * [Deploy TensorFlow model with Transformer](./deployment/mlservice/transformer/)
-    * [Deploy LLM using vLLM](./deployment/mlservice/vllm/)
   * SimpleMLService:
     * [Deploy TensorFlow model](./deployment/simplemlservice/)
 * Workflow:
