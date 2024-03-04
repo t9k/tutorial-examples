@@ -12,7 +12,10 @@ spec:
           parameters:
             "MODEL_PATH": "mnist=model.mar"
           runtime: t9k-torchserve
-          modelUri: pvc://tutorial/tutorial-examples/deployment/mlservice/torch-pvc/
+        storage:
+          pvc:
+            name: tutorial
+            subPath: tutorial-examples/deployment/mlservice/torch-pvc/
         containersResources:
         - name: user-container
           resources:

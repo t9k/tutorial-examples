@@ -21,10 +21,13 @@ spec:
         minReplicas: 1
         model:
           runtime: t9k-tensorflow-serving
-          modelUri: pvc://tutorial/tutorial-examples/deployment/mlservice/transformer/model
         containersResources:
         - name: user-container
           resources:
             limits:
               cpu: "500m"
               memory: 500Mi
+        storage:
+          pvc:
+            name: tutorial
+            subPath: tutorial-examples/deployment/mlservice/transformer/model
