@@ -9,7 +9,7 @@ spec:
       replicaSpecs:
         - type: worker
           skipInitContainer: true
-          command: ["sleep", "inf"]
+          command: ["bash", "/t9k/app/ssh_server.sh"]
   torchrunConfig:
     enabled: true
     maxRestarts: 3
@@ -34,7 +34,7 @@ spec:
                 - "--backend"
                 - "nccl"
               workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ddp
-              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
+              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2-ssh
               resources:
                 requests:
                   cpu: 4
@@ -47,7 +47,25 @@ spec:
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
+                - mountPath: /t9k/host_keys
+                  name: ssh-host-key
+                  readOnly: true
+                - mountPath: /t9k/authorized_keys/ssh-user-public-key
+                  name: ssh-user-public-key
+                  readOnly: true
+                  subPath: ssh-user-public-key
           volumes:
             - name: data
               persistentVolumeClaim:
                 claimName: tutorial
+            - name: ssh-host-key
+              secret:
+                defaultMode: 420
+                secretName: ssh-host-key
+            - name: ssh-user-public-key
+              secret:
+                defaultMode: 420
+                items:
+                - key: ssh-publickey
+                  path: ssh-user-public-key
+                secretName: ssh-user-public-key
