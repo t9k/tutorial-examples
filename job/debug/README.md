@@ -1,6 +1,6 @@
-# 使用 Job 的 debug 模式进行调试
+# 调试 Job
 
-本示例使用 Job 的 debug 模式这一功能对计算任务进行调试。
+本示例使用 Job 的调试模式这一功能来对计算任务进行调试。
 
 debug 模式的设计目标是在保留 Job 原有配置的条件下，方便地对要运行的计算任务进行调试。在 debug 模式下，所有 replica 的容器的启动命令都会被替换为 `["sleep", "inf"]` 或用户指定的其他命令。
 
@@ -17,34 +17,17 @@ cd ~/tutorial-examples/job/debug-mode
 kubectl create -f job_debug.yaml
 ```
 
-在命令行监控作为节点的 Pod `torch-mnist-trainingjob-debug-node-0` 的状态直到变为 `Running`：
+监控节点的 Pod 的状态直到其变为 `Running`：
 
 ```shell
-kubectl get pod -w
+kubectl get pod -l tensorstack.dev/owner-name=torch-mnist-trainingjob-debug -w
 ```
 
-进入 Pod `torch-mnist-trainingjob-debug-node-0`（的容器）进行调试：
+接下来进入 Pod（的容器）以进行调试：
 
 ```shell
-kubectl exec -it torch-mnist-trainingjob-debug-node-0 -- bash
+kubectl exec -it <POD_NAME> -- bash  # 提供 Pod 的名称
 ```
-
-使用 `nvidia-smi` 命令检查当前可用的 GPU，再使用 `ls` 命令检查示例路径是否正确：
-
-```shell
-# 在容器中
-nvidia-smi
-ls job/pytorchtrainingjob/ddp
-```
-
-然后使用 `torchrun` 命令启动训练：
-
-```shell
-# 在容器中
-torchrun --nnodes 1 --nproc_per_node 4 --rdzv_backend c10d job/pytorchtrainingjob/ddp/torch_mnist_trainingjob.py --save_path model_state_dict.pt --log_dir job/pytorchtrainingjob/ddp/log --backend nccl
-```
-
-随即分布式训练开始进行。如果训练脚本出错，则可以立即在终端中进行调试，不会造成 Job 的失败。调试完成后禁用 debug 模式（将 `spec.runMode.debug.enable` 设为 `false`，或直接注释第 6-12 行），再次创建 PyTorchTrainingJob 则正常启动训练。
 
 ## 容器开启 SSH 服务
 
@@ -53,8 +36,9 @@ torchrun --nnodes 1 --nproc_per_node 4 --rdzv_backend c10d job/pytorchtrainingjo
 切换到当前目录下，创建一个包含用户 SSH 公钥的 Secret，以及一个包含主机 SSH 密钥对的 Secret：
 
 ```shell
-cd ~/tutorial-examples/job/debug-mode 
-./create_ssh_user_key_secret.sh -f ~/.ssh/id_rsa.pub  # 提供用户的 SSH 公钥文件的路径
+cd ~/tutorial-examples/job/debug-mode
+./create_ssh_user_key_secret.sh -f <PUBLIC_KEY_FILE>  # 提供用户的 SSH 公钥文件的路径
+                                                      # 可以上传 SSH 公钥文件到 Notebook，或创建一个空白文本文件并粘贴公钥
 ./create_ssh_host_key_secret.sh
 ```
 
@@ -64,4 +48,16 @@ cd ~/tutorial-examples/job/debug-mode
 kubectl create -f job_debug_ssh.yaml
 ```
 
-然后请参照[此文档](https://t9k.github.io/user-manuals/tasks/ssh-notebook.html)的操作步骤，在本地进行端口转发并建立 SSH 连接。之后的调试过程与[容器休眠](#容器休眠)相同，这里不再赘述。
+监控节点的 Pod 的状态直到其变为 `Running`：
+
+```shell
+kubectl get pod -l tensorstack.dev/owner-name=torch-mnist-trainingjob-debug-ssh -w
+```
+
+然后请参照[此文档](https://t9k.github.io/user-manuals/tasks/ssh-notebook.html)的操作步骤，在本地进行端口转发并建立 SSH 连接。唯一不同的是端口转发使用 `t9k-pf pod` 命令，而非 `t9k-pf notebook` 命令：
+
+```shell
+t9k-pf pod <POD_NAME> 5001:2222 -n <PROJECT_NAME>
+```
+
+接下来在终端或 IDE 中进行调试，具体取决于用户使用它们中的哪一个进行 SSH 连接。

@@ -1,7 +1,7 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: PyTorchTrainingJob
 metadata:
-  name: torch-mnist-trainingjob-debug
+  name: torch-mnist-trainingjob-debug-ssh
 spec:
   runMode:
     debug:
