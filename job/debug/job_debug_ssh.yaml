@@ -33,7 +33,7 @@ spec:
                 - "log"
                 - "--backend"
                 - "nccl"
-              workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ddp
+              workingDir: /t9k/mnt/tutorial-examples/job/debug
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2-ssh
               resources:
                 requests:
@@ -47,6 +47,8 @@ spec:
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
+                - mountPath: /dev/shm
+                  name: dshm
                 - mountPath: /t9k/host_keys
                   name: ssh-host-key
                   readOnly: true
@@ -58,6 +60,9 @@ spec:
             - name: data
               persistentVolumeClaim:
                 claimName: tutorial
+            - name: dshm
+              emptyDir:
+                medium: Memory
             - name: ssh-host-key
               secret:
                 defaultMode: 420

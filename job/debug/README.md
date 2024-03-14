@@ -13,7 +13,7 @@ debug 模式支持所有类型的 Job，这里以 PyTorchTrainingJob 为例进�
 切换到当前目录下，使用 `job_debug.yaml` 创建 PyTorchTrainingJob（YAML 配置文件的第 6-12 行增加了 `spec.runMode` 字段以启用 debug 模式）：
 
 ```shell
-cd ~/tutorial-examples/job/debug-mode
+cd ~/tutorial-examples/job/debug
 kubectl create -f job_debug.yaml
 ```
 
@@ -36,7 +36,7 @@ kubectl exec -it <POD_NAME> -- bash  # 提供 Pod 的名称
 切换到当前目录下，创建一个包含用户 SSH 公钥的 Secret，以及一个包含主机 SSH 密钥对的 Secret：
 
 ```shell
-cd ~/tutorial-examples/job/debug-mode
+cd ~/tutorial-examples/job/debug
 ./create_ssh_user_key_secret.sh -f <PUBLIC_KEY_FILE>  # 提供用户的 SSH 公钥文件的路径
                                                       # 可以上传 SSH 公钥文件到 Notebook，或创建一个空白文本文件并粘贴公钥
 ./create_ssh_host_key_secret.sh

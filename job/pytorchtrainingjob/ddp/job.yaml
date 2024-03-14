@@ -44,7 +44,12 @@ spec:
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
+                - mountPath: /dev/shm
+                  name: dshm
           volumes:
             - name: data
               persistentVolumeClaim:
                 claimName: tutorial
+            - name: dshm
+              emptyDir:
+                medium: Memory

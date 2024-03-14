@@ -33,7 +33,7 @@ spec:
                 - "log"
                 - "--backend"
                 - "nccl"
-              workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ddp
+              workingDir: /t9k/mnt/tutorial-examples/job/debug
               image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
               resources:
                 requests:
@@ -47,7 +47,12 @@ spec:
               volumeMounts:
                 - mountPath: /t9k/mnt
                   name: data
+                - mountPath: /dev/shm
+                  name: dshm
           volumes:
             - name: data
               persistentVolumeClaim:
                 claimName: tutorial
+            - name: dshm
+              emptyDir:
+                medium: Memory
