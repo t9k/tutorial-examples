@@ -46,7 +46,7 @@ git clone https://github.com/t9k/tutorial-examples.git
     * [Run Apache Beam distributed computing tasks with BeamJob](./job/beamjob/count-word/)
   * Custom distributed training:
     * [Data parallel training with GenericJob (Keras model)](./job/genericjob/multiworker-keras/)
-  * [Debug mode with Job](./job/debug-mode/)
+  * [Debug Job](./job/debug/)
 * Automatic Hyperparameter Tuning:
   * [HPO with AutoTune (Keras model)](./autotune/hpo-keras/)
   * [HPO with AutoTune (PyTorch model)](./autotune/hpo-torch/)

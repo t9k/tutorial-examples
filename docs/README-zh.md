@@ -47,7 +47,7 @@ git clone https://github.com/t9k/tutorial-examples.git
     * [使用 BeamJob 运行 Apache Beam 分布式计算任务](../job/beamjob/count-word/)
   * 自定义分布式训练：
     * [使用 GenericJob 实现数据并行训练（Keras 模型）](../job/genericjob/multiworker-keras/)
-  * [使用 Job 的 debug 模式进行调试](../job/debug-mode/)
+  * [调试 Job](../job/debug/)
 * 自动超参数调优：
   * [使用 AutoTune 进行超参数优化（PyTorch 模型）](../autotune/hpo-torch/)
   * [使用 AutoTune 进行超参数优化（Keras 模型）](../autotune/hpo-keras/)

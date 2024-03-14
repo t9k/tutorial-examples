@@ -1,19 +1,22 @@
 apiVersion: batch.tensorstack.dev/v1beta1
 kind: PyTorchTrainingJob
 metadata:
-  name: torch-mnist-trainingjob
+  name: torch-mnist-trainingjob-debug-ssh
 spec:
-  tensorboardSpec:
-    trainingLogFilesets:
-      - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log
-    image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
+  runMode:
+    debug:
+      enabled: true
+      replicaSpecs:
+        - type: worker
+          skipInitContainer: true
+          command: ["bash", "/t9k/app/ssh_server.sh"]
   torchrunConfig:
     enabled: true
     maxRestarts: 3
     procPerNode: "4"
     rdzvBackend: c10d
   replicaSpecs:
-    - type: node
+    - type: worker
       replicas: 1
       restartPolicy: ExitCode
       template:
@@ -30,8 +33,8 @@ spec:
                 - "log"
                 - "--backend"
                 - "nccl"
-              workingDir: /t9k/mnt/tutorial-examples/job/pytorchtrainingjob/ddp
-              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2
+              workingDir: /t9k/mnt/tutorial-examples/job/debug
+              image: t9kpublic/pytorch-1.13.0:sdk-0.5.2-ssh
               resources:
                 requests:
                   cpu: 4
@@ -46,6 +49,13 @@ spec:
                   name: data
                 - mountPath: /dev/shm
                   name: dshm
+                - mountPath: /t9k/host_keys
+                  name: ssh-host-key
+                  readOnly: true
+                - mountPath: /t9k/authorized_keys/ssh-user-public-key
+                  name: ssh-user-public-key
+                  readOnly: true
+                  subPath: ssh-user-public-key
           volumes:
             - name: data
               persistentVolumeClaim:
@@ -53,3 +63,14 @@ spec:
             - name: dshm
               emptyDir:
                 medium: Memory
+            - name: ssh-host-key
+              secret:
+                defaultMode: 420
+                secretName: ssh-host-key
+            - name: ssh-user-public-key
+              secret:
+                defaultMode: 420
+                items:
+                - key: ssh-publickey
+                  path: ssh-user-public-key
+                secretName: ssh-user-public-key

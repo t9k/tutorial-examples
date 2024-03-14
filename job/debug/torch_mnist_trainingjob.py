@@ -9,12 +9,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.parallel import DistributedDataParallel as DDP
 import torch.optim as optim
-from torch.optim.lr_scheduler import StepLR
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms
 
 parser = argparse.ArgumentParser(
-    description='Distributed training of Keras model for MNIST with DDP.')
+    description='DDP training of PyTorch model for MNIST.')
 parser.add_argument(
     '--backend',
     type=str,
@@ -24,6 +23,9 @@ parser.add_argument(
 parser.add_argument('--log_dir',
                     type=str,
                     help='Path of the TensorBoard log directory.')
+parser.add_argument('--save_path',
+                    type=str,
+                    help='Path of the saved model.')
 parser.add_argument('--no_cuda',
                     action='store_true',
                     default=False,
@@ -52,7 +54,7 @@ class Net(nn.Module):
         return output
 
 
-def train(scheduler):
+def train():
     global global_step
     for epoch in range(1, epochs + 1):
         model.train()
@@ -124,6 +126,8 @@ if __name__ == '__main__':
     device = torch.device('cuda:{}'.format(local_rank) if use_cuda else 'cpu')
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
+    torch.manual_seed(1)
+
     dataset_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'data')
     # rank 0 downloads datasets in advance
@@ -134,7 +138,7 @@ if __name__ == '__main__':
     model = DDP(model)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001 * world_size)
-    scheduler = StepLR(optimizer, step_size=1, gamma=0.7)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.7)
 
     transform = transforms.Compose(
         [transforms.ToTensor(),
@@ -163,13 +167,15 @@ if __name__ == '__main__':
                                               **kwargs)
 
     if args.log_dir and rank == 0:
-        log_dir = args.log_dir
-        if os.path.exists(log_dir):
-            shutil.rmtree(log_dir, ignore_errors=True)
-        writer = SummaryWriter(log_dir)
+        if os.path.exists(args.log_dir):
+            shutil.rmtree(args.log_dir, ignore_errors=True)
+        writer = SummaryWriter(args.log_dir)
 
     global_step = 0
     epochs = 10
     steps_per_epoch = len(train_loader)
-    train(scheduler)
+    train()
     test()
+
+    if rank == 0:
+        torch.save(model.state_dict(), args.save_path)
