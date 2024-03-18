@@ -17,5 +17,5 @@ spec:
         - name: user-container
           resources:
             limits:
-              cpu: "500m"
-              memory: 1Gi
+              cpu: "200m"
+              memory: 200Mi
