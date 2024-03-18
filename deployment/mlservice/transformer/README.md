@@ -23,15 +23,6 @@ kubectl create -f runtime.yaml
 kubectl apply -f ./mlservice.yaml
 ```
 
-## Transformer 说明
-
-上述部署的 MLService 使用了提前制定好的 Transformer Image，这个 Transformer 的作用是：
-1. 将用户发送的图片转换为 JSON 格式的数据，然后再发送到 Predictor。
-2. 将 Predictor 返回的预测结果转换为可读形式。
-
-制作 Transformer Image 请参考[制作 Transformer 镜像](#制作-transformer-镜像)章节。
-
-
 ## 测试服务
 
 查看 MLService 状态，并等待 `Ready` 一栏变为 `True`

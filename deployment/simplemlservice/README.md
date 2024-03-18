@@ -33,13 +33,13 @@ $ kubectl apply -f ./simplemlservice.yaml
 运行下列命令查看 SimpleMLService、Pod、Service 的状态：
 
 ```sh
-$ kubectl get simplemlservice mnist 
+$ kubectl get simplemlservice mnist
 NAME    READY   URL                                                             AGE
 mnist   True    managed-simplemlservice-mnist-947d0.demo.svc.cluster.local   22s
 $ kubectl get pod -l simplemlservice=mnist
 NAME                                                   READY   STATUS    RESTARTS   AGE
 managed-simplemlservice-mnist-947d0-647477b8f8-p6pvn   1/1     Running   0          37s
-$ kubectl get svc | grep simplemlservice
+$kubectl get svc 
 NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 managed-simplemlservice-mnist-947d0  ClusterIP      10.233.62.14    <none>        80/TCP     46s
 ```
