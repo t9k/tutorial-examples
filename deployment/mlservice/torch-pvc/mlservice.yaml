@@ -13,9 +13,3 @@ spec:
             "MODEL_PATH": "mnist=model.mar"
           runtime: t9k-torchserve
           modelUri: pvc://tutorial/tutorial-examples/deployment/mlservice/torch-pvc/
-        containersResources:
-        - name: user-container
-          resources:
-            limits:
-              cpu: "200m"
-              memory: 200Mi

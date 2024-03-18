@@ -11,10 +11,6 @@ spec:
         containers:
         - name: user-container
           image: t9kpublic/transformer-example:0.1.0
-          resources:
-            limits:
-              cpu: "200m"
-              memory: 200Mi
   releases:
     - name: origin
       predictor:
@@ -22,9 +18,3 @@ spec:
         model:
           runtime: t9k-tensorflow-serving
           modelUri: pvc://tutorial/tutorial-examples/deployment/mlservice/transformer/model
-        containersResources:
-        - name: user-container
-          resources:
-            limits:
-              cpu: "200m"
-              memory: 200Mi
