@@ -23,12 +23,12 @@ kubectl get -f job.yaml -o wide -w
 查看训练产生的 logs：
 
 ```shell
-kubectl logs -f  torch-mnist-trainingjob-node-0
+kubectl logs -l tensorstack.dev/owner-name=torch-mnist-trainingjob --tail=-1 -f
 ```
 
 或者前往模型构建控制台，通过 Web UI 查看训练状态、日志和 TensorBoard 等更加丰富的内容。
 
-## 其它
+## 其他
 
 如需要使用 T9k scheduler 并指定 queue 和 priority，可做如下修改：
 

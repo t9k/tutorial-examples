@@ -68,7 +68,7 @@ curl --data-binary @./shoe.png ${address}/v1/models/model:predict
 
 ### 使用 ImageBuilder 制作镜像
 
-基于上述文件，我们编写 [Dockerfile](./Dockerfile), 然后使用 ImageBuilder 制作镜像。
+基于上述文件，我们编写 [Dockerfile](./Dockerfile)，然后使用 ImageBuilder 制作镜像。
 
 为了使用 ImageBuilder，首先我们需要参照[创建 Secret](../../../build-image/build-image-on-platform/README.md#%E5%88%9B%E5%BB%BA-secret)准备上传镜像所需要的 DockerConfig `Secret`。
 
