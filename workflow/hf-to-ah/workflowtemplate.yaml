@@ -11,30 +11,43 @@ spec:
       description: PVC that serves as temporary storage.
   params:
     - name: name
-      description: Name of the model or dataset in Hugging Face.
+      description: Name of the model or dataset to be downloaded from Hugging Face or ModelScope.
     - name: folder
-      description: Path of the folder in Asset Hub.
+      description: Path of the folder in Asset Hub where the downloaded model or dataset will be placed.
     - name: token
-      description: Hugging Face token for downloading gated model or dataset.
+      description: Hugging Face token used to log in to Hugging Face to download gated model or dataset.
+    - name: source
+      description: Download source. It should be either 'hf' for Hugging Face or 'modelscope' for ModelScope.
+    - name: httpProxy
+      description: Optional HTTP and HTTPs proxy.
   seqPod:
     steps:
       - args: []
         command: []
-        image: 'tsz.io/xyx/hf-to-ah:test4'
+        image: 't9kpublic/hf-to-ah:20240426'
         name: worker
         resources:
           limits:
             cpu: 1
             memory: 16Gi
-        script: >-
+        script: |-
           #!/bin/bash
+
           set -e
 
-          if [ -n "$(params.token)" ]; then
-              git config --global credential.helper store
-              huggingface-cli login --token "$(params.token)" --add-to-git-credential
-          else
-              echo "Token is empty. Skipping login."
+          if [ -n "$(params.httpProxy)" ]; then
+              export http_proxy=$(params.httpProxy)
+              export https_proxy=$(params.httpProxy)
+              echo "Set HTTP Proxy to $(params.httpProxy)"
+          fi
+
+          if [ "$(params.source)" = "hf" ]; then
+              if [ -n "$(params.token)" ]; then
+                  git config --global credential.helper store
+                  huggingface-cli login --token "$(params.token)" --add-to-git-credential
+              else
+                  echo "Token is empty. Skipping login."
+              fi
           fi
 
           cd $(workspaces.tempStorage.path)
@@ -45,7 +58,14 @@ spec:
           rm -rf $dir
 
           while true; do
-              git clone https://huggingface.co/$(params.name)
+              if [ "$(params.source)" = "hf" ]; then
+                  git clone https://huggingface.co/$(params.name)
+              elif [ "$(params.source)" = "modelscope" ]; then
+                  git clone https://www.modelscope.cn/$(params.name).git
+              else
+                  echo "Invalid source. Please provide 'hf' or 'modelscope'."
+              fi
+
               if [ $? -eq 0 ]; then
                   echo "Clone successful!"
                   break
@@ -59,7 +79,9 @@ spec:
 
           mkdir /root/.t9k
           ln -s $(workspaces.t9kConfig.path)/.t9kconfig /root/.t9k/t9k-config.yaml
-          ah create $(params.folder)
+          if ! $(ah ls $(params.folder) > /dev/null 2>&1); then
+              ah create $(params.folder)
+          fi
           ah create $(params.folder)/$dir
           ah commit $(params.folder)/$dir -a "./$dir/*" -m "add files"
 

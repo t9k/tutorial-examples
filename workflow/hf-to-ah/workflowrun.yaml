@@ -13,8 +13,12 @@ spec:
         claimName: tutorial
   params:
     - name: name
-      value: meta-llama/Meta-Llama-3-8B
+      value: facebook/opt-125m
     - name: folder
       value: model/llm
     - name: token
+      value: ''
+    - name: source
+      value: hf
+    - name: httpProxy
       value: ''
