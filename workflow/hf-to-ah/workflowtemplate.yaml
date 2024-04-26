@@ -1,0 +1,66 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowTemplate
+metadata:
+  name: hf-to-ah
+spec:
+  type: SeqPod
+  workspaces:
+    - name: t9kConfig
+      description: Secret that includes a `t9k-config.yaml`.
+    - name: tempStorage
+      description: PVC that serves as temporary storage.
+  params:
+    - name: name
+      description: Name of the model or dataset in Hugging Face.
+    - name: folder
+      description: Path of the folder in Asset Hub.
+    - name: token
+      description: Hugging Face token for downloading gated model or dataset.
+  seqPod:
+    steps:
+      - args: []
+        command: []
+        image: 'tsz.io/xyx/hf-to-ah:test4'
+        name: worker
+        resources:
+          limits:
+            cpu: 1
+            memory: 16Gi
+        script: >-
+          #!/bin/bash
+          set -e
+
+          if [ -n "$(params.token)" ]; then
+              git config --global credential.helper store
+              huggingface-cli login --token "$(params.token)" --add-to-git-credential
+          else
+              echo "Token is empty. Skipping login."
+          fi
+
+          cd $(workspaces.tempStorage.path)
+
+          IFS='/' read -ra parts <<< "$(params.name)"
+          dir="${parts[1]}"
+
+          rm -rf $dir
+
+          while true; do
+              git clone https://huggingface.co/$(params.name)
+              if [ $? -eq 0 ]; then
+                  echo "Clone successful!"
+                  break
+              else
+                  echo "Clone failed. Retrying..."
+                  sleep 1
+              fi
+          done
+
+          rm -rf $dir/.git
+
+          mkdir /root/.t9k
+          ln -s $(workspaces.t9kConfig.path)/.t9kconfig /root/.t9k/t9k-config.yaml
+          ah create $(params.folder)
+          ah create $(params.folder)/$dir
+          ah commit $(params.folder)/$dir -a "./$dir/*" -m "add files"
+
+          rm -rf $dir

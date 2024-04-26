@@ -1,0 +1,20 @@
+apiVersion: batch.tensorstack.dev/v1beta1
+kind: WorkflowRun
+metadata:
+  generateName: hf-to-ah-
+spec:
+  workflowTemplateRef: hf-to-ah
+  workspaces:
+    - name: t9kConfig
+      secret:
+        secretName: t9k-config
+    - name: tempStorage
+      persistentVolumeClaim:
+        claimName: tutorial
+  params:
+    - name: name
+      value: meta-llama/Meta-Llama-3-8B
+    - name: folder
+      value: model/llm
+    - name: token
+      value: ''
