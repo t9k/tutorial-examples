@@ -62,6 +62,7 @@ git clone https://github.com/t9k/tutorial-examples.git
     * [部署简单的模型推理服务（Keras 模型）](../deployment/mlservice/transformer/)
 * 工作流：
   * [建立从数据采样到模型导出的端到端的工作流](../workflow/e2e-workflow/)
+  * [从 Hugging Face 下载模型和数据集到 Asset Hub](../workflow/hf-to-ah/)
 * 平台工具：
   * [Codepack 使用示例](../codepack/)
 * 其他功能：

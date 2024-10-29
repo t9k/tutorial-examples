@@ -3,23 +3,18 @@ kind: PyTorchTrainingJob
 metadata:
   name: torch-mnist-trainingjob
 spec:
-  tensorboardSpec:
-    trainingLogFilesets:
-      - t9k://pvc/tutorial/tutorial-examples/job/pytorchtrainingjob/ddp/log
-    image: t9kpublic/tensorflow-2.11.0:cpu-sdk-0.5.2
   torchrunConfig:
     enabled: true
     maxRestarts: 3
     procPerNode: "4"
     rdzvBackend: c10d
+    extraOptions: []
   replicaSpecs:
     - type: node
       replicas: 1
       restartPolicy: ExitCode
       template:
         spec:
-          securityContext:
-            runAsUser: 1000
           containers:
             - name: pytorch
               args:
