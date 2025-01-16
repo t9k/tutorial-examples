@@ -3,21 +3,29 @@ kind: ColossalAIJob
 metadata:
   name: colossal-palm
 spec:
-  # scheduler:
-  #   t9kScheduler:
-  #     queue: default
-  #     priority: 50
-  launcher:
-    image: t9kpublic/colossalai:0.2.5-palm
-    workingDir: /workspace/ColossalAI/examples/language
-  worker:
-    replicas: 4
+  torchConfig:
     procPerWorker: 1
-    command:
+    script:
       - train.py
       - "--distplan=colossalai"
       - "--dummy_data=True"
-    torchArgs: []
+  replicaSpecs:
+  - type: launcher
+    template:
+      spec:
+        containers:
+        - name: launcher
+          image: t9kpublic/colossalai:0.2.5-palm
+          workingDir: /workspace/ColossalAI/examples/language/palm
+          resources:
+            limits:
+              cpu: 1
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+  - type: worker
+    replicas: 4
     template:
       spec:
         restartPolicy: OnFailure
@@ -34,4 +42,4 @@ spec:
                 memory: 4Gi
                 nvidia.com/gpu: "1"
   runPolicy:
-    cleanUpWorkers: true
+    cleanUpWorkers: false
