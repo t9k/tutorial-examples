@@ -25,8 +25,8 @@ spec:
         - name: user-container
           resources:
             limits:
-              cpu: "500m"
-              memory: 500Mi
+              cpu: 2
+              memory: 4Gi
         storage:
           pvc:
             name: tutorial
