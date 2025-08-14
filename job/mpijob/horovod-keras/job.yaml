@@ -3,35 +3,36 @@ kind: MPIJob
 metadata:
   name: keras-mnist-mpijob
 spec:
-  mca:
-    btl: ^openib
-    pml: ob1
-  mpiHome: /usr/local
-  ssh:
-    sshdPath: /usr/sbin/sshd
-  runPolicy:
-    cleanUpWorkers: true
-  worker:
-    replicas: 4
-    extraMPIArgs:
+  mpiConfig:
+    mca:
+      btl: ^openib
+      pml: ob1
+    home: /usr/local
+    extraArgs:
       - -N
       - "1"
       - --enable-recovery
       - --max-restarts
       - "100"
       - --allow-run-as-root
-    cmd:
+    script:
       - python
-      - keras_mnist_mpijob.py
+      - /t9k/mnt/tutorial-examples/job/mpijob/horovod-keras/keras_mnist_mpijob.py
       - "--log_dir"
       - "log"
       - "--no_cuda"
+  ssh:
+    sshdPath: /usr/sbin/sshd
+  runPolicy:
+    cleanUpWorkers: true
+  replicaSpecs:
+  - type: worker
+    replicas: 4
     template:
       spec:
         containers:
-          - name: mpi-worker
+          - name: worker
             image: t9kpublic/horovod:sdk-0.5.2
-            workingDir: /t9k/mnt/tutorial-examples/job/mpijob/horovod-keras
             resources:
               requests:
                 cpu: 2
@@ -46,5 +47,6 @@ spec:
           - name: data
             persistentVolumeClaim:
               claimName: tutorial
-  runPolicy:
-    cleanUpWorkers: true
+  - type: launcher
+    replicas: 1
+    template: {}

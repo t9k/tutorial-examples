@@ -7,31 +7,46 @@ spec:
   #   t9kScheduler:
   #     queue: default
   #     priority: 50
-  launcher:
-    image: t9kpublic/colossalai:0.2.5-palm
-    workingDir: /workspace/ColossalAI/examples/language
-  worker:
-    replicas: 4
+  ssh:
+    authMountPath: /root/.ssh
+    sshdPath: /usr/sbin/sshd
+  torchConfig:
     procPerWorker: 1
-    command:
-      - train.py
+    script:
+      - /workspace/ColossalAI/examples/language/palm/train.py
       - "--distplan=colossalai"
       - "--dummy_data=True"
-    torchArgs: []
+  replicaSpecs:
+  - type: launcher
     template:
       spec:
+        containers:
+        - name: launcher
+          image: tsz.io/t9k/colossalai:0.2.5-palm
+          workingDir: /workspace
+          resources: 
+            limits:
+              cpu: 1
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+  - type: worker
+    replicas: 4
+    template:
+      spec:
+        nodeName: sm02
         restartPolicy: OnFailure
         containers:
-          - name: worker
-            image: t9kpublic/colossalai:0.2.5-palm
+          - image: tsz.io/t9k/colossalai:0.2.5-palm
+            imagePullPolicy: IfNotPresent
+            name: worker
             resources:
               limits:
-                cpu: 4
-                memory: 8Gi
-                nvidia.com/gpu: "1"
-              requests:
                 cpu: 2
+                memory: 8Gi
+                nvidia.com/gpu: 1
+              requests:
+                cpu: 1
                 memory: 4Gi
-                nvidia.com/gpu: "1"
-  runPolicy:
-    cleanUpWorkers: true
+                nvidia.com/gpu: 1
