@@ -13,5 +13,5 @@ spec:
     image: t9kpublic/tensorflow-serving:2.6.0
     resources:
       limits:
-        cpu: 200m
-        memory: 500Mi
+        cpu: 2
+        memory: 4Gi
