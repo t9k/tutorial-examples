@@ -21,7 +21,7 @@ spec:
         priority: 50
     tasks:
       - type: worker
-        replicas: 4
+        replicas: 2
         template:
           spec:
             securityContext:

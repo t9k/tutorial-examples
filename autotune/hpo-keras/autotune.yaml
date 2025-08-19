@@ -6,9 +6,6 @@ spec:
   maxExecSeconds: 3600
   maxTrialNum: 20
   trialConcurrency: 3
-  aimd:
-    secret: api-key-aimd
-    folder: 
   storage: 100Mi
   searchSpace: |-
     {
@@ -20,7 +17,7 @@ spec:
     type: tensorflow
     tasks:
       - type: worker
-        replicas: 4
+        replicas: 2
         template:
           spec:
             securityContext:
